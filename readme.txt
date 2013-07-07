@@ -1,0 +1,162 @@
+=== SQLite Integration ===
+Contributors: kjmtsh
+Plugin Name: SQLite Integration
+Plugin URI: http://dogwood.skr.jp/wordpress/sqlite-integration/
+Tags: database, SQLite, PDO
+Author: Kojima Toshiyasu
+Author URI: http://dogwood.skr.jp/
+Requires at least: 3.3
+Tested up to: 3.5.2
+Stable tag: 1.0
+License: GPLv2
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+SQLite Integration is the plugin that enables WordPress to use SQLite. If you want to build a WordPress website with it, this plugin is for you.
+
+== Description ==
+
+This plugin enables WordPress to work with [SQLite](http://www.sqlite.org/). You don't have to prepare MySQL database server and its configuration. SQLite is a self-contained, serverless, transactional SQL database engine. It is not a full-featured database system like MySQL or PostgreSQL, but it best fits for low to medium traffic websites.
+
+SQLite Integration is a kind of wrapper program, which is placed between WordPress and SQLite database and works as a mediator. It works as follows:
+
+1. Intercepts the SQL statement for MySQL from WordPress
+2. Rewrites it for SQLite to execute
+3. Give it to SQLite
+4. Gets the results from SQLite
+5. Formats the results as WordPress wants, if necessary
+6. Give the results back to WordPress
+
+WordPress thinks she talks with MySQL and doesn't know what has happened in the background. She really talks with SQLite and will be happy with it.
+
+SQLite Integration is a successor to [PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress) plugin, which unfortunately enough, doesn't seem to be maintained any more. SQLite Integration uses the basic idea and structures of that plugin and adds some more features or some utilities.
+
+= Features =
+
+SQLite Integration is not an ordinary 'plugin'. It is used to install WordPress itself. You need to do some preparations. Please read the install section. And see more detailed instruction in the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration).
+
+Once you succeeded in installing WordPress, you can use it just like the others using MySQL. Optionally, you can activate this plugin in the installed plugins panel of the adimn dashboard, and you can see the useful information and instructions. It is not required but I recommend it.
+
+= Backward Compatibility =
+
+If you are using [PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress), you can migrate your database. See install section.
+
+= Support =
+
+Please contact us with the methods below:
+
+Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
+
+Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have be no support from the plugin authors, eithter.
+
+= Translation =
+
+Documentation is written in English. Japanese catalog file and .pot file are included in the archive. If you translate it into your language, please let me know.
+
+== Installation ==
+
+This plugin is *not* like the other plugins. You can't install and activate it on the plugin administration panel.
+
+First of all, you've got to prepare WordPress installation. See [Installing Wordpress ](http://codex.wordpress.org/Installing_WordPress) section in the Codex.
+
+After checking the prerequisites and unzipping the WordPress archive file, you must rename wp-contig-sample.php file to wp-config.php and do some editting as the [Codex page](http://codex.wordpress.org/Editing_wp-config.php) says. Please follow the instructions *except* the database settings.
+
+When you finish, you can add optional settings. Follow the steps below:
+
+* If you want to put the SQLite database file to the directory different from the default setting (wp-content/database), you can add the line below (don't forget to add a trailing slash):
+
+	`define('DB_DIR', '/home/youraccount/database_directory/');`
+
+	Note: Your PHP scripts must be able to create that directory and files in it.
+
+* If you want to change the database file name to the one different from the default (.ht.sqlite), you can add the line below:
+
+	`define('DB_FILE', 'database_file_name');`
+
+	Note: If you are using 'PDO for WordPress' plugin, see also 'Migrating your database' section.
+
+	If you don't understand well, you don't have to add any of the lines above.
+
+After you finish preparing wp-config.php, follow the next steps:
+
+1. Unzip the plugin archive file.
+
+2. Move db.php file contained in the archive to wp-content directory.
+
+3. Move the sqlite-integration directory to wp-content/plugin/ directory.
+
+  `wordpress/wp-contents/db.php`
+
+	and
+	
+  `wordpress/wp-contents/sqlite-integration`
+
+  respectively.
+
+OK. This is all. Upload everything (keeping the directory structure) to your server and access the wp-admin/install.php with your favorite browser, and WordPress installation process will begin. Enjoy your blogging!
+
+= Migrate your database to SQLite Integration =
+
+If you are using PDO for WordPress now, you can migrate your database to SQLite Integration. You don't have to reinstall WordPress. Please follow the next steps:
+
+1. Check if your MyBlog.sqlite file contains all the tables required by WordPress. You have to use a utility software like [SQLite Manager Mozilla Addon](https://addons.mozilla.org/en-US/firefox/addon/sqlite-manager/). See also [Database Description](http://codex.wordpress.org/Database_Description) in Codex.
+
+2. Backup your MyBlog.sqlite and db.php files.
+
+3. EITHER rename your MyBlog.sqlite to .ht.sqlite OR add the next line in wp-config.php file.
+	
+	`define('FQDB', 'MyBlog.sqlite');`
+
+4. Overwrite your wp-content/db.php with the db.php file contained in SQLite Integration archive.
+
+That's all. Don't forget to check the requirement and your WordPress version. *SQLite Integration doesn't work with WordPress version 3.2.x or lesser*.
+
+== Frequently Asked Questions ==
+
+= Database file is not created =
+
+The reason of failure in creating directory or files is often that PHP is not allowed to craete them. Please check your server setting or ask the administrator.
+
+= Such and such plugins can't be activated or doesn't seem to work properly =
+
+Some of the plugins, especially cache plugins or database maintenace plugins, are not compatible with this plugin. Please activate SQLite Integration and see the plugin comatibility section in the documentation or visit the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/).
+
+= I don't want the admin menu and documentation =
+
+Just deactivate the plugin, and you can remove them. Activation and deactivation affect only admin menu. If you want to remove all the plugin files, just delete it.
+
+== Screenshots ==
+
+1. System Information tells you your database status and installed plugins compatibility.
+
+== Requirements ==
+
+* PHP 5.2 or newer with PDO extension (PHP 5.3 or newer is better).
+* PDO SQLite driver must be loaded.
+
+== Known Limitations ==
+
+Many of the other plugins will work fine with this plugin. But there are some you can't use. Generally speaking, the plugins that manipulate database not with WordPress functions but with Mysql or Mysqli native drivers from PHP might cause the problem.
+
+These are other examples:
+
+= You can't use these plugins because they create the same file that this plugin uses: =
+
+* [W3 Total Cache](http://wordpress.org/extend/plugins/w3-total-cache/)
+* [DB Cache Reloaded Fix](http://wordpress.org/extend/plugins/db-cache-reloaded-fix/)
+* [HyperDB](http://wordpress.org/extend/plugins/hyperdb/)
+
+= You can't use some of the plugins, because they are using MySQL specific features that SQLite can't emulate. For example: =
+
+* [Yet Another Related Posts](http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/)
+* [Better Related Posts](http://wordpress.org/extend/plugins/better-related/)
+
+Probably there are more, I'm afraid.
+
+== Changelog ==
+
+= 1.0 (2013-07-07) =
+First release version of the plugin.
+
+== Upgrade Notice ==
+
+When you fail in upgrading SQLite Integration, I recommend that you should try manual upgrade via FTP.
