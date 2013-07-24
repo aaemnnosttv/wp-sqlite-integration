@@ -3,7 +3,7 @@
  * This file contains PatchUtils class
  * 
  * @package SQLite Integration
- * @since 1.0
+ * @since 1.1
  *
  */
 class PatchUtils {
