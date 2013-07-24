@@ -25,6 +25,13 @@ class CreateQuery{
 	public function rewrite_query($query){
 		$this->_query = $query;
 		$this->_errors [] = '';
+		if (preg_match('/^CREATE\\s*(UNIQUE|FULLTEXT|)\\s*INDEX/ims', $this->_query, $match)) {
+			if (isset($match[1]) && stripos($match[1], 'fulltext') !== false) {
+				return 'SELECT 1=1';
+			} else {
+				return $this->_query;
+			}
+		}
 		$this->strip_backticks();
 		$this->get_table_name();
 		$this->rewrite_comments();

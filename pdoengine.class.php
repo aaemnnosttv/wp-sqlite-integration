@@ -83,7 +83,7 @@ class PDOEngine extends PDO {
             $locked = true;
           } else {
             $message = __("Database connection error!<br />", 'sqlite-integration');
-            $message .= sprintf(__("Error message is: ", 'sqlite-integration'), $err->getMessage());
+            $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err->getMessage());
             $this->set_error(__LINE__, __FUNCTION__, $message);
             return false;
           }
@@ -183,6 +183,17 @@ class PDOEngine extends PDO {
       case 'show_variables':
         $result = $this->show_variables_workaround($query);
         break;
+      case 'drop_index':
+      	$pattern = '/^\\s*(DROP\\s*INDEX\\s*.*?)\\s*ON\\s*(.*)/im';
+      	if (preg_match($pattern, $query, $match)) {
+      		$drop_query = 'ALTER TABLE ' . trim($match[2]) . ' ' . trim($match[1]);
+      		$this->query_type = 'alter';
+      		$result = $this->execute_alter_query($drop_query);
+      		$this->return_value = $result;
+      	} else {
+      		$this->return_value = false;
+      	}
+      	break;
       default:
         $engine = $this->prepare_engine($this->query_type);
         $this->rewritten_query = $engine->rewrite_query($query, $this->query_type);
@@ -460,7 +471,7 @@ class PDOEngine extends PDO {
    * @return boolean|string
    */
   private function determine_query_type($query) {
-    $result = preg_match('/^\\s*(EXPLAIN|PRAGMA|SELECT\\s*FOUND_ROWS|SELECT|INSERT|UPDATE|REPLACE|DELETE|ALTER|CREATE|DROP|SHOW\\s*\\w+\\s*\\w+\\s*|DESCRIBE|DESC|TRUNCATE|OPTIMIZE)/i', $query, $match);
+    $result = preg_match('/^\\s*(EXPLAIN|PRAGMA|SELECT\\s*FOUND_ROWS|SELECT|INSERT|UPDATE|REPLACE|DELETE|ALTER|CREATE|DROP\\s*INDEX|DROP|SHOW\\s*\\w+\\s*\\w+\\s*|DESCRIBE|DESC|TRUNCATE|OPTIMIZE)/i', $query, $match);
     
     if (!$result) {
       return false;
@@ -481,6 +492,9 @@ class PDOEngine extends PDO {
       } else {
         return false;
       }
+    }
+    if (stripos($this->query_type, 'drop index') !== false) {
+    	$this->query_type = 'drop_index';
     }
     return true;
   }
