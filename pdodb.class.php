@@ -16,13 +16,6 @@ if(!defined('PDO_DEBUG')){
   define('PDO_DEBUG', false);
 }
 
-if (!isset($wpdb)){
-	global $wpdb;
-	$wpdb = 'somevar';
-	require_once ABSPATH . 'wp-includes/wp-db.php';
-	unset($wpdb);
-}
-
 /**
  * This class extends wpdb and replaces it.
  * It also rewrites some functions that use mysql specific functions.
