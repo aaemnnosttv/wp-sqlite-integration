@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -161,6 +161,11 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 たぶん、もっとあるでしょう。
 
 == Changelog ==
+
+= 1.1 (2013-07-24) =
+* DROP INDEX 単独のクエリが動作していなかったのを修正しました。
+* shutdown_hook で descructor を実行していたのをやめました。
+* LOCATE() 関数を使えるようにしました。
 
 = 1.0 (2013-07-07) =
 最初のリリース。

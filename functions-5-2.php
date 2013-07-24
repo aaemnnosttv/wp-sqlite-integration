@@ -56,7 +56,8 @@ class PDOSQLiteUDFS {
       'lcase'          => 'lcase',
       'inet_ntoa'      => 'inet_ntoa',
       'inet_aton'      => 'inet_aton',
-      'datediff'       => 'datediff'
+      'datediff'       => 'datediff',
+  		'locate'         => 'locate'
   );
 
   public function month($field){
@@ -365,6 +366,24 @@ class PDOSQLiteUDFS {
     $end_date   = strtotime($end);
     $interval = floor(($end_date - $start_date)/(3600*24));
     return $interval;
+  }
+  /**
+   * emulates MySQL LOCATE() function
+   */
+  public function locate($substr, $str, $pos = 0) {
+  	if (!extension_loaded('mbstring')) {
+  		if (($val = stros($str, $substr, $pos)) !== false) {
+  			return $val + 1;
+  		} else {
+  			return 0;
+  		}
+  	} else {
+	  	if (($val = mb_strpos($str, $substr, $pos)) !== false) {
+	  		return $val + 1;
+	  	} else {
+	  		return 0;
+	  	}
+  	}
   }
 }
 ?>

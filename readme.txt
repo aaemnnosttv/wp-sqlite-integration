@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -153,6 +153,11 @@ These are other examples:
 Probably there are more, I'm afraid.
 
 == Changelog ==
+
+= 1.1 (2013-07-24) =
+* Fixed the manipulation of DROP INDEX query.
+* Removed desctructor() from shutdown_hook.
+* Enabled LOCATE() function in the query string.
 
 = 1.0 (2013-07-07) =
 First release version of the plugin.
