@@ -164,4 +164,4 @@ First release version of the plugin.
 
 == Upgrade Notice ==
 
-When you fail in upgrading SQLite Integration, I recommend that you should try manual upgrade via FTP.
+When auto upgrading of SQLite Integration fails, Please try manual upgrade via FTP.
