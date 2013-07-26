@@ -112,6 +112,12 @@
   },
   
   {
+    "name":"FeedWordPress",
+    "compat":"Checked"
+    "class":"compatible"
+  },
+  
+  {
     "name":"Google Analyticator",
     "compat":"Checked",
     "class":"compatible"

@@ -408,7 +408,7 @@ class PDOSQLiteDriver {
         return;
       }
       // data check
-      if (preg_match('/^\((.*)\)\\s*VALUES\\s*\((.*)\)$/im', $insert_data, $match_1)) {
+      if (preg_match('/^\((.*)\)\\s*VALUES\\s*\((.*)\)$/ims', $insert_data, $match_1)) {
         $col_array = explode(',', $match_1[1]);
         $ins_data_array = explode(',', $match_1[2]);
         foreach ($col_array as $col) {
