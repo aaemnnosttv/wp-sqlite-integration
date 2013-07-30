@@ -5,7 +5,6 @@
  *   wordpress/wp-content/db.php
  * 
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu, Justin Adie
  *
  */

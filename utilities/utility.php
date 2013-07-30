@@ -2,7 +2,7 @@
 /**
  * 
  * @package SQLite Integration
- * @author kjm
+ * @author Kojima Toshiyasu
  *
  */
 class SQLiteIntegrationUtils {

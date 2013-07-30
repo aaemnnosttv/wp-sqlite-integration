@@ -211,12 +211,12 @@ msgid ""
 "SQLite for its database. But PDO for WordPress doesn't seem to be maintained "
 "any more only to be outdated. SQLite Integration makes use of the basic ideas "
 "and framework of PDO for WordPress, adds some new features and updates it to "
-"be able to work with the newest version of WordPress(3.5.1 and 3.6 beta)."
+"be able to work with the newest version of WordPress(3.5.2 and 3.6 beta)."
 msgstr ""
 "このプラグインは<a href=\"http://wordpress.org/extend/plugins/pdo-for-wordpress/\">"
 "PDO for WordPress</a>の後継です。PDO for WordPressはWordPressでSQLiteを使えるようにする"
 "ものでしたが、もうメンテナンスされていないようで、古くなってしまいました。SQLite Integrationは、その基本的な"
-"考えと枠組みを使って、新たな機能を追加し、最新のWordPress(3.5.1および3.6ベータ)で動作するように"
+"考えと枠組みを使って、新たな機能を追加し、最新のWordPress(3.5.2および3.6ベータ)で動作するように"
 "したものです。"
 
 #: utilities/documentation.php:44
@@ -589,8 +589,8 @@ msgstr "パッチを適用しました。"
 
 #: utilities/patch.php:94 utilities/patch.php:121
 #, php-format
-msgid "Error! Messages: %s"
-msgstr "エラー。メッセージは: %s"
+msgid "Error! File %s is not deleted."
+msgstr "エラー。ファイル%sは削除できませんでした。"
 
 #: utilities/patch.php:118
 msgid "Error!: patches directory is not accessible."

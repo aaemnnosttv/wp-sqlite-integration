@@ -195,7 +195,7 @@ msgid ""
 "SQLite for its database. But PDO for WordPress doesn't seem to be maintained "
 "any more only to be outdated. SQLite Integration makes use of the basic ideas "
 "and framework of PDO for WordPress, adds some new features and updates it to "
-"be able to work with the newest version of WordPress(3.5.1 and 3.6 beta)."
+"be able to work with the newest version of WordPress(3.5.2 and 3.6 beta)."
 msgstr ""
 
 #: utilities/documentation.php:44
@@ -505,7 +505,7 @@ msgstr ""
 
 #: utilities/patch.php:94 utilities/patch.php:121
 #, php-format
-msgid "Error! Messages: %s"
+msgid "Error! File %s is not deleted."
 msgstr ""
 
 #: utilities/patch.php:118

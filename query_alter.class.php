@@ -3,7 +3,6 @@
  * The class for manipulating ALTER query
  * newly supports multiple variants
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu
  */
 class AlterQuery {
