@@ -254,6 +254,12 @@
   },
   
   {
+    "name":"WP Emmet",
+    "compat":"Checked",
+    "class":"compatible"
+  },
+  
+  {
     "name":"WP Multibyte Patch",
     "compat":"Checked",
     "class":"compatible"
