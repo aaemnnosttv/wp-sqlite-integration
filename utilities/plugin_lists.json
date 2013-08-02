@@ -112,6 +112,12 @@
   },
   
   {
+    "name":"FeedWordPress",
+    "compat":"Checked",
+    "class":"compatible"
+  },
+  
+  {
     "name":"Google Analyticator",
     "compat":"Checked",
     "class":"compatible"
@@ -243,6 +249,12 @@
   
   {
     "name":"WordPress Related Posts",
+    "compat":"Checked",
+    "class":"compatible"
+  },
+  
+  {
+    "name":"WP Emmet",
     "compat":"Checked",
     "class":"compatible"
   },

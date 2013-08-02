@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 1.1
+Tested up to: 3.6
+Stable tag: 1.2.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,16 +152,26 @@ These are other examples:
 
 Probably there are more, I'm afraid.
 
+== Upgrade Notice ==
+
+When auto upgrading of SQLite Integration fails, please try manual upgrade via FTP.
+
 == Changelog ==
+
+= 1.2.1 (2013-08-04) =
+* Changes following that of the wpdb.php file which makes the plugin compatible with Wordpress 3.6.
+
+= 1.2 (2013-08-03) =
+* Fixed the date string format and its quotation for calendar widget.
+* Fixed the patch utility program for using on the Windows machine.
+* Fixed the textdomain error in utilities/patch.php file when uploading the patch file.
+* Changed the manipulation of the query with ON DUPLICATE KEY UPDATE.
+* Fixed the typos in readme.txt and readme-ja.txt.
 
 = 1.1 (2013-07-24) =
 * Fixed the manipulation of DROP INDEX query.
-* Removed desctructor() from shutdown_hook.
+* Removed destruct() from shutdown_hook.
 * Enabled LOCATE() function in the query string.
 
 = 1.0 (2013-07-07) =
-First release version of the plugin.
-
-== Upgrade Notice ==
-
-When auto upgrading of SQLite Integration fails, Please try manual upgrade via FTP.
+* First release version of the plugin.
