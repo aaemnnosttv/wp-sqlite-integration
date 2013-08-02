@@ -53,12 +53,14 @@ class PDOSQLiteDriver {
 		    $this->_delete_index_hints();
 		    $this->_rewrite_regexp();
 		    $this->_rewrite_boolean();
+		    $this->_fix_date_quoting();
 		    break;
 		  case 'insert':
 		    $this->_strip_backticks();
 		    $this->_execute_duplicate_key_update();
 		    $this->_rewrite_insert_ignore();
 		    $this->_rewrite_regexp();
+		    $this->_fix_date_quoting();
 		    break;
 		  case 'update':
 		    $this->_strip_backticks();
@@ -289,20 +291,23 @@ class PDOSQLiteDriver {
 	}
 	
 	/**
-	 * Justin Adie says: 
-	 * method to fix inconsistent use of quoted, unquoted etc date values in query function
-	 * this is ironic, given the above rewrite badlyformed dates method 
-	 * examples 
+	 * Fix the date string and quote. This is required for the calendar widget.
+	 * 
 	 * where month(fieldname)=08 becomes month(fieldname)='8'
 	 * where month(fieldname)='08' becomes month(fieldname)='8'
 	 * 
-	 * I don't understand...
+	 * I use preg_replace_callback instead of 'e' option because of security reason.
+	 * cf. PHP manual (regular expression)
 	 * 
 	 * @return void
 	 */
-	private function _fix_date_quoting(){
-		$pattern = '/(month|year|second|day|minute|hour|dayofmonth)\s*\((.*?)\)\s*=\s*["\']?(\d{1,4})[\'"]?\s*/ei';
-		$this->_query = preg_replace($pattern, "'\\1(\\2)=\'' . intval('\\3') . '\' ' ", $this->_query);
+	private function _fix_date_quoting() {
+		$pattern = '/(month|year|second|day|minute|hour|dayofmonth)\\s*\((.*?)\)\\s*=\\s*["\']?(\d{1,4})[\'"]?\\s*/im';
+		$this->_query = preg_replace_callback($pattern, array($this, '__fix_date_quoting'), $this->_query);
+	}
+	private function __fix_date_quoting($match) {
+		$fixed_val = "{$match[1]}({$match[2]})='" . intval($match[3]) . "' ";
+		return $fixed_val;
 	}
 	
 	private function _rewrite_regexp(){
