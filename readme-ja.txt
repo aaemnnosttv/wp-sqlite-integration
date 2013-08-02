@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,6 +166,9 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 SQLite Integrationのアップグレードに失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
 
 == Changelog ==
+
+= 1.2.1 (2013-08-04) =
+* wp-db.php の変更にともなう修正をしました。WordPress 3.6 との互換性を保つためのものです。
 
 = 1.2 (2013-08-03) =
 * カレンダー・ウィジェットでの不具合に対応するため、日付フォーマットとそのクオートを修正しました。
