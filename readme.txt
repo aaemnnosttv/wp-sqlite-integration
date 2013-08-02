@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 1.1
+Tested up to: 3.6
+Stable tag: 1.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,7 +158,8 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 
 == Changelog ==
 
-= 1.2 (2013-07-30) =
+= 1.2 (2013-08-03) =
+* Fixed the date string format and its quotation for calendar widget.
 * Fixed the patch utility program for using on the Windows machine.
 * Fixed the textdomain error in utilities/patch.php file when uploading the patch file.
 * Changed the manipulation of the query with ON DUPLICATE KEY UPDATE.
