@@ -96,7 +96,7 @@ class PDOSQLiteDriver {
 	 */
 	private function _handle_show_query(){
 	  $table_name = '';
-		$pattern = '/^\\s*SHOW\\s*TABLES\\s*(LIKE\\s*(.*))$/im';
+		$pattern = '/^\\s*SHOW\\s*TABLES\\s*.*?(LIKE\\s*(.*))$/im';
 		if (preg_match($pattern, $this->_query, $matches)) {
 		  $table_name = str_replace(array("'", ';'), '', $matches[2]);
 		}
