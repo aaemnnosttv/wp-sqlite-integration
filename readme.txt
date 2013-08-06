@@ -46,7 +46,7 @@ Please contact us with the methods below:
 
 Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
 
-Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have be no support from the plugin authors, eithter.
+Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have no support from the plugin authors, eithter.
 
 = Translation =
 

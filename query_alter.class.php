@@ -84,7 +84,11 @@ class AlterQuery {
             $tokens['column_name'] = '('.trim($col_name).')';
           } elseif (in_array($match_2, array('index', 'key'))) {
             $tokens['command'] = $match_1.' '.$match_2;
-            $tokens['index_name'] = $match_3;
+            if ($match_3 == '') {
+            	$tokens['index_name'] = str_replace(array('(', ')'), '', $the_rest);
+            } else {
+	            $tokens['index_name'] = $match_3;
+            }
             $tokens['column_name'] = trim($the_rest);
           } else {
             $tokens['command'] = $match_1.' column';

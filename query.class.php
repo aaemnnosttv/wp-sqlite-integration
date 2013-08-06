@@ -286,7 +286,7 @@ class PDOSQLiteDriver {
 	 * @return void 
 	 */
 	private function _delete_index_hints(){
-		$pattern = '/use\s+index\s*\(.*?\)/i';
+		$pattern = '/\\s*(use|ignore|force)\\s+index\\s*\(.*?\)/i';
 		$this->_query = preg_replace($pattern, '', $this->_query);
 	}
 	
