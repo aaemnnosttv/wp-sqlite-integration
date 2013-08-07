@@ -22,7 +22,14 @@
     "compat":"Checked",
     "class":"compatible"
   },
-  
+
+	{
+		"name":"Better Delete Revision",
+		"compat":"No",
+		"reason":"DELETE with JOIN/etc",
+		"class":"incompatible"
+	},
+	
   {
     "name":"Better Related Posts",
     "compat":"No",
@@ -181,6 +188,12 @@
     "class":"compatible"
   },
   
+	{
+		"name":"Redirection",
+		"compat":"Checked",
+		"class":"compatible"
+	},
+	
   {
     "name":"Related Posts",
     "compat":"Checked",
@@ -276,7 +289,13 @@
     "compat":"Checked",
     "class":"compatible"
   },
-  
+
+	{
+		"name":"WP-PostViews",
+		"compat":"Checked",
+		"class":"compatible"
+	},
+	
   {
     "name":"WP-reCAPTCHA",
     "compat":"Checked",
