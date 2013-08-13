@@ -114,14 +114,14 @@ class PDOEngine extends PDO {
     if (!is_dir(FQDBDIR)) {
       if (!@mkdir(FQDBDIR, 0777, true)) {
         umask($u);
-        $message = __('Unable to create the required directory! Please check your server settings.', 'sqlite-integration');
+        $message = 'Unable to create the required directory! Please check your server settings.';
         echo $message;
         return false;
       }
     }
     if (!is_writable(FQDBDIR)) {
       umask($u);
-      $message = __('Unable to create a file in the directory! Please check your server settings.', 'sqlite-integration');
+      $message = 'Unable to create a file in the directory! Please check your server settings.';
       echo $message;
       return false;
     }
@@ -129,7 +129,7 @@ class PDOEngine extends PDO {
       $fh = fopen(FQDBDIR . '.htaccess', "w");
       if (!$fh) {
         umask($u);
-        $message = __('Unable to create a file in the directory! Please check your server settings.', 'sqlite-integration');
+        $message = 'Unable to create a file in the directory! Please check your server settings.';
         echo $message;
         return false;
       }

@@ -83,7 +83,7 @@ class PDODB extends wpdb {
     
     if (!$str) {
       $err = $this->dbh->get_error_message() ? $this->dbh->get_error_message() : '';
-      $str = $err[2];
+      if (!empty($err)) $str = $err[2]; else $str = '';
     }
     $EZSQL_ERROR[] = array('query' => $this->last_query, 'error_str' => $str);
     

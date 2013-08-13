@@ -167,8 +167,14 @@ SQLite Integrationのアップグレードに失敗するようなら、FTPを�
 
 == Changelog ==
 
+= 1.3 (2013-08-11) =
+* エラーメッセージの出力方法を一部変更しました。
+* query_create.class.phpの_rewrite_field_types()を変更しました。
+* BETWEEN関数が使えるようになりました。
+* New StatPressプラグインが使えるように、ALTER TABLE CHANGE COLUMNの扱いを修正しました。
+
 = 1.2.1 (2013-08-04) =
-* wp-db.php の変更にともなう修正をしました。WordPress 3.6 との互換性を保つためのものです。
+* wp-db.phpの変更にともなって、wpdb::real_escapeプロパティを削除しました。WordPress 3.6 との互換性を保つための変更です。
 
 = 1.2 (2013-08-03) =
 * カレンダー・ウィジェットでの不具合に対応するため、日付フォーマットとそのクオートを修正しました。

@@ -158,8 +158,14 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 
 == Changelog ==
 
+= 1.3 (2013-08-10) =
+* Changed the way of putting out the error messages.
+* Modified the _rewrite_field_types() in query_create.class.php.
+* Added the support for BETWEEN function.
+* Fixed the manipulation of ALTER TABLE CHANGE COLUMN query for NewStatPress plugin to work.
+
 = 1.2.1 (2013-08-04) =
-* Changes following that of the wpdb.php file which makes the plugin compatible with Wordpress 3.6.
+* Removed wpdb::real_escape property following the change of the wpdb.php file which makes the plugin compatible with Wordpress 3.6.
 
 = 1.2 (2013-08-03) =
 * Fixed the date string format and its quotation for calendar widget.

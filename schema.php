@@ -22,8 +22,8 @@ function make_db_sqlite() {
   	$pdo = new PDO('sqlite:'.FQDB, null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 	} catch (PDOException $err) {
 	  $err_data = $err->errorInfo;
-	  $message = __("Database connection error!<br />", 'sqlite-integration');
-	  $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err_data[2]);
+	  $message = 'Database connection error!<br />';
+	  $message .= sprintf("Error message is: %s", $err_data[2]);
 	  echo $message;
 	  return false;
 	}
@@ -76,8 +76,8 @@ function make_db_sqlite() {
 	    $pdo->commit();
 	  } else {
 	    $pdo->rollBack();
-	    $message =  sprintf(__("Error occured while creating tables or indexes...<br />Query was: %s<br />", 'sqlite-integration'), var_export($rewritten_query, true));
-	    $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err_data[2]);
+	    $message =  sprintf("Error occured while creating tables or indexes...<br />Query was: %s<br />", var_export($rewritten_query, true));
+	    $message .= sprintf("Error message is: %s", $err_data[2]);
 	    echo $message;
 	    return false;
 	  }

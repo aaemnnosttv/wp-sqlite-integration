@@ -54,6 +54,7 @@ class PDOSQLiteDriver {
 		    $this->_rewrite_regexp();
 		    $this->_rewrite_boolean();
 		    $this->_fix_date_quoting();
+		    $this->_rewrite_between();
 		    break;
 		  case 'insert':
 		    $this->_strip_backticks();
@@ -511,6 +512,15 @@ class PDOSQLiteDriver {
     }
   }
   
+  private function _rewrite_between() {
+  	$pattern = '/\\s*(\\w+)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s]*)?\\s*/ims';
+  	if (preg_match($pattern, $this->_query, $match)) {
+  		$column_name  = trim($match[1]);
+  		$min_value    = trim($match[2]);
+  		$max_value    = trim($match[3]);
+  		$this->_query = str_ireplace($match[0], " $column_name >= $min_value AND $column_name <= $max_value ", $this->_query);
+  	}
+  }
   /**
    * workaround function to avoid DELETE with JOIN
    * wp-admin/includes/upgrade.php contains 'DELETE ... JOIN' statement.

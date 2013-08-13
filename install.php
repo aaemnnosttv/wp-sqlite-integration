@@ -6,7 +6,7 @@
  */
 
 /**
- * This function overrides wp_install() in wp-admin/upgrade.php
+ * This function overrides wp_install() in wp-admin/includes/upgrade.php
  */
 function wp_install($blog_title, $user_name, $user_email, $public, $deprecated = '', $user_password = '') {
   if (!empty($deprecated))
