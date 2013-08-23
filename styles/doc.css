@@ -1,21 +1,8 @@
 @CHARSET "UTF-8";
 #sqlite-admin-wrap h2,
 #sqlite-admin-side-wrap h2 {
-  background: rgb(73, 90, 88);
-  background: -moz-linear-gradient(bottom, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.5), rgba(73, 90, 88, 0));
-  background: -webkit-gradient(linear, bottom, top, from(rgba(73, 90, 88, 1)), color-stop(0.5, rgba(73, 90, 88, 0.5)), to(rgba(73, 90, 88, 0)));
-  background: linear-gradient(to top, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.2));
-  color: rgb(247, 254, 236);
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -moz-border-radius-topright: 6px;
-  -moz-border-radius-topleft: 6px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  text-shadow: -1px -1px 0 rgb(93, 69, 35),
-                1px -1px 0 rgb(93, 69, 35),
-                -1px 1px 0 rgb(93, 69, 35),
-                1px 1px 0 rgb(93, 69, 35);
+	background: rgb(34, 34, 34);
+  color: rgb(256, 256, 256);
   padding-left: 5px;
 }
 .navigation {
@@ -37,13 +24,8 @@
   margin-right: 10px;
   padding: 5px;
   border: .5px solit #000;
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -moz-border-radius-topright: 6px;
-  -moz-border-radius-topleft: 6px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  box-shadow: 5px 5px 5px #eee;
+  background: rgb(51, 51, 51);
+  color: (256, 256, 256);
 }
 .menu-selected {
   font-size: 20px;
@@ -54,22 +36,8 @@
   margin-right: 10px;
   padding: 5px;
   border: .5px solit #000;
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -moz-border-radius-topright: 6px;
-  -moz-border-radius-topleft: 6px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  box-shadow: 5px 5px 5px #eee;
-  background: rgb(73, 90, 88);
-  background: -moz-linear-gradient(bottom, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.5), rgba(73, 90, 88, 0));
-  background: -webkit-gradient(linear, bottom, top, from(rgba(73, 90, 88, 1)), color-stop(0.5, rgba(73, 90, 88, 0.5)), to(rgba(73, 90, 88, 0)));
-  background: linear-gradient(to top, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.2));
-  color: rgb(247, 254, 236);
-  text-shadow: -1px -1px 0 rgb(93, 69, 35),
-                1px -1px 0 rgb(93, 69, 35),
-                -1px 1px 0 rgb(93, 69, 35),
-                1px 1px 0 rgb(93, 69, 35);
+  background: rgb(0, 116, 162);
+  color: rgb(256, 256, 256);
 }
 .menu-item a {
   text-decoration: none;
@@ -78,6 +46,7 @@
   color: #1d1d1d;
   font-size: 10pt;
   border: 1px solid #ddd;
+  background: rgb(256, 256, 256);
 /*   border-top: 0; */
   -webkit-border-bottom-right-radius: 6px;
   -webkit-border-bottom-left-radius: 6px;
@@ -85,6 +54,12 @@
   -moz-border-radius-bottomleft: 6px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -webkit-border-top-left-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-topleft: 6px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   display: block;
   float: left;
   min-height: 100px;
@@ -99,6 +74,7 @@
   color: #1d1d1d;
   font-size: 10pt;
   border: 1px solid #ddd;
+  background: rgb(256, 256, 256);
 /*   border-top: 0; */
   -webkit-border-bottom-right-radius: 6px;
   -webkit-border-bottom-left-radius: 6px;
@@ -106,6 +82,12 @@
   -moz-border-radius-bottomleft: 6px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -webkit-border-top-left-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-topleft: 6px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   display: block;
   float: left;
   min-height: 100px;

@@ -176,6 +176,14 @@
   },
   
   {
+    "name":"NewStatPress",
+    "compat":"Needs Patch",
+    "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+    "reason":"MySQL specific data",
+    "class":"workaround"
+  },
+  
+  {
     "name":"Optimize Database after Deleting Revisions",
     "compat":"Probably No",
     "reason":"MySQL function/MySQL specific table",

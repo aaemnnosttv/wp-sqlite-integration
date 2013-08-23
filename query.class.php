@@ -70,6 +70,7 @@ class PDOSQLiteDriver {
 		    $this->_rewrite_limit_usage();
 		    $this->_rewrite_order_by_usage();
 		    $this->_rewrite_regexp();
+		    $this->_rewrite_between();
 		    break;
 		  case 'delete':
 		    $this->_strip_backticks();
@@ -518,7 +519,8 @@ class PDOSQLiteDriver {
   		$column_name  = trim($match[1]);
   		$min_value    = trim($match[2]);
   		$max_value    = trim($match[3]);
-  		$this->_query = str_ireplace($match[0], " $column_name >= $min_value AND $column_name <= $max_value ", $this->_query);
+  		$replacement  = " $column_name >= '$min_value' AND $column_name <= '$max_value'";
+  		$this->_query = str_ireplace($match[0], $replacement, $this->_query);
   	}
   }
   /**
