@@ -158,7 +158,7 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 * [Yet Another Related Posts](http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/)
 * [Better Related Posts](http://wordpress.org/extend/plugins/better-related/)
 
-たぶん、もっとあるでしょう。
+たぶん、もっとあるでしょう。動作しないプラグインを見つけたら、お知らせいただけると助かります。
 
 
 == Upgrade Notice ==
@@ -168,9 +168,11 @@ SQLite Integrationのアップグレードに失敗するようなら、FTPを�
 == Changelog ==
 
 = 1.3 (2013-08-11) =
-* エラーメッセージの出力方法を一部変更しました。
-* query_create.class.phpの_rewrite_field_types()を変更しました。
-* BETWEEN関数が使えるようになりました。
+* ダッシュボードのスタイルをMP6プラグインに合わせたものに変えました。
+* 言語カタログが読み込まれていないときのエラーメッセージの出力方法を一部変更しました。
+* query_create.class.phpの_rewrite_field_types()を変更しました。dbDelta()関数が意図したとおりに実行されます。
+* BETWEENステートメントが使えるようになりました。
+* クエリからインデックスヒントを全て削除して実行するようにしました。
 * New StatPressプラグインが使えるように、ALTER TABLE CHANGE COLUMNの扱いを修正しました。
 
 = 1.2.1 (2013-08-04) =

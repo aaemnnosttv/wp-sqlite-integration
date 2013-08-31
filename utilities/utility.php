@@ -198,7 +198,7 @@ class SQLiteIntegrationUtils {
     $db_file = FQDB;
     if (file_exists($db_file)) {
       $size = filesize($db_file);
-      clearstatcache(false, $db_file);
+      clearstatcache(true, $db_file);
       return $this->convert_to_formatted_number($size);
     }
   }

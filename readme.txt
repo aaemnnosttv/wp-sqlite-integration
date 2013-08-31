@@ -150,7 +150,7 @@ These are other examples:
 * [Yet Another Related Posts](http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/)
 * [Better Related Posts](http://wordpress.org/extend/plugins/better-related/)
 
-Probably there are more, I'm afraid.
+Probably there are more, I'm afraid. If you find one, please let me know.
 
 == Upgrade Notice ==
 
@@ -159,9 +159,11 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 == Changelog ==
 
 = 1.3 (2013-08-10) =
-* Changed the way of putting out the error messages.
-* Modified the _rewrite_field_types() in query_create.class.php.
-* Added the support for BETWEEN function.
+* Changed the dashboard style to match MP6 plugin.
+* Changed the way of putting out the error messages when language catalogs are not loaded.
+* Modified the _rewrite_field_types() in query_create.class.php for the dbDelta() function to work properly.
+* Added the support for BETWEEN statement.
+* Changed the regular expression to remove all the index hints from the query string.
 * Fixed the manipulation of ALTER TABLE CHANGE COLUMN query for NewStatPress plugin to work.
 
 = 1.2.1 (2013-08-04) =

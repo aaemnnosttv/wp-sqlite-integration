@@ -41,6 +41,7 @@
 }
 .menu-item a {
   text-decoration: none;
+  color: rgb(256, 256, 256);
 }
 #sqlite-admin-wrap {
   color: #1d1d1d;
