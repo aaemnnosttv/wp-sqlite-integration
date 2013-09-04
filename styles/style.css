@@ -108,10 +108,10 @@ p {
 }
 table#sys-info{
 /*   width: 600px; */
-  width: 450px;
+  width: 480px;
 }
 table#status {
-  width: 450px;
+  width: 480px;
 }
 table#sqlite-table {
 /*   width: 700px; */
@@ -172,7 +172,8 @@ input.button-primary {
 .alt {
   background: rgb(247, 254, 236);
 }
-table#patch-files .item {
+table#patch-files .item,
+table#backup-files .item {
   width: 40px;
 }
 .alert {

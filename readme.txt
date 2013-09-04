@@ -158,13 +158,15 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 
 == Changelog ==
 
-= 1.3 (2013-08-10) =
+= 1.3 (2013-09-04) =
+* Added the backup utility that creates the zipped archive of the current snapshot of the database file.
 * Changed the dashboard style to match MP6 plugin.
 * Changed the way of putting out the error messages when language catalogs are not loaded.
 * Modified the _rewrite_field_types() in query_create.class.php for the dbDelta() function to work properly.
 * Added the support for BETWEEN statement.
 * Changed the regular expression to remove all the index hints from the query string.
 * Fixed the manipulation of ALTER TABLE CHANGE COLUMN query for NewStatPress plugin to work.
+* Fixed minor bugs.
 
 = 1.2.1 (2013-08-04) =
 * Removed wpdb::real_escape property following the change of the wpdb.php file which makes the plugin compatible with Wordpress 3.6.

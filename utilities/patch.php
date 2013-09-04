@@ -202,7 +202,7 @@ class PatchUtils {
         }
         echo '</div>';
       } else {
-        $message = __('Error! Please remove files manually');
+        $message = __('Error! Please remove files manually', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
       }
     }

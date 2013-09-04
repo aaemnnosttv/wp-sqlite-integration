@@ -168,6 +168,7 @@ class SQLiteIntegration {
       add_action('admin_print_scripts-'.$util_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$doc_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$patch_page, array($this, 'add_sqlite_script'));
+      add_action('admin_print_scripts-'.$edit_db, array($this, 'add_sqlite_script'));
     }
   }
   
@@ -191,6 +192,7 @@ class SQLiteIntegration {
       add_action('admin_print_scripts-'.$util_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$doc_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$patch_page, array($this, 'add_sqlite_script'));
+      add_action('admin_print_scripts-'.$edit_db, array($this, 'add_sqlite_script'));
     }
   }
   
