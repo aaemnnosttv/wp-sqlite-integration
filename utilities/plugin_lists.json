@@ -22,7 +22,14 @@
     "compat":"Checked",
     "class":"compatible"
   },
-  
+
+	{
+		"name":"Better Delete Revision",
+		"compat":"No",
+		"reason":"DELETE with JOIN/etc",
+		"class":"incompatible"
+	},
+	
   {
     "name":"Better Related Posts",
     "compat":"No",
@@ -112,6 +119,12 @@
   },
   
   {
+    "name":"FeedWordPress",
+    "compat":"Checked",
+    "class":"compatible"
+  },
+  
+  {
     "name":"Google Analyticator",
     "compat":"Checked",
     "class":"compatible"
@@ -163,6 +176,14 @@
   },
   
   {
+    "name":"NewStatPress",
+    "compat":"Needs Patch",
+    "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+    "reason":"MySQL specific data",
+    "class":"workaround"
+  },
+  
+  {
     "name":"Optimize Database after Deleting Revisions",
     "compat":"Probably No",
     "reason":"MySQL function/MySQL specific table",
@@ -175,6 +196,12 @@
     "class":"compatible"
   },
   
+	{
+		"name":"Redirection",
+		"compat":"Checked",
+		"class":"compatible"
+	},
+	
   {
     "name":"Related Posts",
     "compat":"Checked",
@@ -248,6 +275,12 @@
   },
   
   {
+    "name":"WP Emmet",
+    "compat":"Checked",
+    "class":"compatible"
+  },
+  
+  {
     "name":"WP Multibyte Patch",
     "compat":"Checked",
     "class":"compatible"
@@ -264,7 +297,13 @@
     "compat":"Checked",
     "class":"compatible"
   },
-  
+
+	{
+		"name":"WP-PostViews",
+		"compat":"Checked",
+		"class":"compatible"
+	},
+	
   {
     "name":"WP-reCAPTCHA",
     "compat":"Checked",

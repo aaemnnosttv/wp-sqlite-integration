@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 1.1
+Tested up to: 3.6
+Stable tag: 1.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,7 +46,7 @@ Please contact us with the methods below:
 
 Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
 
-Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have be no support from the plugin authors, eithter.
+Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have no support from the plugin authors, eithter.
 
 = Translation =
 
@@ -150,18 +150,38 @@ These are other examples:
 * [Yet Another Related Posts](http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/)
 * [Better Related Posts](http://wordpress.org/extend/plugins/better-related/)
 
-Probably there are more, I'm afraid.
-
-== Changelog ==
-
-= 1.1 (2013-07-24) =
-* Fixed the manipulation of DROP INDEX query.
-* Removed desctructor() from shutdown_hook.
-* Enabled LOCATE() function in the query string.
-
-= 1.0 (2013-07-07) =
-First release version of the plugin.
+Probably there are more, I'm afraid. If you find one, please let me know.
 
 == Upgrade Notice ==
 
-When auto upgrading of SQLite Integration fails, Please try manual upgrade via FTP.
+When auto upgrading of SQLite Integration fails, please try manual upgrade via FTP.
+
+== Changelog ==
+
+= 1.3 (2013-09-04) =
+* Added the backup utility that creates the zipped archive of the current snapshot of the database file.
+* Changed the dashboard style to match MP6 plugin.
+* Changed the way of putting out the error messages when language catalogs are not loaded.
+* Modified the _rewrite_field_types() in query_create.class.php for the dbDelta() function to work properly.
+* Added the support for BETWEEN statement.
+* Changed the regular expression to remove all the index hints from the query string.
+* Fixed the manipulation of ALTER TABLE CHANGE COLUMN query for NewStatPress plugin to work.
+* Fixed minor bugs.
+
+= 1.2.1 (2013-08-04) =
+* Removed wpdb::real_escape property following the change of the wpdb.php file which makes the plugin compatible with Wordpress 3.6.
+
+= 1.2 (2013-08-03) =
+* Fixed the date string format and its quotation for calendar widget.
+* Fixed the patch utility program for using on the Windows machine.
+* Fixed the textdomain error in utilities/patch.php file when uploading the patch file.
+* Changed the manipulation of the query with ON DUPLICATE KEY UPDATE.
+* Fixed the typos in readme.txt and readme-ja.txt.
+
+= 1.1 (2013-07-24) =
+* Fixed the manipulation of DROP INDEX query.
+* Removed destruct() from shutdown_hook.
+* Enabled LOCATE() function in the query string.
+
+= 1.0 (2013-07-07) =
+* First release version of the plugin.

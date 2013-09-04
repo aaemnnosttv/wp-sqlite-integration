@@ -3,7 +3,6 @@
  * The class for manipulating ALTER query
  * newly supports multiple variants
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu
  */
 class AlterQuery {
@@ -85,7 +84,11 @@ class AlterQuery {
             $tokens['column_name'] = '('.trim($col_name).')';
           } elseif (in_array($match_2, array('index', 'key'))) {
             $tokens['command'] = $match_1.' '.$match_2;
-            $tokens['index_name'] = $match_3;
+            if ($match_3 == '') {
+            	$tokens['index_name'] = str_replace(array('(', ')'), '', $the_rest);
+            } else {
+	            $tokens['index_name'] = $match_3;
+            }
             $tokens['column_name'] = trim($the_rest);
           } else {
             $tokens['command'] = $match_1.' column';
@@ -133,9 +136,8 @@ class AlterQuery {
           if ($match_2 == 'column') {
             $tokens['command'] = $match_1.' '.$match_2;
             $tokens['old_column'] = $match_3;
-            list($new_col) = preg_split('/\s/s', trim($the_rest), -1, PREG_SPLIT_DELIM_CAPTURE);
+            list($new_col, $col_def) = explode(' ', trim($the_rest), 2);
             $tokens['new_column'] = $new_col;
-            $col_def = str_ireplace($new_col, '', $the_rest);
             $tokens['column_def'] = trim($col_def);
           } else {
             $tokens['command'] = $match_1.' column';
@@ -345,16 +347,16 @@ class AlterQuery {
     $create_query = array_shift($index_queries);
     $create_query = preg_replace("/{$tokenized_query['table_name']}/i", $temp_table, $create_query);
     if (preg_match("/\\b{$tokenized_query['old_column']}\\s*(.+?)(?=,)/ims", $create_query, $match)) {
-      if ($tokenized_query['column_def'] == trim($match[1])) {
+      if ($column_def == trim($match[1])) {
         return 'SELECT 1=1';
       } else {
-        $create_query = preg_replace("/\\b{$tokenized_query['old_column']}\\s*.*?(?=,)/ims", "{$tokenized_query['new_column']} {$tokenized_query['column_def']}", $create_query);
+        $create_query = preg_replace("/\\b{$tokenized_query['old_column']}\\s*.*?(?=,)/ims", "{$tokenized_query['new_column']} {$column_def}", $create_query);
       }
     } elseif (preg_match("/\\b{$tokenized_query['old_column']}\\s*(.+?)(?=\))/ims", $create_query, $match)) {
-      if ($tokenized_query['column_def'] == trim($match[1])) {
+      if ($column_def == trim($match[1])) {
         return 'SELECT 1=1';
       } else {
-        $create_query = preg_replace("/\\b{$tokenized_query['old_column']}\\s*.*?(?=\))/ims", "{$tokenized_query['new_column']} {$tokenized_query['column_def']}", $create_query);
+        $create_query = preg_replace("/\\b{$tokenized_query['old_column']}\\s*.*?(?=\))/ims", "{$tokenized_query['new_column']} {$column_def}", $create_query);
       }
     }
     $query[] = $create_query;
@@ -411,28 +413,28 @@ class AlterQuery {
    */
   private function convert_field_types($col_name, $col_def){
     $array_types = array(
-        'bit'        => 'INTEGER', 'bool'       => 'INTEGER',
-        'boolean'    => 'INTEGER', 'tinyint'    => 'INTEGER',
-        'smallint'   => 'INTEGER', 'mediumint'  => 'INTEGER',
-        'int'        => 'INTEGER', 'integer'    => 'INTEGER',
-        'bigint'     => 'INTEGER', 'float'      => 'REAL',
-        'double'     => 'REAL',    'decimal'    => 'REAL',
-        'dec'        => 'REAL',    'numeric'    => 'REAL',
-        'fixed'      => 'REAL',    'date'       => 'TEXT',
-        'datetime'   => 'TEXT',    'timestamp'  => 'TEXT',
-        'time'       => 'TEXT',    'year'       => 'TEXT',
-        'char'       => 'TEXT',    'varchar'    => 'TEXT',
-        'binary'     => 'INTEGER', 'varbinary'  => 'BLOB',
-        'tinyblob'   => 'BLOB',    'tinytext'   => 'TEXT',
-        'blob'       => 'BLOB',    'text'       => 'TEXT',
-        'mediumblob' => 'BLOB',    'mediumtext' => 'TEXT',
-        'longblob'   => 'BLOB',    'longtext'   => 'TEXT'
+    		'bit'        => 'INTEGER', 'bool'       => 'INTEGER',
+    		'boolean'    => 'INTEGER', 'tinyint'    => 'INTEGER',
+    		'smallint'   => 'INTEGER', 'mediumint'  => 'INTEGER',
+    		'bigint'     => 'INTEGER', 'integer'    => 'INTEGER',
+    		'int'        => 'INTEGER', 'float'      => 'REAL',
+    		'double'     => 'REAL',    'decimal'    => 'REAL',
+    		'dec'        => 'REAL',    'numeric'    => 'REAL',
+    		'fixed'      => 'REAL',    'datetime'   => 'TEXT',
+    		'date'       => 'TEXT',    'timestamp'  => 'TEXT',
+    		'time'       => 'TEXT',    'year'       => 'TEXT',
+    		'varchar'    => 'TEXT',    'char'       => 'TEXT',
+    		'varbinary'  => 'BLOB',    'binary'     => 'BLOB',
+    		'tinyblob'   => 'BLOB',    'mediumblob' => 'BLOB',
+    		'longblob'   => 'BLOB',    'blob'       => 'BLOB',
+    		'tinytext'   => 'TEXT',    'mediumtext' => 'TEXT',
+    		'longtext'   => 'TEXT',    'text'       => 'TEXT'
     );
     $array_curtime = array('current_timestamp', 'current_time', 'current_date');
     $array_reptime = array("'0000-00-00 00:00:00'", "'0000-00-00 00:00:00'", "'0000-00-00'");
     $def_string = str_replace('`', '', $col_def);
     foreach ($array_types as $o=>$r){
-      $pattern = "/\\b" . $o . "\\s*(\([^\)]*\))?\\s*/imsx";
+      $pattern = "/\\b$o\\s*(\([^\)]*\)*)?\\s*/ims";
       if (preg_match($pattern, $def_string)) {
         $def_string = preg_replace($pattern, "$r ", $def_string);
         break;

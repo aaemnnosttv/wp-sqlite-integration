@@ -1,7 +1,6 @@
 <?php
 /**
  * @package SQLite Integration
- * @version 1.1
  * @author  Kojima Toshiyasu, Justin Adie
  */
 
@@ -54,12 +53,15 @@ class PDOSQLiteDriver {
 		    $this->_delete_index_hints();
 		    $this->_rewrite_regexp();
 		    $this->_rewrite_boolean();
+		    $this->_fix_date_quoting();
+		    $this->_rewrite_between();
 		    break;
 		  case 'insert':
 		    $this->_strip_backticks();
 		    $this->_execute_duplicate_key_update();
 		    $this->_rewrite_insert_ignore();
 		    $this->_rewrite_regexp();
+		    $this->_fix_date_quoting();
 		    break;
 		  case 'update':
 		    $this->_strip_backticks();
@@ -68,6 +70,7 @@ class PDOSQLiteDriver {
 		    $this->_rewrite_limit_usage();
 		    $this->_rewrite_order_by_usage();
 		    $this->_rewrite_regexp();
+		    $this->_rewrite_between();
 		    break;
 		  case 'delete':
 		    $this->_strip_backticks();
@@ -95,7 +98,7 @@ class PDOSQLiteDriver {
 	 */
 	private function _handle_show_query(){
 	  $table_name = '';
-		$pattern = '/^\\s*SHOW\\s*TABLES\\s*(LIKE\\s*(.*))$/im';
+		$pattern = '/^\\s*SHOW\\s*TABLES\\s*.*?(LIKE\\s*(.*))$/im';
 		if (preg_match($pattern, $this->_query, $matches)) {
 		  $table_name = str_replace(array("'", ';'), '', $matches[2]);
 		}
@@ -285,25 +288,28 @@ class PDOSQLiteDriver {
 	 * @return void 
 	 */
 	private function _delete_index_hints(){
-		$pattern = '/use\s+index\s*\(.*?\)/i';
+		$pattern = '/\\s*(use|ignore|force)\\s+index\\s*\(.*?\)/i';
 		$this->_query = preg_replace($pattern, '', $this->_query);
 	}
 	
 	/**
-	 * Justin Adie says: 
-	 * method to fix inconsistent use of quoted, unquoted etc date values in query function
-	 * this is ironic, given the above rewrite badlyformed dates method 
-	 * examples 
+	 * Fix the date string and quote. This is required for the calendar widget.
+	 * 
 	 * where month(fieldname)=08 becomes month(fieldname)='8'
 	 * where month(fieldname)='08' becomes month(fieldname)='8'
 	 * 
-	 * I don't understand...
+	 * I use preg_replace_callback instead of 'e' option because of security reason.
+	 * cf. PHP manual (regular expression)
 	 * 
 	 * @return void
 	 */
-	private function _fix_date_quoting(){
-		$pattern = '/(month|year|second|day|minute|hour|dayofmonth)\s*\((.*?)\)\s*=\s*["\']?(\d{1,4})[\'"]?\s*/ei';
-		$this->_query = preg_replace($pattern, "'\\1(\\2)=\'' . intval('\\3') . '\' ' ", $this->_query);
+	private function _fix_date_quoting() {
+		$pattern = '/(month|year|second|day|minute|hour|dayofmonth)\\s*\((.*?)\)\\s*=\\s*["\']?(\d{1,4})[\'"]?\\s*/im';
+		$this->_query = preg_replace_callback($pattern, array($this, '__fix_date_quoting'), $this->_query);
+	}
+	private function __fix_date_quoting($match) {
+		$fixed_val = "{$match[1]}({$match[2]})='" . intval($match[3]) . "' ";
+		return $fixed_val;
 	}
 	
 	private function _rewrite_regexp(){
@@ -408,7 +414,7 @@ class PDOSQLiteDriver {
         return;
       }
       // data check
-      if (preg_match('/^\((.*)\)\\s*VALUES\\s*\((.*)\)$/im', $insert_data, $match_1)) {
+      if (preg_match('/^\((.*)\)\\s*VALUES\\s*\((.*)\)$/ims', $insert_data, $match_1)) {
         $col_array = explode(',', $match_1[1]);
         $ins_data_array = explode(',', $match_1[2]);
         foreach ($col_array as $col) {
@@ -507,6 +513,16 @@ class PDOSQLiteDriver {
     }
   }
   
+  private function _rewrite_between() {
+  	$pattern = '/\\s*(\\w+)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s]*)?\\s*/ims';
+  	if (preg_match($pattern, $this->_query, $match)) {
+  		$column_name  = trim($match[1]);
+  		$min_value    = trim($match[2]);
+  		$max_value    = trim($match[3]);
+  		$replacement  = " $column_name >= '$min_value' AND $column_name <= '$max_value'";
+  		$this->_query = str_ireplace($match[0], $replacement, $this->_query);
+  	}
+  }
   /**
    * workaround function to avoid DELETE with JOIN
    * wp-admin/includes/upgrade.php contains 'DELETE ... JOIN' statement.

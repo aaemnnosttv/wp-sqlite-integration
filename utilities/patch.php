@@ -3,7 +3,7 @@
  * This file contains PatchUtils class
  * 
  * @package SQLite Integration
- * @since 1.1
+ * @author Kojima Toshiyasu
  *
  */
 class PatchUtils {
@@ -34,6 +34,8 @@ class PatchUtils {
    * @return boolean|array
    */
   private function apply_patches() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     $installed_plugins = array();
     $file_names = array();
     $output = array();
@@ -103,6 +105,8 @@ class PatchUtils {
    * @return boolean|array
    */
   private function delete_patch_files() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     $file_names = array();
     $rm_results = array();
     if (isset($_POST['plugin_checked'])) {
@@ -110,18 +114,16 @@ class PatchUtils {
     } else {
       return false;
     }
-    $command = 'rm -f';
-    foreach ($file_names as $file) {
-      if (chdir(SQLitePatchDir)) {
-        exec("$command $file", $output, $retval);
-      } else {
-        $rm_results[$file] = __('Error!: patches directory is not accessible.', $domain);
-      }
-      if ($retval > 0) {
-        $rm_results[$file] = sprintf(__('Error! Messages: %s', $domain), $output);
-      } else {
-        $rm_results[$file] = sprintf(__('File %s is deleted.', $domain), $file);
-      }
+    if (chdir(SQLitePatchDir)) {
+    	foreach ($file_names as $file) {
+    		if (unlink($file)) {
+    			$rm_results[$file] = sprintf(__('File %s is deleted.', $domain), $file);
+    		} else {
+    			$rm_results[$file] = sprintf(__('Error! File %s is not deleted.', $domain), $file);
+    		}
+    	}
+    } else {
+    	$rm_results[$file] = __('Error!: patches directory is not accessible.', $domain);
     }
     return $rm_results;
   }
@@ -130,6 +132,8 @@ class PatchUtils {
    * No return values.
    */
   private function upload_file() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     if (!file_exists(SQLitePatchDir) || !is_dir(SQLitePatchDir)) {
       mkdir(SQLitePatchDir, 0705, true);
     }
@@ -198,7 +202,7 @@ class PatchUtils {
         }
         echo '</div>';
       } else {
-        $message = __('Error! Please remove files manually');
+        $message = __('Error! Please remove files manually', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
       }
     }
