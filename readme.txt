@@ -158,6 +158,9 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 
 == Changelog ==
 
+= 1.3.1 () =
+* Changed the manipulation of SHOW INDEX query with WHERE clause.
+
 = 1.3 (2013-09-04) =
 * Added the backup utility that creates the zipped archive of the current snapshot of the database file.
 * Changed the dashboard style to match MP6 plugin.

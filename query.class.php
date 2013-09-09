@@ -347,28 +347,12 @@ class PDOSQLiteDriver {
 
   /**
    * method to execute SHOW INDEX query
+   * Moved the WHERE clause manipulation to pdoengin.class.php (ver 1.3.1)
    */
   private function _handle_show_index() {
-    $_columns = array(// No, you'll get no meaningful information..
-        'Key_name' => 'name',
-        );
-    $pattern_0 = '/^\\s*SHOW\\s*(?:INDEX|INDEXES|KEYS)\\s*FROM\\s*(\\w+)?\\s*WHERE\\s*(.*)$/im';
-    $pattern_1 = '/^\\s*SHOW\\s*(?:INDEX|INDEXES|KEYS)\\s*FROM\\s*(\\w+)?/im';
-    if (preg_match($pattern_0, $this->_query, $match_0)) {
-      $table_name = str_replace("'", '', $match_0[1]);
-      list($key, $value) = explode('=', $match_0[2]);
-      $key = trim($key);
-      $value = preg_replace("/[\';]/", '', $value);
-      $value = trim($value);
-      if (array_key_exists($key, $_columns)) {
-        $key = $_columns[$key];
-        $where_clause = 'AND ' . $key . ' LIKE ' . "'" . $value . "%'";
-      } else {
-        $where_clause = '';
-      }
-      $this->_query = "SELECT * FROM sqlite_master WHERE tbl_name='$table_name' $where_clause";
-    } elseif (preg_match($pattern_1, $this->_query, $match_1)) {
-      $table_name = preg_replace("/[\';]/", '', $match_1[1]);
+    $pattern = '/^\\s*SHOW\\s*(?:INDEX|INDEXES|KEYS)\\s*FROM\\s*(\\w+)?/im';
+    if (preg_match($pattern, $this->_query, $match)) {
+      $table_name = preg_replace("/[\';]/", '', $match[1]);
       $table_name = trim($table_name);
       $this->_query = "SELECT * FROM sqlite_master WHERE tbl_name='$table_name'";
     }

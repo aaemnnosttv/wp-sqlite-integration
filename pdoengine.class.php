@@ -773,6 +773,7 @@ class PDOEngine extends PDO {
   }
   /**
    * rewrites the result of SHOW INDEX to the Object compatible with MySQL
+   * added the WHERE clause manipulation (ver 1.3.1)
    */
   private function convert_to_index_object() {
     $_results = array();
@@ -838,6 +839,20 @@ class PDOEngine extends PDO {
         $_columns['Index_type']  = 'BTREE';
         $_columns['Comment']     = '';
         $_results[] = new ObjectArray($_columns);
+      }
+      if (stripos($this->queries[0], 'WHERE') !== false) {
+      	preg_match('/WHERE\\s*(.*)$/im', $this->queries[0], $match);
+      	list($key, $value) = explode('=', $match[1]);
+      	$key = trim($key);
+      	$value = preg_replace("/[\';]/", '', $value);
+      	$value = trim($value);
+      	foreach ($_results as $result) {
+      		if (stripos($value, $result->$key) !== false) {
+      			unset($_results);
+				    $_results[] = $result;
+				    break;
+      		}
+      	}
       }
     }
     $this->results = $_results;
