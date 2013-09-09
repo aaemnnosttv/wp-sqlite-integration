@@ -151,7 +151,7 @@ class AlterQuery {
             $tokens['command'] = $match_1.' '.$match_2;
             $tokens['column_name'] = $match_3;
             list($set_or_drop) = explode(' ', $the_rest);
-            if ($set_or_drop == 'set') {
+            if (strtolower($set_or_drop) == 'set') {
               $tokens['default_command'] = 'set default';
               $default_value = str_ireplace('set default', '', $the_rest);
               $tokens['default_value'] = trim($default_value);
@@ -161,7 +161,7 @@ class AlterQuery {
           } else {
             $tokens['command'] = $match_1.' column';
             $tokens['column_name'] = $match_2;
-            if ($match_3 == 'set') {
+            if (strtolower($match_3) == 'set') {
               $tokens['default_command'] = 'set default';
               $default_value = str_ireplace('default', '', $the_rest);
               $tokens['default_value'] = trim($default_value);
@@ -388,7 +388,7 @@ class AlterQuery {
     if (stripos($create_query, $tokenized_query['column_name']) === false) {
       return 'SELECT 1=1';
     }
-    if (preg_match("/\\s*({$tokenized_query['column_name']}\\s*.*?)\\s*(DEFAULT\\s*.*)[,)]/im", $create_query, $match)) {
+    if (preg_match("/\\s*({$tokenized_query['column_name']}\\s*.*?)\\s*(DEFAULT\\s*.*|)[,)]/im", $create_query, $match)) {
       $col_def = trim($match[1]);
       $old_default = trim($match[2]);
       $create_query = preg_replace("/($col_def)\\s*$old_default/im", "\\1 $def_value", $create_query);
