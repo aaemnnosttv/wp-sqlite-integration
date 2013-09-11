@@ -14,6 +14,9 @@ jQuery(document).ready(function($) {
 	} else if (document.getElementById("patch-files") != null) {
 		$table = $('#patch-files');
 		$headers = $table.find('thead th').slice(1);
+	} else if (document.getElementById("backup-files") != null) {
+		$table = $('#backup-files');
+		$headers = $table.find('thead th').slice(1);
 	}
 	$headers
 	  .wrapInner('<a href="#"></a>')

@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 1.1
+Tested up to: 3.6
+Stable tag: 1.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,12 @@ SQLite Integrationはラッパ・プログラムです。WordPressとSQLiteの�
 WordPressはMySQLと話していると思っていて、背後で何が起こっているかは知りません。実際にはSQLiteと話しているのですが、WordPressはいつもの通り仕事をします。
 
 SQLite Integrationは[PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress)プラグインの後継です。後者は残念なことに、もうメンテナンスされていないようです。SQLite IntegrationはPDO for WordPressの基本的なアイディアと構造を借りて、より多くの機能とユーティリティを追加しました。
+
+= 重要なお知らせ =
+
+このプラグインを使ってWordPress 3.5.x をインストールし、3.6にアップグレードした場合、データベースが意図したとおりに動作していないかもしれません。これに該当する場合は、プラグインを最新版にアップグレードして、管理画面のメンテナンスページに移動し、修復が必要かどうかをチェックしてください。必要なら、そのページで提供しているユーティリティを使って修復をすることができます。
+
+WordPress 3.6 をインストールした場合や、3.5.x を使っている場合は、これに該当しませんので、修復は必要ありません。
 
 = Features =
 
@@ -158,18 +164,44 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 * [Yet Another Related Posts](http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/)
 * [Better Related Posts](http://wordpress.org/extend/plugins/better-related/)
 
-たぶん、もっとあるでしょう。
+たぶん、もっとあるでしょう。動作しないプラグインを見つけたら、お知らせいただけると助かります。
 
-== Changelog ==
-
-= 1.1 (2013-07-24) =
-* DROP INDEX 単独のクエリが動作していなかったのを修正しました。
-* shutdown_hook で descructor を実行していたのをやめました。
-* LOCATE() 関数を使えるようにしました。
-
-= 1.0 (2013-07-07) =
-最初のリリース。
 
 == Upgrade Notice ==
 
 SQLite Integrationのアップグレードに失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
+
+== Changelog ==
+
+= 1.4 (2013-09-12) =
+* アップグレードしたWordPressで期待通り動作しないのを修正するために、データベース管理ユーティリティを追加しました。
+* SHOW INDEXクエリにWHERE句がある場合の処理を変更しました。
+* ALTER TABLEクエリのバグを修正しました。
+
+= 1.3 (2013-09-04) =
+* データベースファイルのスナップショットをzipアーカイブとしてバックアップするユーティリティを追加しました。
+* ダッシュボードのスタイルをMP6プラグインに合わせたものに変えました。
+* 言語カタログが読み込まれていないときのエラーメッセージの出力方法を一部変更しました。
+* query_create.class.phpの_rewrite_field_types()を変更しました。dbDelta()関数が意図したとおりに実行されます。
+* BETWEENステートメントが使えるようになりました。
+* クエリからインデックスヒントを全て削除して実行するようにしました。
+* New StatPressプラグインが使えるように、ALTER TABLE CHANGE COLUMNの扱いを修正しました。
+* いくつかの小さなバグを修正しました。
+
+= 1.2.1 (2013-08-04) =
+* wp-db.phpの変更にともなって、wpdb::real_escapeプロパティを削除しました。WordPress 3.6 との互換性を保つための変更です。
+
+= 1.2 (2013-08-03) =
+* カレンダー・ウィジェットでの不具合に対応するため、日付フォーマットとそのクオートを修正しました。
+* Windows マシンでパッチファイルが削除できなかったのを修正しました。
+* パッチファイルをアップロードするときに textdomain のエラーが出るのを修正しました。
+* ON DUPLICATE KEY UPDATEをともなったクエリの処理を変更しました。
+* readme.txt と readme-ja.txt の間違いを直しました。
+
+= 1.1 (2013-07-24) =
+* DROP INDEX 単独のクエリが動作していなかったのを修正しました。
+* shutdown_hook で destruct() を実行していたのをやめました。
+* LOCATE() 関数を使えるようにしました。
+
+= 1.0 (2013-07-07) =
+* 最初のリリース。

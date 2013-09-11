@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: SQLite Integration
-Plugin URI: http://wordpress.org/extend/plugins/sqlite-integration
+Plugin URI: http://dogwood.skr.jp/wordpress/sqlite-integration/
 Description: SQLite Integration is the plugin that enables WordPress to use SQLite. If you don't have MySQL and want to build a WordPress website, it's for you.
 Author: Kojima Toshiyasu
-Version: 1.1
+Version: 1.4
 Author URI: http://dogwood.skr.jp
 Text Domain: sqlite-integration
 Domain Path: /languages
@@ -58,6 +58,10 @@ if (!class_exists('SQLiteIntegrationDocument')) {
 if (!class_exists('PatchUtils')) {
   require_once SQLiteFilePath . '/utilities/patch.php';
   $patch_utils = new PatchUtils();
+}
+if (!class_exists('DatabaseMaintenance')) {
+	require_once SQLiteFilePath . '/utilities/database_maintenance.php';
+	$maintenance = new DatabaseMaintenance();
 }
 
 /**
@@ -153,13 +157,14 @@ class SQLiteIntegration {
    * users.
    */
   function add_pages() {
-    global $utils, $doc, $patch_utils;
+    global $utils, $doc, $patch_utils, $maintenance;
     if (function_exists('add_options_page')) {
       $welcome_page = add_options_page(__('SQLite Integration'), __('SQLite Integration'), 'manage_options', 'sqlite-integration', array($utils, 'welcome'));
       $util_page = add_submenu_page(null, 'System Info', 'System Info', 'manage_options', 'sys-info', array($utils, 'show_utils'));
       $edit_db   = add_submenu_page(null, 'Setting File', 'Setting File', 'manage_options', 'setting-file', array($utils, 'edit_db_file'));
       $doc_page  = add_submenu_page(null, 'Documentation', 'Documentation', 'manage_options', 'doc', array($doc, 'show_doc'));
       $patch_page = add_submenu_page(null, 'Patch Utility', 'Patch Utility', 'manage_options', 'patch', array($patch_utils, 'show_patch_page'));
+      $maintenance_page = add_submenu_page(null, 'DB Maintenance', 'DB Maintenance', 'manage_options', 'maintenance', array($maintenance, 'show_maintenance_page'));
       add_action('admin_print_styles-'.$welcome_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$util_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$edit_db, array($this, 'add_style_sheet'));
@@ -168,6 +173,8 @@ class SQLiteIntegration {
       add_action('admin_print_scripts-'.$util_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$doc_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$patch_page, array($this, 'add_sqlite_script'));
+      add_action('admin_print_scripts-'.$edit_db, array($this, 'add_sqlite_script'));
+      add_action('admin_print_styles-'.$maintenance_page, array($this, 'add_style_sheet'));
     }
   }
   
@@ -176,13 +183,14 @@ class SQLiteIntegration {
    * So, capability is set to manage_network_options.
    */
   function add_network_pages() {
-    global $utils, $doc, $patch_utils;
+    global $utils, $doc, $patch_utils, $maintenance;
     if (function_exists('add_options_page')) {
       $welcome_page = add_submenu_page('settings.php', __('SQLite Integration'), __('SQLite Integration'), 'manage_network_options', 'sqlite-integration', array($utils, 'welcome'));
       $util_page = add_submenu_page(null, 'System Info', 'System Info', 'manage_network_options', 'sys-info', array($utils, 'show_utils'));
       $edit_db   = add_submenu_page(null, 'Setting File', 'Setting File', 'manage_network_options', 'setting-file', array($utils, 'edit_db_file'));
       $doc_page  = add_submenu_page(null, 'Documentation', 'Documentation', 'manage_network_options', 'doc', array($doc, 'show_doc'));
       $patch_page = add_submenu_page(null, 'Patch Utility', 'Patch Utility', 'manage_network_options', 'patch', array($patch_utils, 'show_patch_page'));
+      $maintenance_page = add_submenu_page(null, 'DB Maintenance', 'DB Maintenance', 'manage_network_options', 'maintenance', array($maintenance, 'show_maintenance_page'));
       add_action('admin_print_styles-'.$welcome_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$util_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$edit_db, array($this, 'add_style_sheet'));
@@ -191,6 +199,8 @@ class SQLiteIntegration {
       add_action('admin_print_scripts-'.$util_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$doc_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$patch_page, array($this, 'add_sqlite_script'));
+      add_action('admin_print_scripts-'.$edit_db, array($this, 'add_sqlite_script'));
+      add_action('admin_print_styles-'.$maintenance_page, array($this, 'add_style_sheet'));
     }
   }
   

@@ -1,7 +1,6 @@
 <?php
 /**
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
@@ -115,14 +114,14 @@ class PDOEngine extends PDO {
     if (!is_dir(FQDBDIR)) {
       if (!@mkdir(FQDBDIR, 0777, true)) {
         umask($u);
-        $message = __('Unable to create the required directory! Please check your server settings.', 'sqlite-integration');
+        $message = 'Unable to create the required directory! Please check your server settings.';
         echo $message;
         return false;
       }
     }
     if (!is_writable(FQDBDIR)) {
       umask($u);
-      $message = __('Unable to create a file in the directory! Please check your server settings.', 'sqlite-integration');
+      $message = 'Unable to create a file in the directory! Please check your server settings.';
       echo $message;
       return false;
     }
@@ -130,7 +129,7 @@ class PDOEngine extends PDO {
       $fh = fopen(FQDBDIR . '.htaccess', "w");
       if (!$fh) {
         umask($u);
-        $message = __('Unable to create a file in the directory! Please check your server settings.', 'sqlite-integration');
+        $message = 'Unable to create a file in the directory! Please check your server settings.';
         echo $message;
         return false;
       }
@@ -649,7 +648,12 @@ class PDOEngine extends PDO {
     $engine = $this->prepare_engine($this->query_type);
     $reason = 0;
     $message = '';
+    $re_query = '';
     $rewritten_query = $engine->rewrite_query($query, $this->query_type);
+    if (is_array($rewritten_query) && array_key_exists('recursion', $rewritten_query)) {
+    	$re_query = $rewritten_query['recursion'];
+    	unset($rewritten_query['recursion']);
+    }
     try {
       $this->beginTransaction();
       if (is_array($rewritten_query)) {
@@ -674,6 +678,9 @@ class PDOEngine extends PDO {
       } else {
         $this->rollBack();
       }
+    }
+    if ($re_query != '') {
+    	$this->query($re_query);
     }
     if ($reason > 0) {
       $err_message = sprintf(__("Problem in executing alter query. Error was: %s", 'sqlite-integration'), $message);
@@ -774,6 +781,7 @@ class PDOEngine extends PDO {
   }
   /**
    * rewrites the result of SHOW INDEX to the Object compatible with MySQL
+   * added the WHERE clause manipulation (ver 1.3.1)
    */
   private function convert_to_index_object() {
     $_results = array();
@@ -839,6 +847,20 @@ class PDOEngine extends PDO {
         $_columns['Index_type']  = 'BTREE';
         $_columns['Comment']     = '';
         $_results[] = new ObjectArray($_columns);
+      }
+      if (stripos($this->queries[0], 'WHERE') !== false) {
+      	preg_match('/WHERE\\s*(.*)$/im', $this->queries[0], $match);
+      	list($key, $value) = explode('=', $match[1]);
+      	$key = trim($key);
+      	$value = preg_replace("/[\';]/", '', $value);
+      	$value = trim($value);
+      	foreach ($_results as $result) {
+      		if (stripos($value, $result->$key) !== false) {
+      			unset($_results);
+				    $_results[] = $result;
+				    break;
+      		}
+      	}
       }
     }
     $this->results = $_results;
