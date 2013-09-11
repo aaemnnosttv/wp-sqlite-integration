@@ -648,7 +648,12 @@ class PDOEngine extends PDO {
     $engine = $this->prepare_engine($this->query_type);
     $reason = 0;
     $message = '';
+    $re_query = '';
     $rewritten_query = $engine->rewrite_query($query, $this->query_type);
+    if (is_array($rewritten_query) && array_key_exists('recursion', $rewritten_query)) {
+    	$re_query = $rewritten_query['recursion'];
+    	unset($rewritten_query['recursion']);
+    }
     try {
       $this->beginTransaction();
       if (is_array($rewritten_query)) {
@@ -673,6 +678,9 @@ class PDOEngine extends PDO {
       } else {
         $this->rollBack();
       }
+    }
+    if ($re_query != '') {
+    	$this->query($re_query);
     }
     if ($reason > 0) {
       $err_message = sprintf(__("Problem in executing alter query. Error was: %s", 'sqlite-integration'), $message);

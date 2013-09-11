@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,12 @@ SQLite Integration is a kind of wrapper program, which is placed between WordPre
 WordPress thinks she talks with MySQL and doesn't know what has happened in the background. She really talks with SQLite and will be happy with it.
 
 SQLite Integration is a successor to [PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress) plugin, which unfortunately enough, doesn't seem to be maintained any more. SQLite Integration uses the basic idea and structures of that plugin and adds some more features or some utilities.
+
+= Important Notice =
+
+When your installed WordPress 3.5.x with this plugin and upgraded to 3.6, your database might not work as expected. If this is your case, please upgrade this plugin to the newest version (1.4) and visit the maintenance page in the admin dashboard, where you can check if you need to fix your database, and you can do fixing job with the utility.
+
+When you installed WordPress 3.6 with this plugin or your WordPress is 3.5.x, you don't have to fix your database.
 
 = Features =
 
@@ -158,9 +164,10 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 
 == Changelog ==
 
-= 1.3.1 () =
+= 1.4 (2013-09-12) =
+* Added the database maintenance utility for fixing the database mulfunction of the upgraded WordPress installation.
 * Changed the manipulation of SHOW INDEX query with WHERE clause.
-* Fixed the bug of the manipulation of ALTER TABLE ALTER COLUMN query.
+* Fixed the bug of the manipulation of ALTER TABLE query.
 
 = 1.3 (2013-09-04) =
 * Added the backup utility that creates the zipped archive of the current snapshot of the database file.

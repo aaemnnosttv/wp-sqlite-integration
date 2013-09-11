@@ -24,6 +24,7 @@ class SQLiteIntegrationDocument {
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=sys-info"><?php _e('System Info', $domain); ?></a></li>
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=setting-file"><?php _e('Miscellaneous', $domain);?></a></li>
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=patch"><?php _e('Patch Utility', $domain);?></a></li>
+        <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
       </ul>
     </div>
     <div class="wrap" id="sqlite-admin-wrap">

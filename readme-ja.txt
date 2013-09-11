@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,12 @@ SQLite Integrationはラッパ・プログラムです。WordPressとSQLiteの�
 WordPressはMySQLと話していると思っていて、背後で何が起こっているかは知りません。実際にはSQLiteと話しているのですが、WordPressはいつもの通り仕事をします。
 
 SQLite Integrationは[PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress)プラグインの後継です。後者は残念なことに、もうメンテナンスされていないようです。SQLite IntegrationはPDO for WordPressの基本的なアイディアと構造を借りて、より多くの機能とユーティリティを追加しました。
+
+= 重要なお知らせ =
+
+このプラグインを使ってWordPress 3.5.x をインストールし、3.6にアップグレードした場合、データベースが意図したとおりに動作していないかもしれません。これに該当する場合は、プラグインを最新版にアップグレードして、管理画面のメンテナンスページに移動し、修復が必要かどうかをチェックしてください。必要なら、そのページで提供しているユーティリティを使って修復をすることができます。
+
+WordPress 3.6 をインストールした場合や、3.5.x を使っている場合は、これに該当しませんので、修復は必要ありません。
 
 = Features =
 
@@ -167,9 +173,10 @@ SQLite Integrationのアップグレードに失敗するようなら、FTPを�
 
 == Changelog ==
 
-= 1.3.1 () =
+= 1.4 (2013-09-12) =
+* アップグレードしたWordPressで期待通り動作しないのを修正するために、データベース管理ユーティリティを追加しました。
 * SHOW INDEXクエリにWHERE句がある場合の処理を変更しました。
-* ALTER TABLE ALTER COLUMNクエリのバグを修正しました。
+* ALTER TABLEクエリのバグを修正しました。
 
 = 1.3 (2013-09-04) =
 * データベースファイルのスナップショットをzipアーカイブとしてバックアップするユーティリティを追加しました。

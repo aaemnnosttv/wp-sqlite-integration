@@ -1227,3 +1227,113 @@ msgid ""
 "continue."
 msgstr ""
 "この内容を保存してもよろしいですか?\\n\\nやめるなら[キャンセル]を、続けるなら[OK]をクリック。"
+
+#: database_maintenance.php:314
+msgid "Can't create backup file."
+msgstr "バックアップファイルを作れません。"
+
+#: database_maintenance.php:334
+msgid "Failed: "
+msgstr "失敗: "
+
+#: database_maintenance.php:395
+msgid "Maintenance"
+msgstr "メンテナンス"
+
+#: database_maintenance.php:399
+msgid "Database Maintenace"
+msgstr "データベース・メンテナンス"
+
+#: database_maintenance.php:400
+msgid "Important Notice"
+msgstr "重要なお知らせ"
+
+#: database_maintenance.php:402
+msgid ""
+"When you installed WordPress 3.5.x with SQLite Integration and upgraded to "
+"3.6, your database might not function as expected."
+msgstr ""
+"WordPress 3.5.x を SQLite Integrationを使ってインストールし、3.6 にアップグレードした場合、"
+"データベースが意図したとおりに動作しないかもしれません。"
+
+#: database_maintenance.php:403
+msgid ""
+"This page provide you the database sanity check utility and the restore "
+"utility."
+msgstr ""
+"このページでは、データベースが正常かどうかをチェックするユーティリティと、回復ユーティリティを提供します。"
+
+#: database_maintenance.php:406
+msgid ""
+"Click \"Sanity Check\" button first, and see if you need to fix database or "
+"not. If needed, click \"Fix Database\" button. Afterward you may go to "
+"Miscellaneous page and optimize database (this is not required)."
+msgstr ""
+"「正常チェック」ボタンを最初にクリックして、データベースが修復を必要とするかどうかを見てください。必要なら、"
+"「修復」ボタンをクリックしてください。「いろいろ」ページに移動して、最適化をすることもできます（必須ではありません）。"
+
+#: database_maintenance.php:409
+msgid ""
+"Fix Database procedure will create a database backup file each time the "
+"button clicked. The backup file is named with \"maintenance-backup\", so you "
+"can remove it if you don't need it. Please go to Miscellaneous page and "
+"check if there is one."
+msgstr ""
+"データベースの修復は、ボタンがクリックされるたびにバックアップファイルを作成します。ファイル名には、"
+"\"maintenance-backup\"とついていますので、必要なければ削除してかまいません。"
+"「いろいろ」ページに移動して、バックアップファイルが作成されているかどうかご覧ください。"
+
+#: database_maintenance.php:412
+msgid ""
+"If you installed WordPress 3.6 (not upgraded), you don't have to restore the "
+"database."
+msgstr ""
+"アップグレードではなくて、WordPress 3.6 を最初からインストールした場合は、データベースの修復は"
+"必要ありません。"
+
+#: database_maintenance.php:421
+msgid "Sanity Check"
+msgstr "正常チェック"
+
+#: database_maintenance.php:421
+msgid ""
+"Are you sure to check the database? This will take some time.\\n\\nClick "
+"[Cancel] to stop, [OK] to continue."
+msgstr ""
+"データベースのチェックをします。この操作は少し時間がかかるかもしれません。\\n\\nやめるなら[キャンセル]を、"
+"続けるなら[OK]をクリックしてください。"
+
+#: database_maintenance.php:422
+msgid "Fix database"
+msgstr "修復"
+
+#: database_maintenance.php:422
+msgid ""
+"Are you sure to do fix the database? This will take some time.\\n\\nClick "
+"[Cancel] to stop, [OK] to continue."
+msgstr ""
+"データベースの修復をします。この操作は少し時間がかかるかもしれません。\\n\\nやめるなら[キャンセル]を、"
+"続けるなら[OK]をクリックしてください。"
+
+#: database_maintenance.php:436 database_maintenance.php:446
+msgid "Results"
+msgstr "結果"
+
+#: database_maintenance.php:447
+msgid "Your database restoration is successfully finished!"
+msgstr "データベースの修復が成功しました。"
+
+#: database_maintenance.php:463 database_maintenance.php:474
+msgid "Checked Results"
+msgstr "チェックの結果"
+
+#: database_maintenance.php:468
+msgid " needs restoring."
+msgstr "修復が必要です。"
+
+#: database_maintenance.php:475
+msgid "Your database is OK. You don't have to restore it."
+msgstr "あなたのデータベースは正常です。修復の必要はありません。"
+
+msgid "You can check your database and fix it if needed."
+msgstr "データベースのチェックと修復をすることができます。"
