@@ -86,7 +86,7 @@ class SQLiteIntegrationDocument {
   	  <p>
   	  <?php _e('SQLite Integration doesn\'t contain database maintenace functionality, because there are some other free or proprietary softwares that give you such functionalities. For example, these are among free softwares:', $domain);?>
   	  </p>
-  	  <ul>
+  	  <ul class="in-body-list">
   	    <li><a href="https://addons.mozilla.org/en-US/firefox/addon/sqlite-manager/">SQLite Manager Mozilla Addon</a>(<?php _e('my recommendation', $domain);?>)</li>
   	    <li><a href="http://www.sqlitemanager.org/">SQLiteManager</a>(<?php _e('unfortunately seems not to maintained...', $domain); ?>)</li>
   	  </ul>

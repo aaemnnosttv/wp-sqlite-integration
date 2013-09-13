@@ -138,7 +138,7 @@ td.menu-title {
 table.statement {
   width: 500px;
 }
-ul {
+ul.in-body-list {
   margin-left: 20px;
 }
 ol {

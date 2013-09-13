@@ -403,10 +403,10 @@ class DatabaseMaintenance {
 	    	<?php _e('This page provide you the database sanity check utility and the restore utility.', $domain);?>
 	    </p>
 	    <p>
-	    	<?php _e('Click "Sanity Check" button first, and see if you need to fix database or not. If needed, click "Fix Database" button. Afterward you may go to Miscellaneous page and optimize database (this is not required).')?>
+	    	<?php _e('Click "Sanity Check" button first, and see if you need to fix database or not. If needed, click "Fix Database" button. Afterward you may go to Miscellaneous page and optimize database (this is not required).', $domain);?>
 	    </p>
 	    <p>
-	    	<?php _e('Fix Database procedure will create a database backup file each time the button clicked. The backup file is named with "maintenance-backup", so you can remove it if you don\'t need it. Please go to Miscellaneous page and check if there is one.')?>
+	    	<?php _e('Fix Database procedure will create a database backup file each time the button clicked. The backup file is named with "maintenance-backup", so you can remove it if you don\'t need it. Please go to Miscellaneous page and check if there is one.', $domain);?>
 	    </p>
 	    <p>
 	    	<?php _e('If you installed WordPress 3.6 (not upgraded), you don\'t have to restore the database.', $domain);?>
