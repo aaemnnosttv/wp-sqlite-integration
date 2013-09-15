@@ -120,8 +120,10 @@
   
   {
     "name":"FeedWordPress",
-    "compat":"Checked",
-    "class":"compatible"
+    "compat":"Needs patch",
+		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+		"reason":"MySQL specific function",
+    "class":"workaround"
   },
   
   {
@@ -182,6 +184,14 @@
     "reason":"MySQL specific data",
     "class":"workaround"
   },
+	
+	{
+		"name":"NextGEN Gallery",
+		"compat":"Needs patch",
+		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+		"reason":"MySQL specific function",
+		"class":"workaround"
+	},
   
   {
     "name":"Optimize Database after Deleting Revisions",
@@ -264,8 +274,10 @@
 	
   {
     "name":"Wordpress Popular Posts",
-    "compat":"Checked",
-    "class":"compatible"
+    "compat":"Needs patch",
+		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+		"reason":"MySQL specific query",
+    "class":"workaround"
   },
   
   {

@@ -56,7 +56,14 @@ function wp_install($blog_title, $user_name, $user_email, $public, $deprecated =
   wp_new_blog_notification($blog_title, $guessurl, $user_id, ($email_password ? $user_password : __('The password you chose during the install.')));
   
   wp_cache_flush();
-  
+
+  if ((isset($_SERVER['SERVER_NAME']) && stripos('apache', $_SERVER['SERVER_NAME']) === false) || (isset($_SERVER['SERVER_SIGNATURE']) && stripos('apache', $_SERVER['SERVER_SIGNATURE']) === false)) {
+    $server_message = sprintf('Your webserver doesn\'t seem to be Apache. So the database directory access restriction by the .htaccess file may not function. We strongly recommend that you should restrict the access to the directory %s in some other way.', FQDBDIR);
+    echo '<div style="position: absolute; margin-top: 250px; width: 700px; border: .5px dashed rgb(0, 0, 0);"><p style="margin: 10px;">';
+    echo $server_message;
+    echo '</p></div>';
+  }
+
   return array('url' => $guessurl, 'user_id' => $user_id, 'password' => $user_password, 'password_message' => $message);
 }
 ?>

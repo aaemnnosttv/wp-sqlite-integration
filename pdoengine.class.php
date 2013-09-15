@@ -112,7 +112,7 @@ class PDOEngine extends PDO {
     global $wpdb;
     $u = umask(0000);
     if (!is_dir(FQDBDIR)) {
-      if (!@mkdir(FQDBDIR, 0777, true)) {
+      if (!@mkdir(FQDBDIR, 0707, true)) {
         umask($u);
         $message = 'Unable to create the required directory! Please check your server settings.';
         echo $message;
@@ -706,7 +706,11 @@ class PDOEngine extends PDO {
       $value = str_replace("'", '', $match[1]);
       $dummy_data['Variable_name'] = trim($value);
       // this is set for Wordfence Security Plugin
-      if ($value == 'max_allowed_packet') $dummy_data['Value'] = 1047552;
+      if ($value == 'max_allowed_packet') {
+				$dummy_data['Value'] = 1047552;
+			} else {
+				$dummy_data['Value'] = '';
+			}
     }
     $_results[] = new ObjectArray($dummy_data);
     $this->results = $_results;

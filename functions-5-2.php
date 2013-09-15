@@ -56,7 +56,8 @@ class PDOSQLiteUDFS {
       'inet_ntoa'      => 'inet_ntoa',
       'inet_aton'      => 'inet_aton',
       'datediff'       => 'datediff',
-  		'locate'         => 'locate'
+  		'locate'         => 'locate',
+			'version'        => 'version'
   );
 
   public function month($field){
@@ -384,5 +385,12 @@ class PDOSQLiteUDFS {
 	  	}
   	}
   }
+	/**
+	 * 
+	 */
+	public function version() {
+    global $required_mysql_version;
+    return $required_mysql_version;
+	}
 }
 ?>

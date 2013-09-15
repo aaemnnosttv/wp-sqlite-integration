@@ -17,12 +17,11 @@ class DatabaseMaintenance {
 						'comment_author_email' => '\'\'',
 						'comment_author_url'   => '\'\'',
 						'comment_author_IP'    => '\'\'',
-						'comment_date'         => '\'0000-00-00 00:00:00\'',
 						'comment_date_gmt'     => '\'0000-00-00 00:00:00\'',
+						'comment_date'         => '\'0000-00-00 00:00:00\'',
 						'comment_karma'        => '\'0\'',
 						'comment_approved'     => '\'1\'',
 						'comment_agent'        => '\'\'',
-						'comment_type'         => '\'\'',
 						'comment_type'         => '\'\'',
 						'comment_parent'       => '\'0\'',
 						'user_id'              => '\'0\''
@@ -50,15 +49,15 @@ class DatabaseMaintenance {
 				),
 				$wpdb->prefix.'posts' => array(
 						'post_author' => '\'0\'',
-						'post_date' => '\'0000-00-00 00:00:00\'',
 						'post_date_gmt' => '\'0000-00-00 00:00:00\'',
+						'post_date' => '\'0000-00-00 00:00:00\'',
 						'post_status' => '\'publish\'',
 						'comment_status' => '\'open\'',
 						'ping_status' => '\'open\'',
 						'post_password' => '\'\'',
 						'post_name' => '\'\'',
-						'post_modified' => '\'0000-00-00 00:00:00\'',
 						'post_modified_gmt' => '\'0000-00-00 00:00:00\'',
+						'post_modified' => '\'0000-00-00 00:00:00\'',
 						'post_parent' => '\'0\'',
 						'guid' => '\'\'',
 						'menu_order' => '\'0\'',
@@ -90,7 +89,6 @@ class DatabaseMaintenance {
 						'user_status' => '\'0\'',
 						'display_name' => '\'\'',
 						// for network install
-						'user_login' => '\'\'',
 						'spam' => '\'0\'',
 						'deleted' => '\'0\''
 				),
@@ -344,6 +342,23 @@ class DatabaseMaintenance {
 			return $return_val;
 		}
 	}
+	
+	private function show_columns() {
+		global $wpdb, $utils;
+		$domain = $utils->text_domain;
+		$tables = $wpdb->tables('all');
+		if (!isset($_POST['table'])) {
+			$message = __('Table name is not selected.', $domain);
+			return $message;
+		} elseif (!in_array($_POST['table'], $tables)) {
+			$message = __('There\'s no such table', $domain);
+			return $message;
+		}	else {
+			$table_name = $_POST['table'];
+			$results = $wpdb->get_results("SHOW COLUMNS FROM $table_name");
+			return $results;
+		}
+	}
 
 	private function maintenance_backup() {
 		$result = array();
@@ -421,7 +436,25 @@ class DatabaseMaintenance {
 	    	<input type="submit" name="sanity-check" class="button-primary" value="<?php _e('Sanity Check', $domain);?>" onclick="return confirm('<?php _e('Are you sure to check the database? This will take some time.\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
 	    	<input type="submit" name="do-fix-database" class="button-primary" value="<?php _e('Fix database', $domain);?>" onclick="return confirm('<?php _e('Are you sure to do fix the database? This will take some time.\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
 	    </form>
-    </div>
+	   	<h3><?php _e('Columns Information', $domain);?></h3>
+	   	<p>
+	   		<?php _e('Select a table name and click "Display Columns" button, and you\'ll see the column property of that table. This information is for debug use.', $domain);?>
+	   	</p>
+	   	<form action="" method="post">
+        <?php
+        	if (function_exists('wp_nonce_field')) {
+            wp_nonce_field('sqliteintegration-database-manip-stats');
+          }
+        ?>
+	   		<label for="table"/>Table Name: </label>
+	    	<select name="table" id="table">
+	    		<?php foreach ($wp_tables as $table) :?>
+	    		<option value="<?php echo $table;?>"><?php echo $table;?></option>
+	    		<?php endforeach;?>
+	    	</select>
+	    	<input type="submit" name="show-columns" class="button-secondary" value="<?php _e('Display Columns', $domain);?>" onclick="return confirm('<?php _e('Display columns in the selected table.\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
+	    </form>
+	    </div>
     <?php endif;
     
     if (isset($_POST['do-fix-database'])) {
@@ -479,6 +512,38 @@ class DatabaseMaintenance {
     		echo '</div>';
     	}
     }
+    if (isset($_POST['show-columns'])) {
+			check_admin_referer('sqliteintegration-database-manip-stats');
+    	if (is_multisite() && !current_user_can('manage_network_options')) {
+    		die(__('You are not allowed to do this operation!', $domain));
+    	} elseif (!current_user_can('manage_options')) {
+    		die(__('You are not allowed to do this operation!', $domain));
+    	}
+    	$results = $this->show_columns();
+    	if (is_array($results)) {
+				$title = '<h3>'. sprintf(__('Columns In %s', $domain), $_POST['table']) . '</h3>';
+				echo '<div class="wrap" id="sqlite-admin-side-wrap">';
+				echo $title;
+				echo '<table><thead><tr><th>Column</th><th>Type</th><th>Null</th><th>Default</th></tr></thead>';
+				echo '<tbody>';
+				foreach ($results as $column) {
+					echo '<tr>';
+					echo '<td>' . $column->Field . '</td>';
+					echo '<td>' . $column->Type . '</td>';
+					echo '<td>' . $column->Null . '</td>';
+					echo '<td>' . $column->Default . '</td>';
+					echo '</tr>';
+				}
+				echo '</tbody></table></div>';
+			} else {
+				$title = '<h3>'. __('Columns Info', $domain) . '</h3>';
+				echo '<div class="wrap" id="sqlite-admin-side-wrap">';
+				echo $title;
+				echo '<ul>';
+				echo $results;
+				echo '</ul></div>';
+			}
+		}
 	}
 }
 ?>
