@@ -1337,3 +1337,30 @@ msgstr "あなたのデータベースは正常です。修復の必要はあり
 
 msgid "You can check your database and fix it if needed."
 msgstr "データベースのチェックと修復をすることができます。"
+
+msgid "Table name is not selected."
+msgstr "テーブル名が選択されていません。"
+
+msgid "There's no such table."
+msgstr "テーブルが存在しません。"
+
+msgid "Columns Information"
+msgstr "カラム情報"
+
+msgid ""
+"Select a table name and click \"Display Columns\" button, and you'll see "
+"the column property of that table. This information is for debug use."
+msgstr ""
+"テーブル名を選択して「カラムを表示」ボタンをクリックしてください。そのテーブルのカラム属性を表示します。"
+"この情報はデバッグのために利用されます。"
+
+msgid ""
+"Display columns in the selected table.\\n\\nClick [Cancel] to stop, [OK] to continue."
+msgstr ""
+"選択したテーブルのカラムを表示します。\\n\\nやめるなら、[キャンセル]を、続けるんら、[OK]をクリックしてください。"
+
+msgid "Columns In %s"
+msgstr "%sのカラム"
+
+msgid "Columns Info"
+msgstr "カラム情報"

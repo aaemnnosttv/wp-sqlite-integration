@@ -351,7 +351,7 @@ class DatabaseMaintenance {
 			$message = __('Table name is not selected.', $domain);
 			return $message;
 		} elseif (!in_array($_POST['table'], $tables)) {
-			$message = __('There\'s no such table', $domain);
+			$message = __('There\'s no such table.', $domain);
 			return $message;
 		}	else {
 			$table_name = $_POST['table'];
@@ -391,7 +391,7 @@ class DatabaseMaintenance {
 	}
 
 	function show_maintenance_page() {
-		global $utils;
+		global $utils, $wpdb;
 		$domain = $utils->text_domain;
 		if (is_multisite() && !current_user_can('manage_network_options')) {
 			die(__('You are not allowed to access this page!', $domain));
@@ -440,6 +440,9 @@ class DatabaseMaintenance {
 	   	<p>
 	   		<?php _e('Select a table name and click "Display Columns" button, and you\'ll see the column property of that table. This information is for debug use.', $domain);?>
 	   	</p>
+			<?php
+				$wp_tables = $wpdb->tables('all');
+			?>
 	   	<form action="" method="post">
         <?php
         	if (function_exists('wp_nonce_field')) {
