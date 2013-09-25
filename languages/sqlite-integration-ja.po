@@ -1364,3 +1364,18 @@ msgstr "%sのカラム"
 
 msgid "Columns Info"
 msgstr "カラム情報"
+
+msgid "Table Name: "
+msgstr "テーブル名"
+
+msgid "Column"
+msgstr "カラム"
+
+msgid "Type"
+msgstr "タイプ"
+
+msgid "Null"
+msgstr "ヌル"
+
+msgid "Default"
+msgstr "デフォルト"

@@ -304,14 +304,13 @@ class DatabaseMaintenance {
 				)
 		);
 		if (version_compare($wp_version, '3.6', '<')) return false;
-		$results = $this->sanity_check();
 		$return_val = array();
 		$queries = array();
+		$results = $this->sanity_check();
 		if ($results !== true) {
 			if (!$this->maintenance_backup()) {
 				$message = __('Can\'t create backup file.', $domain);
-				echo $message;
-				return false;
+				return $message;
 			}
 			$tables = array_keys($results);
 			foreach ($tables as $table) {
@@ -334,10 +333,12 @@ class DatabaseMaintenance {
 				}
 			}
 		} else {
-			return true;
+			$message = __('Your database is OK. You don\'t have to restore it.', $domain);
+			return $message;
 		}
 		if (empty($return_val)) {
-			return true;
+			$message = __('Your database restoration is successfully finished!', $domain);
+			return $message;
 		} else {
 			return $return_val;
 		}
@@ -398,8 +399,6 @@ class DatabaseMaintenance {
 		} elseif (!current_user_can('manage_options')) {
 			die(__('You are not allowed to access this page!', $domain));
 		}
-
-
     if (isset($_GET['page']) && $_GET['page'] == 'maintenance') : ?>
     <div class="navigation">
       <ul class="navi-menu">
@@ -449,7 +448,7 @@ class DatabaseMaintenance {
             wp_nonce_field('sqliteintegration-database-manip-stats');
           }
         ?>
-	   		<label for="table"/>Table Name: </label>
+	   		<label for="table"/><?php _e('Table Name: ', $domain);?></label>
 	    	<select name="table" id="table">
 	    		<?php foreach ($wp_tables as $table) :?>
 	    		<option value="<?php echo $table;?>"><?php echo $table;?></option>
@@ -468,7 +467,7 @@ class DatabaseMaintenance {
     		die(__('You are not allowed to do this operation!', $domain));
     	}
     	$fix_results = $this->do_fix_database();
-    	if ($fix_results !== true) {
+    	if (is_array($fix_results)) {
 				$title = '<h3>'. __('Results', $domain) . '</h3>';
 				echo '<div class="wrap" id="sqlite-admin-side-wrap">';
 				echo $title;
@@ -480,10 +479,9 @@ class DatabaseMaintenance {
     		echo '</div>';
     	} else {
 				$title = '<h3>'. __('Results', $domain) . '</h3>';
-				$message = __('Your database restoration is successfully finished!', $domain);
 				echo '<div class="wrap" id="sqlite-admin-side-wrap">';
 				echo $title;
-				echo '<p>'.$message.'</p>';
+				echo '<p>'.$fix_results.'</p>';
 				echo '</div>';
 			}
     }
@@ -525,26 +523,31 @@ class DatabaseMaintenance {
     	$results = $this->show_columns();
     	if (is_array($results)) {
 				$title = '<h3>'. sprintf(__('Columns In %s', $domain), $_POST['table']) . '</h3>';
-				echo '<div class="wrap" id="sqlite-admin-side-wrap">';
+				$column_header = __('Column', $domain);
+				$type_header = __('Type', $domain);
+				$null_header = __('Null', $domain);
+				$default_header = __('Default', $domain);
+				echo '<div class="wrap" id="sqlite-admin-side-wrap" style="clear: both;">';
 				echo $title;
-				echo '<table><thead><tr><th>Column</th><th>Type</th><th>Null</th><th>Default</th></tr></thead>';
+				echo '<table class="widefat page fixed"><thead><tr><th>'. $column_header . '</th><th>'. $type_header . '</th><th>' . $null_header . '</th><th>' . $default_header . '</th></tr></thead>';
 				echo '<tbody>';
+				$counter = 0;
 				foreach ($results as $column) {
-					echo '<tr>';
+					echo (($counter % 2) == 1) ? '<tr class="alt">' : '<tr>';
 					echo '<td>' . $column->Field . '</td>';
 					echo '<td>' . $column->Type . '</td>';
 					echo '<td>' . $column->Null . '</td>';
 					echo '<td>' . $column->Default . '</td>';
 					echo '</tr>';
+					$counter++;
 				}
 				echo '</tbody></table></div>';
 			} else {
 				$title = '<h3>'. __('Columns Info', $domain) . '</h3>';
 				echo '<div class="wrap" id="sqlite-admin-side-wrap">';
 				echo $title;
-				echo '<ul>';
-				echo $results;
-				echo '</ul></div>';
+				echo '<p>' . $results;
+				echo '</p></div>';
 			}
 		}
 	}

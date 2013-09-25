@@ -6,7 +6,7 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.6
+Tested up to: 3.6.1
 Stable tag: 1.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,7 +38,7 @@ When you installed WordPress 3.6 with this plugin or your WordPress is 3.5.x, yo
 
 = Features =
 
-SQLite Integration is not an ordinary 'plugin'. It is used to install WordPress itself. You need to do some preparations. Please read the install section. And see more detailed instruction in the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration).
+SQLite Integration is not an ordinary 'plugin'. It is used to install WordPress itself. You need to do some preparations. Please read the install section. And see more detailed instruction in the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/).
 
 Once you succeeded in installing WordPress, you can use it just like the others using MySQL. Optionally, you can activate this plugin in the installed plugins panel of the adimn dashboard, and you can see the useful information and instructions. It is not required but I recommend it.
 
@@ -50,7 +50,8 @@ If you are using [PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for
 
 Please contact us with the methods below:
 
-Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
+1. Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
+2. Visti the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/) or [SQLite Integration(ja) Page](http://dogwood.skr.jp/wordpress/sqlite-integration-ja/) and leave a message.
 
 Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have no support from the plugin authors, eithter.
 

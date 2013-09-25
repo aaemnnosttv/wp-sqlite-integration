@@ -34,7 +34,7 @@ class PDOEngine extends PDO {
 
   /**
    * Constructor
-   * @param array $DatabaseParams
+   * @param
    */
   function __construct() {
     $this->init();
@@ -79,8 +79,8 @@ class PDOEngine extends PDO {
           if ($status == 5 || $status == 6) {
             $locked = true;
           } else {
-            $message = __("Database connection error!<br />", 'sqlite-integration');
-            $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err->getMessage());
+            $message = 'Database connection error!<br />';
+            $message .= sprintf("Error message is: %s", $err->getMessage());
             $this->set_error(__LINE__, __FUNCTION__, $message);
             return false;
           }
@@ -95,8 +95,8 @@ class PDOEngine extends PDO {
       try {
         $this->pdo = new PDO($dsn, null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
       } catch (PDOException $err) {
-        $message = __("Database connection error!<br />", 'sqlite-integration');
-        $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err->getMessage());
+        $message = 'Database initialization error!<br />';
+        $message .= sprintf("Error message is: %s", $err->getMessage());
         $this->set_error(__LINE__, __FUNCTION__, $message);
         return false;
       }
@@ -133,7 +133,7 @@ class PDOEngine extends PDO {
         echo $message;
         return false;
       }
-      fwrite($fh, "DENY FROM ALL");
+      fwrite($fh, 'DENY FROM ALL');
       fclose($fh);
     }
     umask($u);
@@ -144,7 +144,7 @@ class PDOEngine extends PDO {
    * executed once while installation process
    */
   private function make_sqlite_tables() {
-    require_once PDODIR . "install.php";
+    require_once PDODIR . 'install.php';
   }
   
   public function query($query) {
@@ -252,7 +252,7 @@ class PDOEngine extends PDO {
 		
 		ob_start();
 		debug_print_backtrace();
-		$output .= "<pre>" . ob_get_contents() . "</pre>";
+		$output .= '<pre>' . ob_get_contents() . '</pre>';
 		ob_end_clean();
 		return $output;
 	
@@ -298,7 +298,7 @@ class PDOEngine extends PDO {
 	}
 	
   private function prepare_query(){
-		$this->queries[] = "Prepare:\t". $this->prepared_query;
+		$this->queries[] = 'Prepare: ' . $this->prepared_query;
 		$reason = 0;
 		$message = '';
 		$statement = null;
@@ -312,7 +312,7 @@ class PDOEngine extends PDO {
 		} while (5 == $reason || 6 == $reason);
 		
 		if ($reason > 0){
-			$err_message = sprintf(__("Problem preparing the PDO SQL Statement.  Error was: %s", 'sqlite-integration'), $message);
+			$err_message = sprintf("Problem preparing the PDO SQL Statement.  Error was: %s", $message);
 	    $this->set_error(__LINE__, __FUNCTION__, $err_message);
 		}
 		return $statement;
@@ -324,7 +324,7 @@ class PDOEngine extends PDO {
 		if (!is_object($statement))
 		  return;
 		if (count($this->extracted_variables) > 0) {
-			$this->queries[] = "Executing: ". var_export($this->extracted_variables, true);
+			$this->queries[] = 'Executing: ' . var_export($this->extracted_variables, true);
 			do {
 				if ($this->query_type == 'update' || $this->query_type == 'replace') {
 					try {
@@ -346,7 +346,7 @@ class PDOEngine extends PDO {
 				}
 			} while (5 == $reason || 6 == $reason);
 		} else {
-			$this->queries[] = "Executing: (no parameters)\t ";
+			$this->queries[] = 'Executing: (no parameters)';
 			do{
 			  if ($this->query_type == 'update' || $this->query_type == 'replace') {
 			  	try {
@@ -369,7 +369,7 @@ class PDOEngine extends PDO {
 			} while (5 == $reason || 6 == $reason);
 		}
 		if ($reason > 0) {
-			$err_message = sprintf(__("Error while executing query! Error message was: %s", 'sqlite-integration'), $message);
+			$err_message = sprintf("Error while executing query! Error message was: %s", $message);
 			$this->set_error(__LINE__, __FUNCTION__, $err_message);
 			return false;
 		} else {
@@ -377,32 +377,32 @@ class PDOEngine extends PDO {
 		}
 		//generate the results that $wpdb will want to see
 		switch ($this->query_type) {
-			case "insert":
-			case "update":
-			case "replace":
+			case 'insert':
+			case 'update':
+			case 'replace':
 				$this->last_insert_id = $this->pdo->lastInsertId();
 				$this->affected_rows = $statement->rowCount();
 				$this->return_value = $this->affected_rows;
 			  break;
-			case "select":
-			case "show":
-			case "showcolumns":
-			case "showindex":
-			case "describe":
-      case "desc":
+			case 'select':
+			case 'show':
+			case 'showcolumns':
+			case 'showindex':
+			case 'describe':
+      case 'desc':
 //  			case "foundrows":
 				$this->num_rows = count($this->_results);
 				$this->return_value = $this->num_rows;
 			  break;
-			case "delete":
+			case 'delete':
 				$this->affected_rows = $statement->rowCount();
 				$this->return_value = $this->affected_rows;
 			  break;
-			case "alter":
-			case "drop":
-			case "create":
-			case "optimize":
-			case "truncate":
+			case 'alter':
+			case 'drop':
+			case 'create':
+			case 'optimize':
+			case 'truncate':
 				if ($this->is_error) {
 					$this->return_value = false;
 				} else {
@@ -423,7 +423,7 @@ class PDOEngine extends PDO {
 		$_limit = $limit = ini_get('pcre.backtrack_limit');
 		do {
 			if ($limit > 10000000) {
-				$message = __("The query is too big to parse properly", 'sqlite-integration');
+				$message = 'The query is too big to parse properly';
 				$this->set_error(__LINE__, __FUNCTION__, $message);
 				break; //no point in continuing execution, would get into a loop
 			} else {
@@ -435,7 +435,7 @@ class PDOEngine extends PDO {
 		
 		//reset the pcre.backtrack_limist
 		ini_set('pcre.backtrack_limit', $_limit);
-		$this->queries[]= "With Placeholders: $query ";
+		$this->queries[]= 'With Placeholders: ' . $query;
 		$this->prepared_query = $query;
 	}
 	
@@ -504,7 +504,7 @@ class PDOEngine extends PDO {
   private function execute_insert_query_new($query) {
   	$engine = $this->prepare_engine($this->query_type);
     $this->rewritten_query = $engine->rewrite_query($query, $this->query_type);
-    $this->queries[] = "Rewritten: $this->rewritten_query";
+    $this->queries[] = 'Rewritten: ' . $this->rewritten_query;
     $this->extract_variables();
     $statement = $this->prepare_query();
     $this->execute_query($statement);
@@ -543,7 +543,7 @@ class PDOEngine extends PDO {
         }
         $query_string = $query_prefix . ' ' . $value . $suffix;
         $this->rewritten_query = $engine->rewrite_query($query_string, $this->query_type);
-        $this->queries[] = "Rewritten: $this->rewritten_query";
+        $this->queries[] = 'Rewritten: ' . $this->rewritten_query;
         $this->extracted_variables = array();
         $this->extract_variables();
         if ($first) {
@@ -556,7 +556,7 @@ class PDOEngine extends PDO {
       }
     } else {
       $this->rewritten_query = $engine->rewrite_query($query, $this->query_type);
-      $this->queries[] = "Rewritten: $this->rewritten_query";
+      $this->queries[] = 'Rewritten: ' . $this->rewritten_query;
       $this->extract_variables();
       $statement = $this->prepare_query();
       $this->execute_query($statement);
@@ -632,7 +632,7 @@ class PDOEngine extends PDO {
       }
     }
     if ($reason > 0) {
-      $err_message = sprintf(__("Problem in creating table or index. Error was: %s", 'sqlite-integration'), $message);
+      $err_message = sprintf("Problem in creating table or index. Error was: %s", $message);
       $this->set_error(__LINE__, __FUNCTION__, $err_message);
       return false;
     }
@@ -683,7 +683,7 @@ class PDOEngine extends PDO {
     	$this->query($re_query);
     }
     if ($reason > 0) {
-      $err_message = sprintf(__("Problem in executing alter query. Error was: %s", 'sqlite-integration'), $message);
+      $err_message = sprintf("Problem in executing alter query. Error was: %s", $message);
       $this->set_error(__LINE__, __FUNCTION__, $err_message);
       return false;
     }

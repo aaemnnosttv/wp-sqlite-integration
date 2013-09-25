@@ -6,7 +6,7 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.6
+Tested up to: 3.6.1
 Stable tag: 1.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,7 +50,8 @@ SQLite Integrationは普通の「プラグイン」ではありません。WordP
 
 下の方法でコンタクトを取ってください。
 
-[Support Forum](http://wordpress.org/support/plugin/sqlite-integration)にポストする。
+1. [Support Forum](http://wordpress.org/support/plugin/sqlite-integration)にポストする。
+2. [SQLite Integration(ja)のページ](http://dogwood.skr.jp/wordpress/sqlite-integration-ja/)でメッセージを残す。
 
 注意: WordPress.orgはMySQL以外のデータベースを正式にサポートしていません。だから、WordPress.orgからのサポートは得られません。フォーラムに投稿しても、回答を得ることはまずないでしょう。また、パッチをあてたプラグインを使う場合は、そのプラグインの作者からのサポートはないものと思ってください。自分でリスクを負う必要があります。
 

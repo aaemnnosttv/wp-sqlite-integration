@@ -54,7 +54,7 @@ class PDOSQLiteDriver {
 		    $this->_rewrite_regexp();
 		    $this->_rewrite_boolean();
 		    $this->_fix_date_quoting();
-		    $this->_rewrite_between();
+// 		    $this->_rewrite_between();
 		    break;
 		  case 'insert':
 		    $this->_strip_backticks();
@@ -70,7 +70,7 @@ class PDOSQLiteDriver {
 		    $this->_rewrite_limit_usage();
 		    $this->_rewrite_order_by_usage();
 		    $this->_rewrite_regexp();
-		    $this->_rewrite_between();
+// 		    $this->_rewrite_between();
 		    break;
 		  case 'delete':
 		    $this->_strip_backticks();
@@ -488,13 +488,13 @@ class PDOSQLiteDriver {
           $this->_query = $update_query;
         }
       }
-    } else {
-      // wordaround...
-      $pattern = '/ ON DUPLICATE KEY UPDATE.*$/im';
-      $replace_query = preg_replace($pattern, '', $this->_query);
-      $replace_query = str_ireplace('INSERT ', 'INSERT OR REPLACE ', $replace_query);
-      $this->_query = $replace_query;
     }
+//      else {
+//       $pattern = '/ ON DUPLICATE KEY UPDATE.*$/im';
+//       $replace_query = preg_replace($pattern, '', $this->_query);
+//       $replace_query = str_ireplace('INSERT ', 'INSERT OR REPLACE ', $replace_query);
+//       $this->_query = $replace_query;
+//     }
   }
   
   private function _rewrite_between() {

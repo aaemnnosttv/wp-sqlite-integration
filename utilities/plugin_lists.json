@@ -23,13 +23,13 @@
     "class":"compatible"
   },
 
-	{
-		"name":"Better Delete Revision",
-		"compat":"No",
-		"reason":"DELETE with JOIN/etc",
-		"class":"incompatible"
-	},
-	
+  {
+    "name":"Better Delete Revision",
+    "compat":"No",
+    "reason":"DELETE with JOIN/etc",
+    "class":"incompatible"
+  },
+
   {
     "name":"Better Related Posts",
     "compat":"No",
@@ -121,8 +121,8 @@
   {
     "name":"FeedWordPress",
     "compat":"Needs patch",
-		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
-		"reason":"MySQL specific function",
+    "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+    "reason":"MySQL specific function",
     "class":"workaround"
   },
   
