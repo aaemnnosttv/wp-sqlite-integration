@@ -22,7 +22,14 @@
     "compat":"Checked",
     "class":"compatible"
   },
-  
+
+  {
+    "name":"Better Delete Revision",
+    "compat":"No",
+    "reason":"DELETE with JOIN/etc",
+    "class":"incompatible"
+  },
+
   {
     "name":"Better Related Posts",
     "compat":"No",
@@ -112,6 +119,14 @@
   },
   
   {
+    "name":"FeedWordPress",
+    "compat":"Needs patch",
+    "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+    "reason":"MySQL specific function",
+    "class":"workaround"
+  },
+  
+  {
     "name":"Google Analyticator",
     "compat":"Checked",
     "class":"compatible"
@@ -163,6 +178,34 @@
   },
   
   {
+  	"name":"Mathjax Latex",
+  	"compat":"Checked",
+  	"class":"compatible"
+  },
+  
+  {
+  	"name":"MP6",
+  	"compat":"Checked",
+  	"class":"compatible"
+  },
+  
+  {
+    "name":"NewStatPress",
+    "compat":"Needs Patch",
+    "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+    "reason":"MySQL specific data",
+    "class":"workaround"
+  },
+	
+	{
+		"name":"NextGEN Gallery",
+		"compat":"Needs patch",
+		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+		"reason":"MySQL specific function",
+		"class":"workaround"
+	},
+  
+  {
     "name":"Optimize Database after Deleting Revisions",
     "compat":"Probably No",
     "reason":"MySQL function/MySQL specific table",
@@ -175,6 +218,12 @@
     "class":"compatible"
   },
   
+	{
+		"name":"Redirection",
+		"compat":"Checked",
+		"class":"compatible"
+	},
+	
   {
     "name":"Related Posts",
     "compat":"Checked",
@@ -237,12 +286,20 @@
 	
   {
     "name":"Wordpress Popular Posts",
+    "compat":"Needs Patch",
+		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+		"reason":"MySQL specific query",
+    "class":"workaround"
+  },
+  
+  {
+    "name":"WordPress Related Posts",
     "compat":"Checked",
     "class":"compatible"
   },
   
   {
-    "name":"WordPress Related Posts",
+    "name":"WP Emmet",
     "compat":"Checked",
     "class":"compatible"
   },
@@ -264,7 +321,13 @@
     "compat":"Checked",
     "class":"compatible"
   },
-  
+
+	{
+		"name":"WP-PostViews",
+		"compat":"Checked",
+		"class":"compatible"
+	},
+	
   {
     "name":"WP-reCAPTCHA",
     "compat":"Checked",

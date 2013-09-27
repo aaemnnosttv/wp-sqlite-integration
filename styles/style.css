@@ -1,22 +1,9 @@
 @CHARSET "UTF-8";
 #sqlite-admin-wrap h2,
 #sqlite-admin-side-wrap h2 {
-  background: rgb(73, 90, 88);
-  background: -moz-linear-gradient(bottom, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.5), rgba(73, 90, 88, 0));
-  background: -webkit-gradient(linear, bottom, top, from(rgba(73, 90, 88, 1)), color-stop(0.5, rgba(73, 90, 88, 0.5)), to(rgba(73, 90, 88, 0)));
-  background: linear-gradient(to top, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.2));
-  color: rgb(247, 254, 236);
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -moz-border-radius-topright: 6px;
-  -moz-border-radius-topleft: 6px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  text-shadow: -1px -1px 0 rgb(93, 69, 35),
-                1px -1px 0 rgb(93, 69, 35),
-                -1px 1px 0 rgb(93, 69, 35),
-                1px 1px 0 rgb(93, 69, 35);
-  padding-left: 5px;
+  background: rgb(34, 34, 34);
+  color: rgb(256, 256, 256);
+	padding-left: 5px;
 }
 h3 {
   clear: both;
@@ -40,13 +27,8 @@ h3 {
   margin-right: 10px;
   padding: 5px;
   border: .5px solit #000;
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -moz-border-radius-topright: 6px;
-  -moz-border-radius-topleft: 6px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  box-shadow: 5px 5px 5px #eee;
+  background: rgb(51, 51, 51);
+  color: (256, 256, 256);
 }
 .menu-selected {
   font-size: 20px;
@@ -57,30 +39,18 @@ h3 {
   margin-right: 10px;
   padding: 5px;
   border: .5px solit #000;
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-top-left-radius: 6px;
-  -moz-border-radius-topright: 6px;
-  -moz-border-radius-topleft: 6px;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  box-shadow: 5px 5px 5px #eee;
-  background: rgb(73, 90, 88);
-  background: -moz-linear-gradient(bottom, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.5), rgba(73, 90, 88, 0));
-  background: -webkit-gradient(linear, bottom, top, from(rgba(73, 90, 88, 1)), color-stop(0.5, rgba(73, 90, 88, 0.5)), to(rgba(73, 90, 88, 0)));
-  background: linear-gradient(to top, rgba(73, 90, 88, 1), rgba(73, 90, 88, 0.2));
-  color: rgb(247, 254, 236);
-  text-shadow: -1px -1px 0 rgb(93, 69, 35),
-                1px -1px 0 rgb(93, 69, 35),
-                -1px 1px 0 rgb(93, 69, 35),
-                1px 1px 0 rgb(93, 69, 35);
+  background: rgb(0, 116, 162);
+  color: rgb(256, 256, 256);
 }
 .menu-item a {
   text-decoration: none;
+  color: rgb(256, 256, 256);
 }
 #sqlite-admin-wrap {
 	color: #1d1d1d;
   font-size: 10pt;
   border: 1px solid #ddd;
+  background: rgb(256, 256, 256);
 /*   border-top: 0; */
   -webkit-border-bottom-right-radius: 6px;
   -webkit-border-bottom-left-radius: 6px;
@@ -88,11 +58,17 @@ h3 {
   -moz-border-radius-bottomleft: 6px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -webkit-border-top-left-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-topleft: 6px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   display: block;
   float: left;
   min-height: 100%;
   position: relative;
-  width: 60%;
+  width: 58%;
   margin-top: 10px;
   padding: 5px;
   box-shadow: 5px 5px 5px #eee;
@@ -102,6 +78,7 @@ h3 {
   color: #1d1d1d;
   font-size: 10pt;
   border: 1px solid #ddd;
+  background: rgb(256, 256, 256);
 /*   border-top: 0; */
   -webkit-border-bottom-right-radius: 6px;
   -webkit-border-bottom-left-radius: 6px;
@@ -109,6 +86,12 @@ h3 {
   -moz-border-radius-bottomleft: 6px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -webkit-border-top-left-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-topleft: 6px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   display: block;
   float: left;
   min-height: 100%;
@@ -125,14 +108,14 @@ p {
 }
 table#sys-info{
 /*   width: 600px; */
-  width: 450px;
+  width: 480px;
 }
 table#status {
-  width: 450px;
+  width: 480px;
 }
 table#sqlite-table {
 /*   width: 700px; */
-  width: 650px;
+  width: 100%;
 }
 th.tbl-name {
   width: 200px;
@@ -141,7 +124,7 @@ th.tbl_owner {
   width: 105px;
 }
 th.tbl_index {
-  width: 350px;
+  width: 300px;
 }
 td.system {
   color: rgb(153, 0, 0);
@@ -150,12 +133,12 @@ td.user {
   color: rgb(0, 0, 255);
 }
 td.menu-title {
-  width: 90px;
+  width: 95px;
 }
 table.statement {
   width: 500px;
 }
-ul {
+ul.in-body-list {
   margin-left: 20px;
 }
 ol {
@@ -176,7 +159,7 @@ tr.workaround {
 tr.compatible {
 }
 th.active-plugins {
-  width: 100px;
+  width: 120px;
 }
 th.compatible {
   width: 80px;
@@ -189,7 +172,8 @@ input.button-primary {
 .alt {
   background: rgb(247, 254, 236);
 }
-table#patch-files .item {
+table#patch-files .item,
+table#backup-files .item {
   width: 40px;
 }
 .alert {

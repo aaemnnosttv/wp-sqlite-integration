@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 1.1
+Tested up to: 3.6.1
+Stable tag: 1.4.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,9 +30,15 @@ WordPress thinks she talks with MySQL and doesn't know what has happened in the 
 
 SQLite Integration is a successor to [PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress) plugin, which unfortunately enough, doesn't seem to be maintained any more. SQLite Integration uses the basic idea and structures of that plugin and adds some more features or some utilities.
 
+= Important Notice =
+
+When your installed WordPress 3.5.x with this plugin and upgraded to 3.6, your database might not work as expected. If this is your case, please upgrade this plugin to the newest version (1.4) and visit the maintenance page in the admin dashboard, where you can check if you need to fix your database, and you can do fixing job with the utility.
+
+When you installed WordPress 3.6 with this plugin or your WordPress is 3.5.x, you don't have to fix your database.
+
 = Features =
 
-SQLite Integration is not an ordinary 'plugin'. It is used to install WordPress itself. You need to do some preparations. Please read the install section. And see more detailed instruction in the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration).
+SQLite Integration is not an ordinary 'plugin'. It is used to install WordPress itself. You need to do some preparations. Please read the install section. And see more detailed instruction in the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/).
 
 Once you succeeded in installing WordPress, you can use it just like the others using MySQL. Optionally, you can activate this plugin in the installed plugins panel of the adimn dashboard, and you can see the useful information and instructions. It is not required but I recommend it.
 
@@ -44,9 +50,10 @@ If you are using [PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for
 
 Please contact us with the methods below:
 
-Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
+1. Post to [Support Forum](http://wordpress.org/support/plugin/sqlite-integration/).
+2. Visti the [SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/) or [SQLite Integration(ja) Page](http://dogwood.skr.jp/wordpress/sqlite-integration-ja/) and leave a message.
 
-Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have be no support from the plugin authors, eithter.
+Notes: WordPress.org doesn't officially support using any other database than MySQL. So there will be no supports from WordPress.org. Even if you post to the general Forum, you have few chances to get the answer. And if you use patched plugins, you will have no support from the plugin authors, eithter.
 
 = Translation =
 
@@ -150,18 +157,50 @@ These are other examples:
 * [Yet Another Related Posts](http://wordpress.org/extend/plugins/yet-another-related-posts-plugin/)
 * [Better Related Posts](http://wordpress.org/extend/plugins/better-related/)
 
-Probably there are more, I'm afraid.
-
-== Changelog ==
-
-= 1.1 (2013-07-24) =
-* Fixed the manipulation of DROP INDEX query.
-* Removed desctructor() from shutdown_hook.
-* Enabled LOCATE() function in the query string.
-
-= 1.0 (2013-07-07) =
-First release version of the plugin.
+Probably there are more, I'm afraid. If you find one, please let me know.
 
 == Upgrade Notice ==
 
-When auto upgrading of SQLite Integration fails, Please try manual upgrade via FTP.
+When auto upgrading of SQLite Integration fails, please try manual upgrade via FTP.
+
+== Changelog ==
+
+= 1.4.1 (2013-09-27) =
+* Fixed the rewriting process of BETWEEN function. This is a critical bug. When your newly created post contains 'between A and B' phrase, it is not published and disappears.
+* Fixed the admin dashboard display when using MP6.
+* Fixed the Japanese catalog.
+* Added the procedure for returning the dummy data when using SELECT version().
+* Added the procedure for displaying column informatin of WordPress tables when WP_DEBUG enabled.
+
+= 1.4 (2013-09-12) =
+* Added the database maintenance utility for fixing the database malfunction of the upgraded WordPress installation.
+* Changed the manipulation of SHOW INDEX query with WHERE clause.
+* Fixed the bug of the manipulation of ALTER TABLE query.
+
+= 1.3 (2013-09-04) =
+* Added the backup utility that creates the zipped archive of the current snapshot of the database file.
+* Changed the dashboard style to match MP6 plugin.
+* Changed the way of putting out the error messages when language catalogs are not loaded.
+* Modified the _rewrite_field_types() in query_create.class.php for the dbDelta() function to work properly.
+* Added the support for BETWEEN statement.
+* Changed the regular expression to remove all the index hints from the query string.
+* Fixed the manipulation of ALTER TABLE CHANGE COLUMN query for NewStatPress plugin to work.
+* Fixed minor bugs.
+
+= 1.2.1 (2013-08-04) =
+* Removed wpdb::real_escape property following the change of the wpdb.php file which makes the plugin compatible with Wordpress 3.6.
+
+= 1.2 (2013-08-03) =
+* Fixed the date string format and its quotation for calendar widget.
+* Fixed the patch utility program for using on the Windows machine.
+* Fixed the textdomain error in utilities/patch.php file when uploading the patch file.
+* Changed the manipulation of the query with ON DUPLICATE KEY UPDATE.
+* Fixed the typos in readme.txt and readme-ja.txt.
+
+= 1.1 (2013-07-24) =
+* Fixed the manipulation of DROP INDEX query.
+* Removed destruct() from shutdown_hook.
+* Enabled LOCATE() function in the query string.
+
+= 1.0 (2013-07-07) =
+* First release version of the plugin.
