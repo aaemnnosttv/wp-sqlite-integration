@@ -178,6 +178,18 @@
   },
   
   {
+  	"name":"Mathjax Latex",
+  	"compat":"Checked",
+  	"class":"compatible"
+  },
+  
+  {
+  	"name":"MP6",
+  	"compat":"Checked",
+  	"class":"compatible"
+  },
+  
+  {
     "name":"NewStatPress",
     "compat":"Needs Patch",
     "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
@@ -274,7 +286,7 @@
 	
   {
     "name":"Wordpress Popular Posts",
-    "compat":"Needs patch",
+    "compat":"Needs Patch",
 		"patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
 		"reason":"MySQL specific query",
     "class":"workaround"

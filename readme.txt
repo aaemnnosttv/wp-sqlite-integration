@@ -165,8 +165,15 @@ When auto upgrading of SQLite Integration fails, please try manual upgrade via F
 
 == Changelog ==
 
+= 1.4.1 (2013-09-27) =
+* Fixed the rewriting process of BETWEEN function. This is a critical bug. When your newly created post contains 'between A and B' phrase, it is not published and disappears.
+* Fixed the admin dashboard display when using MP6.
+* Fixed the Japanese catalog.
+* Added the procedure for returning the dummy data when using SELECT version().
+* Added the procedure for displaying column informatin of WordPress tables when WP_DEBUG enabled.
+
 = 1.4 (2013-09-12) =
-* Added the database maintenance utility for fixing the database mulfunction of the upgraded WordPress installation.
+* Added the database maintenance utility for fixing the database malfunction of the upgraded WordPress installation.
 * Changed the manipulation of SHOW INDEX query with WHERE clause.
 * Fixed the bug of the manipulation of ALTER TABLE query.
 

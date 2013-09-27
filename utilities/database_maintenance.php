@@ -435,6 +435,8 @@ class DatabaseMaintenance {
 	    	<input type="submit" name="sanity-check" class="button-primary" value="<?php _e('Sanity Check', $domain);?>" onclick="return confirm('<?php _e('Are you sure to check the database? This will take some time.\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
 	    	<input type="submit" name="do-fix-database" class="button-primary" value="<?php _e('Fix database', $domain);?>" onclick="return confirm('<?php _e('Are you sure to do fix the database? This will take some time.\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
 	    </form>
+	    
+	    <?php if (defined('WP_DEBUG') && WP_DEBUG == true) : ?>
 	   	<h3><?php _e('Columns Information', $domain);?></h3>
 	   	<p>
 	   		<?php _e('Select a table name and click "Display Columns" button, and you\'ll see the column property of that table. This information is for debug use.', $domain);?>
@@ -456,6 +458,8 @@ class DatabaseMaintenance {
 	    	</select>
 	    	<input type="submit" name="show-columns" class="button-secondary" value="<?php _e('Display Columns', $domain);?>" onclick="return confirm('<?php _e('Display columns in the selected table.\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
 	    </form>
+	    <?php endif; ?>
+	    
 	    </div>
     <?php endif;
     
