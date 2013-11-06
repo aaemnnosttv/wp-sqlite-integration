@@ -88,7 +88,15 @@ class PDOSQLiteDriver {
 		  case 'optimize':
 		    $this->_rewrite_optimize();
 		    break;
+		  case 'pragma':
+		  	break;
 		  default:
+		  	if (defined(WP_DEBUG) && WP_DEBUG) {
+		  		break;
+		  	} else {
+			  	$this->_return_true();
+			  	break;
+		  	}
 		}
 		return $this->_query;
 	}
@@ -541,6 +549,12 @@ class PDOSQLiteDriver {
     if (stripos($this->_query, $pattern) !== false) {
       $this->_query = $rewritten;
     }
+  }
+  /**
+   * 
+   */
+  private function _return_true() {
+  	$this->_query = 'SELECT 1=1';
   }
 }
 ?>

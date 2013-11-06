@@ -390,6 +390,8 @@ class PDOEngine extends PDO {
 			case 'showindex':
 			case 'describe':
       case 'desc':
+      case 'check':
+      case 'analyze':
 //  			case "foundrows":
 				$this->num_rows = count($this->_results);
 				$this->return_value = $this->num_rows;
@@ -468,7 +470,7 @@ class PDOEngine extends PDO {
    * @return boolean|string
    */
   private function determine_query_type($query) {
-    $result = preg_match('/^\\s*(EXPLAIN|PRAGMA|SELECT\\s*FOUND_ROWS|SELECT|INSERT|UPDATE|REPLACE|DELETE|ALTER|CREATE|DROP\\s*INDEX|DROP|SHOW\\s*\\w+\\s*\\w+\\s*|DESCRIBE|DESC|TRUNCATE|OPTIMIZE)/i', $query, $match);
+    $result = preg_match('/^\\s*(EXPLAIN|PRAGMA|SELECT\\s*FOUND_ROWS|SELECT|INSERT|UPDATE|REPLACE|DELETE|ALTER|CREATE|DROP\\s*INDEX|DROP|SHOW\\s*\\w+\\s*\\w+\\s*|DESCRIBE|DESC|TRUNCATE|OPTIMIZE|CHECK|ANALYZE)/i', $query, $match);
     
     if (!$result) {
       return false;
@@ -724,6 +726,8 @@ class PDOEngine extends PDO {
       $this->convert_to_columns_object();
     } elseif ('showindex' === $this->query_type){
       $this->convert_to_index_object();
+    } elseif (in_array($this->query_type, array('check', 'analyze'))) {
+    	$this->convert_result_check_or_analyze();
     } else {
       $this->results = $this->_results;
     }
@@ -870,6 +874,26 @@ class PDOEngine extends PDO {
     $this->results = $_results;
   }
 
+  private function convert_result_check_or_analyze() {
+  	$results = array();
+  	if ($this->query_type == 'check') {
+	  	$_columns = array(
+	  			'Table' => '',
+	  			'Op'    => 'check',
+	  			'Msg_type' => 'status',
+	  			'Msg_text' => 'OK'
+	  		);
+  	} else {
+  		$_columns = array(
+  				'Table'    => '',
+  				'Op'       => 'analyze',
+  				'Msg_type' => 'status',
+  				'Msg_text' => 'Table is already up to date'
+  			);
+  	}
+  	$_results[] = new ObjectArray($_columns);
+  	$this->results = $_results;
+  }
   /**
    * function to get SQLite library version
    * this is used for checking if SQLite can execute multiple rows insert

@@ -14,7 +14,7 @@ function make_db_sqlite() {
   include_once ABSPATH . 'wp-admin/includes/schema.php';
   $index_array = array();
   
-  ob_end_clean();
+//   ob_end_clean();
   $table_schemas = wp_get_db_schema();
 	$queries = explode (";", $table_schemas);
 	$query_parser = new CreateQuery();

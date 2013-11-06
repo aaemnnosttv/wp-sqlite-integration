@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.6.1
-Stable tag: 1.4.1
+Tested up to: 3.7.1
+Stable tag: 1.4.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ SQLite Integration is the plugin that enables WordPress to use SQLite. If you wa
 
 == Description ==
 
-This plugin enables WordPress to work with [SQLite](http://www.sqlite.org/). You don't have to prepare MySQL database server and its configuration. SQLite is a self-contained, serverless, transactional SQL database engine. It is not a full-featured database system like MySQL or PostgreSQL, but it best fits for low to medium traffic websites.
+This plugin enables WordPress to work with [SQLite](http://www.sqlite.org/). You don't have to prepare MySQL database server or its configuration. SQLite is a self-contained, serverless, transactional SQL database engine. It is not a full-featured database system like MySQL or PostgreSQL, but it best fits for low to medium traffic websites.
 
 SQLite Integration is a kind of wrapper program, which is placed between WordPress and SQLite database and works as a mediator. It works as follows:
 
@@ -32,7 +32,7 @@ SQLite Integration is a successor to [PDO for WordPress](http://wordpress.org/ex
 
 = Important Notice =
 
-When your installed WordPress 3.5.x with this plugin and upgraded to 3.6, your database might not work as expected. If this is your case, please upgrade this plugin to the newest version (1.4) and visit the maintenance page in the admin dashboard, where you can check if you need to fix your database, and you can do fixing job with the utility.
+When your installed WordPress 3.5.x with this plugin and upgraded to 3.6, your database might not work as expected. If this is your case, please upgrade this plugin to the newest version (1.4.2) and visit the maintenance page in the admin dashboard, where you can check if you need to fix your database, and you can do fixing job with the utility.
 
 When you installed WordPress 3.6 with this plugin or your WordPress is 3.5.x, you don't have to fix your database.
 
@@ -65,9 +65,9 @@ This plugin is *not* like the other plugins. You can't install and activate it o
 
 First of all, you've got to prepare WordPress installation. See [Installing Wordpress ](http://codex.wordpress.org/Installing_WordPress) section in the Codex.
 
-After checking the prerequisites and unzipping the WordPress archive file, you must rename wp-contig-sample.php file to wp-config.php and do some editting as the [Codex page](http://codex.wordpress.org/Editing_wp-config.php) says. Please follow the instructions *except* the database settings.
+After checking the prerequisites and unzipping the WordPress archive file, you must rename wp-contig-sample.php file to wp-config.php and do some editting as the [Codex page](http://codex.wordpress.org/Editing_wp-config.php) says. Please follow the Codex' instructions *except* the database settings.
 
-When you finish, you can add optional settings. Follow the steps below:
+When you finish, you can add optional settings. This is not required. If you don't need optional settings, you don't have to edit wp-config.php any more.
 
 * If you want to put the SQLite database file to the directory different from the default setting (wp-content/database), you can add the line below (don't forget to add a trailing slash):
 
@@ -164,6 +164,11 @@ Probably there are more, I'm afraid. If you find one, please let me know.
 When auto upgrading of SQLite Integration fails, please try manual upgrade via FTP.
 
 == Changelog ==
+
+= 1.4.2 (2013-11-06) =
+* Fixed some minor bugs about the information in the dashboard.
+* Changed the screenshot.
+* Tested WordPress 3.7.1 installation.
 
 = 1.4.1 (2013-09-27) =
 * Fixed the rewriting process of BETWEEN function. This is a critical bug. When your newly created post contains 'between A and B' phrase, it is not published and disappears.

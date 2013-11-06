@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.6.1
-Stable tag: 1.4.1
+Tested up to: 3.7.1
+Stable tag: 1.4.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,11 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 SQLite Integrationのアップグレードに失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
 
 == Changelog ==
+
+= 1.4.2 (2013-11-06) =
+* ダッシュボードに表示される情報についてのバグを修正しました。
+* スクリーンショットを変更しました。
+* WordPress 3.7.1 でのインストールテストを行いました。
 
 = 1.4.1 (2013-09-27) =
 * BETWEEN関数の書き換え方を修正しました。致命的なバグです。新規投稿に'between A and B'というフレーズが含まれていると、公開されず、投稿自体も消えます。
