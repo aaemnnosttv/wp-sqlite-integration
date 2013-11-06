@@ -1,7 +1,6 @@
 <?php
 /**
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
@@ -48,6 +47,16 @@ class PDODB extends wpdb {
   
   /**
    * dummy out the MySQL function
+   * @see wpdb::set_charset()
+   */
+  function set_charset($dbh, $charset = null, $collate = null) {
+  	if ( ! isset( $charset ) )
+  		$charset = $this->charset;
+  	if ( ! isset( $collate ) )
+  		$collate = $this->collate;
+  }
+  /**
+   * dummy out the MySQL function
    * @see wpdb::select()
    */
   function select($db, $dbh = null) {
@@ -62,10 +71,7 @@ class PDODB extends wpdb {
    * @see wpdb::_real_escape()
    */
   function _real_escape($string) {
-    if ($this->dbh && $this->real_escape)
-      return $this->dbh->quote($string);
-    else
-      return addslashes($string);
+    return addslashes($string);
   }
   
   /**
@@ -77,7 +83,7 @@ class PDODB extends wpdb {
     
     if (!$str) {
       $err = $this->dbh->get_error_message() ? $this->dbh->get_error_message() : '';
-      $str = $err[2];
+      if (!empty($err)) $str = $err[2]; else $str = '';
     }
     $EZSQL_ERROR[] = array('query' => $this->last_query, 'error_str' => $str);
     

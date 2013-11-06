@@ -5,12 +5,11 @@
  *   wordpress/wp-content/db.php
  * 
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
 
-function pdo_log_erro($message, $data = null) {
+function pdo_log_error($message, $data = null) {
   
   if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin') !== false) {
     $admin_dir = '';
@@ -38,15 +37,15 @@ HTML
 }
 
 if (version_compare( PHP_VERSION, '5.2.4', '<')) {
-  pdo_log_erro(__('PHP version on this server is too old.'), sprinf(__("Your server is running PHP version %d but this version of WordPress requires at least 5.2.4"), phpversion()));
+	pdo_log_error('PHP version on this server is too old.', sprinf("Your server is running PHP version %d but this version of WordPress requires at least 5.2.4", phpversion()));
 }
 
 if (!extension_loaded('pdo')) {
-  pdo_log_erro(__('PHP PDO Extension is not loaded.'), __('Your PHP installation appears to be missing the PDO extension which is required for this version of WordPress.'));
+	pdo_log_error('PHP PDO Extension is not loaded.', 'Your PHP installation appears to be missing the PDO extension which is required for this version of WordPress.');
 }
 
 if (!extension_loaded('pdo_sqlite')) {
-  pdo_log_erro(__('PDO Driver for SQLite is missing.'), __('Your PHP installtion appears not to have the right PDO drivers loaded. These are required for this version of WordPress and the type of database you have specified.'));
+	pdo_log_error('PDO Driver for SQLite is missing.', 'Your PHP installtion appears not to have the right PDO drivers loaded. These are required for this version of WordPress and the type of database you have specified.');
 }
 
 /**

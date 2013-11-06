@@ -1,7 +1,6 @@
 <?php
 /**
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu, Justin Adie
  */
  
@@ -31,8 +30,9 @@ class CreateQuery{
 			} else {
 				return $this->_query;
 			}
+		} elseif (preg_match('/^CREATE\\s*(TEMP|TEMPORARY|)\\s*TRIGGER\\s*/im', $this->_query)) {
+			return $this->_query;
 		}
-		$this->strip_backticks();
 		$this->get_table_name();
 		$this->rewrite_comments();
 		$this->rewrite_field_types();
@@ -46,6 +46,7 @@ class CreateQuery{
 		$this->rewrite_set();
 		$this->rewrite_key();
 		$this->add_if_not_exists();
+		$this->strip_backticks();
 		
 		return $this->post_process();
 	}
@@ -86,8 +87,12 @@ class CreateQuery{
 		    'longblob'   => 'blob',    'longtext'   => 'text'
 		    );
 		foreach ($array_types as $o=>$r){
-			$pattern = '/\\b(?<!`)'.$o.'\\b\\s*(\([^\)]*\)*)?\\s*/imsx';
-			$this->_query = preg_replace($pattern, " $r ", $this->_query);
+			$pattern = "/\\b(?<!`)$o\\b\\s*(\([^\)]*\)*)?\\s*/ims";
+			if (preg_match("/^\\s*.*?\\s*\(.*?$o.*?\)/im", $this->_query)) {
+				;
+			} else {
+				$this->_query = preg_replace($pattern, " $r ", $this->_query);
+			}
 		}
 	}
 

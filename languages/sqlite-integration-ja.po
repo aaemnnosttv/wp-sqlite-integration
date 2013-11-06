@@ -1,188 +1,133 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2013 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Kojima Toshiyasu <kjm@dogwood.skr.jp>, 2013.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-21 13:11+0900\n"
-"PO-Revision-Date: 2013-05-21 13:11+0900\n"
+"POT-Creation-Date: 2013-09-03 14:31+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kojima Toshiyasu <kjm@dogwood.skr.jp>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: Japanese\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: db.php:46
-msgid "PHP version on this server is too old."
-msgstr "お使いのPHPが古すぎます。"
-
-#: db.php:46
-#, php-format
-msgid ""
-"Your server is running PHP version %d but this version of WordPress requires "
-"at least 5.2.4"
-msgstr ""
-"PHP%dをお使いになっていますが、WordPressには5.2.4以上が必要です。"
-
-#: db.php:50
-msgid "PHP PDO Extension is not loaded."
-msgstr "PHPのPDOエクステンションがロードされていません。"
-
-#: db.php:50
-msgid ""
-"Your PHP installation appears to be missing the PDO extension which is "
-"required for this version of WordPress."
-msgstr ""
-"このWordPressで必要とされるPHPのPDOエクステンションが欠けているようです。"
-
-#: db.php:54
-msgid "PDO Driver for SQLite is missing."
-msgstr "PDOのSQLite用ドライバがありません。"
-
-#: db.php:54
-msgid ""
-"Your PHP installtion appears not to have the right PDO drivers loaded. These "
-"are required for this version of WordPress and the type of database you have "
-"specified."
-msgstr ""
-"お使いのPHPでは、必要なPDOドライバがロードされていないようです。これは、WordPressとデータベースを運用するのに"
-"必要です。"
-
-#: install.php:42
+#: install.php:40
 msgid ""
 "<strong><em>Note that password</em></strong> carefully! It is a <em>random</"
 "em> password that was generated just for you."
-msgstr ""
-"注意して<strong><em>パスワードを控えてください</em></strong>! これは<em>ランダムに</em>"
-"作成されたものです。"
+msgstr "注意して<strong><em>このパスワードを扱ってください</em></strong>。これは<em>ランダムに生成された</em>"
+"パスワードです。"
 
-#: install.php:47
+#: install.php:45
 msgid "Your chosen password."
-msgstr "あなたが決めたパスワード。"
+msgstr "あなたが入力したパスワード。"
 
-#: install.php:58
+#: install.php:56
 msgid "The password you chose during the install."
-msgstr "インストールのときにあなたが決めたパスワード。"
+msgstr "インストールのときにあなたが入力したパスワード。"
 
 #: pdodb.class.php:96
 #, php-format
 msgid "WordPress database error %1$s for query %2$s made by %3$s"
-msgstr "WordPressデータベースエラー%1$s。クエリは%2$s。%3$sが作成しました。"
+msgstr "データベース・エラーです。メッセージ: %1$s, クエリ: %2$s, 呼び出し: %3$s"
 
 #: pdodb.class.php:98
 #, php-format
 msgid "WordPress database error %1$s for query %2$s"
-msgstr "WordPressデータベースエラー%1$s。クエリは%2$s。"
+msgstr "データベース・エラーです。メッセージ: %1$s, クエリ: %2$s"
 
-#: pdodb.class.php:134
+#: pdodb.class.php:136
 #, php-format
 msgid ""
 "<h1>Error establlishing a database connection</h1><p>We have been unable to "
 "connect to the specified database. <br />The error message received was %s"
 msgstr ""
-"<h1>データベース接続エラー</h1><p>データベースに接続できませんでした。<br />エラーメッセージは、%sです。"
+"<h1>データベース接続エラー</h1><p>データベースに接続できません。<br />エラーメッセージは、%s"
 
-#: pdoengine.class.php:80 pdoengine.class.php:96 schema.php:26
+#: pdoengine.class.php:82 pdoengine.class.php:98
 msgid "Database connection error!<br />"
 msgstr "データベース接続エラー!<br />"
 
-#: pdoengine.class.php:81 pdoengine.class.php:97 schema.php:27 schema.php:81
+#: pdoengine.class.php:83 pdoengine.class.php:99
+#, php-format
 msgid "Error message is: %s"
-msgstr "エラーメッセージは: "
+msgstr "エラーメッセージ: %s"
 
-#: pdoengine.class.php:115
-msgid ""
-"Unable to create the required directory! Please check your server settings."
-msgstr ""
-"必要なディレクトリが作成できませんでした。サーバ設定を確認してください。"
-
-#: pdoengine.class.php:120 pdoengine.class.php:126
-msgid ""
-"Unable to create a file in the directory! Please check your server settings."
-msgstr ""
-"ディレクトリにファイルを作成できませんでした。サーバ設定を確認してください。"
-
-#: pdoengine.class.php:148
+#: pdoengine.class.php:156
 #, php-format
 msgid ""
 "<h1>Unknown query type</h1><p>Sorry, we cannot determine the type of query "
 "that is requested.</p><p>The query is %s</p>"
 msgstr ""
-"<h1>未知のクエリ</h1><p>申し訳ありません、要求されたクエリのタイプを決定できません。</p><p>クエリは%s"
-"です。</p>"
+"<h1>不明のクエリ</h1><p>申し訳ありません。要求されたクエリのタイプを判別できませんでした。</p>"
+"<p>クエリ: %s</p>"
 
-#: pdoengine.class.php:294
+#: pdoengine.class.php:315
 #, php-format
 msgid "Problem preparing the PDO SQL Statement.  Error was: %s"
-msgstr "SQLステートメントの準備中に問題。エラーは： %s"
+msgstr "PDO SQLステートメントを準備中に問題がありました。エラー: %s"
 
-#: pdoengine.class.php:327
+#: pdoengine.class.php:372
 #, php-format
 msgid "Error while executing query! Error message was: %s"
-msgstr "クエリの実行中にエラー! エラーメッセージは: %s"
+msgstr "クエリを実行中にエラーが発生しました。エラーメッセージ: %s"
 
-#: pdoengine.class.php:381
+#: pdoengine.class.php:426
 msgid "The query is too big to parse properly"
-msgstr "クエリが長すぎて解析できません"
+msgstr "クエリが長すぎてちゃんと解析できません"
 
-#: pdoengine.class.php:583
+#: pdoengine.class.php:635
 #, php-format
 msgid "Problem in creating table or index. Error was: %s"
-msgstr "テーブルまたはインデックスを作成中に問題発生。エラーは: %s"
+msgstr "テーブルかインデックスを作るときに問題がありました。エラー: %s"
 
-#: pdoengine.class.php:626
+#: pdoengine.class.php:678
 #, php-format
 msgid "Problem in executing alter query. Error was: %s"
-msgstr "ALTERクエリを実行中に問題発生。エラーは: %s"
-
-#: schema.php:80
-#, php-format
-msgid ""
-"Error occured while creating tables or indexes...<br />Query was: %s<br />"
-msgstr ""
-"テーブルまたはインデックスを作成中にエラー発生。<br />クエリは: %s<br />"
+msgstr "ALTERクエリを実行中に問題がありました。エラー: %s"
 
 #: sqlite-integration.php:158 sqlite-integration.php:181
 msgid "SQLite Integration"
 msgstr ""
 
-#: utilities/documentation.php:17 utilities/documentation.php:19
-#: utilities/patch.php:157 utilities/patch.php:159 utilities/utility.php:382
-#: utilities/utility.php:384 utilities/utility.php:555
-#: utilities/utility.php:557
+#: utilities/documentation.php:16 utilities/documentation.php:18
+#: utilities/patch.php:161 utilities/patch.php:163
+#: utilities/utility.php:450 utilities/utility.php:452
+#: utilities/utility.php:636 utilities/utility.php:638
 msgid "You are not allowed to access this page!"
 msgstr "このページにアクセスする権限がありません!"
 
-#: utilities/documentation.php:24 utilities/documentation.php:31
-#: utilities/patch.php:217 utilities/utility.php:354 utilities/utility.php:389
-#: utilities/utility.php:601
+#: utilities/documentation.php:23 utilities/documentation.php:30
+#: utilities/patch.php:221 utilities/utility.php:422
+#: utilities/utility.php:457 utilities/utility.php:711
 msgid "Documentation"
 msgstr "ドキュメント"
 
-#: utilities/documentation.php:25 utilities/patch.php:218
-#: utilities/utility.php:358 utilities/utility.php:390
-#: utilities/utility.php:602
+#: utilities/documentation.php:24 utilities/patch.php:222
+#: utilities/utility.php:426 utilities/utility.php:458
+#: utilities/utility.php:712
 msgid "System Info"
 msgstr "システム情報"
 
-#: utilities/documentation.php:26 utilities/patch.php:219
-#: utilities/utility.php:362 utilities/utility.php:391
-#: utilities/utility.php:603
+#: utilities/documentation.php:25 utilities/patch.php:223
+#: utilities/utility.php:430 utilities/utility.php:459
+#: utilities/utility.php:713
 msgid "Miscellaneous"
-msgstr "いろいろなもの"
+msgstr "いろいろ"
 
-#: utilities/documentation.php:27 utilities/patch.php:220
-#: utilities/utility.php:366 utilities/utility.php:392
-#: utilities/utility.php:604
+#: utilities/documentation.php:26 utilities/patch.php:224
+#: utilities/utility.php:434 utilities/utility.php:460
+#: utilities/utility.php:714
 msgid "Patch Utility"
-msgstr "パッチをあてる"
+msgstr "パッチ"
 
-#: utilities/documentation.php:33
+#: utilities/documentation.php:32
 msgid ""
 "This is a brief documentation about this plugin. For more details, see also "
 "the <a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration\">Plugin "
@@ -191,7 +136,7 @@ msgstr ""
 "このプラグインについての短いドキュメントです。詳しくは、<a href=\"http://dogwood.skr.jp/wordpress/"
 "sqlite-integration\">プラグインのページ</a>をご覧ください。"
 
-#: utilities/documentation.php:36
+#: utilities/documentation.php:35
 msgid ""
 "Please don't forget: WordPress DOES NOT OFFICIALLY SUPPORT any database "
 "other than MySQL. So if you ask about this plugin in the Forum, it's not "
@@ -200,26 +145,26 @@ msgstr ""
 "忘れないでください。WordPressが正式にサポートしているのはMySQLだけです。だから、フォーラムで質問しても、"
 "回答が得られることは少ないでしょう。"
 
-#: utilities/documentation.php:39
+#: utilities/documentation.php:38
 msgid "Features"
 msgstr "機能"
 
-#: utilities/documentation.php:41
+#: utilities/documentation.php:40
 msgid ""
 "This plugin is a successor to <a href=\"http://wordpress.org/extend/plugins/"
 "pdo-for-wordpress/\">PDO for WordPress</a>, which enabled WordPress to use "
 "SQLite for its database. But PDO for WordPress doesn't seem to be maintained "
-"any more only to be outdated. SQLite Integration makes use of the basic ideas "
-"and framework of PDO for WordPress, adds some new features and updates it to "
-"be able to work with the newest version of WordPress(3.5.1 and 3.6 beta)."
+"any more only to be outdated. SQLite Integration makes use of the basic "
+"ideas and framework of PDO for WordPress, adds some new features and updates "
+"it to be able to work with the newest version of WordPress(3.7.1)."
 msgstr ""
 "このプラグインは<a href=\"http://wordpress.org/extend/plugins/pdo-for-wordpress/\">"
 "PDO for WordPress</a>の後継です。PDO for WordPressはWordPressでSQLiteを使えるようにする"
 "ものでしたが、もうメンテナンスされていないようで、古くなってしまいました。SQLite Integrationは、その基本的な"
-"考えと枠組みを使って、新たな機能を追加し、最新のWordPress(3.5.1および3.6ベータ)で動作するように"
+"考えと枠組みを使って、新たな機能を追加し、最新のWordPress(3.7.1)で動作するように"
 "したものです。"
 
-#: utilities/documentation.php:44
+#: utilities/documentation.php:43
 msgid ""
 "<a href=\"http://www.sqlite.org/\">SQLite Web Page</a> says &mdash; SQLite "
 "is a &quot;software library that implements selfcontained, serverless, zero-"
@@ -232,7 +177,7 @@ msgstr ""
 "のライブラリです&quot;。&quot;小規模・中規模のウェブサイトによく合います&quot;。小さくてポータブル、"
 "データベース・サーバなしでも使えるデータベースです。"
 
-#: utilities/documentation.php:47
+#: utilities/documentation.php:46
 msgid ""
 "Unfortunately enough, WordPress only supports MySQL. Consequently it doesn't "
 "provide any APIs for SQLite. So if you want to create a website using "
@@ -243,53 +188,53 @@ msgstr ""
 "存在しません。だから、データベース・サーバなしでWordPressを使い、ウェブサイトを作ろうと思ったら、ある種の"
 "ラッパ・プログラムを書かなければなりません。これが、SQLite Integrationです。"
 
-#: utilities/documentation.php:50
+#: utilities/documentation.php:49
 msgid "SQLite Integration does the work as follows:"
 msgstr "SQLite Integrationは次のように動作します:"
 
-#: utilities/documentation.php:53
+#: utilities/documentation.php:52
 msgid "Intercepts SQL statement for MySQL from WordPress"
 msgstr "WordPressからMySQLに発行されるSQLステートメントをインターセプトします"
 
-#: utilities/documentation.php:54
+#: utilities/documentation.php:53
 msgid "Rewrites it as SQLite can execute"
 msgstr "SQLiteが実行できる形に書き換えます"
 
-#: utilities/documentation.php:55
+#: utilities/documentation.php:54
 msgid "Gives it to SQLite"
 msgstr "SQLiteに実行させます"
 
-#: utilities/documentation.php:56
+#: utilities/documentation.php:55
 msgid "Gets the results from SQLite"
 msgstr "SQLiteから結果を受け取ります"
 
-#: utilities/documentation.php:57
+#: utilities/documentation.php:56
 msgid "Format the results as MySQL returns, if necessary"
 msgstr "必要があれば、その結果をMySQLが返す形に整形します"
 
-#: utilities/documentation.php:58
+#: utilities/documentation.php:57
 msgid "Gives back the results to WordPress"
 msgstr "WordPressに結果を返します"
 
-#: utilities/documentation.php:61
+#: utilities/documentation.php:60
 msgid ""
 "WordPress doesn't know what has happened in the background and will be happy "
 "with it."
 msgstr ""
 "WordPressは背後で何が起こっているかを知らず、普通通り動作を続けます。"
 
-#: utilities/documentation.php:64
+#: utilities/documentation.php:63
 msgid "Limitations"
 msgstr "できないこと"
 
-#: utilities/documentation.php:66
+#: utilities/documentation.php:65
 msgid ""
 "SQLite Integration uses SQLite, so the limitations of SQLite is, as it is, "
 "those of SQLite Integration. MySQL is far from a simple SQL engine and has "
 "many extended features and functionalities. WordPress uses some of them. "
 "Among those are some SQLite doesn't implement. For those features that "
-"WordPress uses, I made them work with SQLite Integration. But for others that "
-"some plugins are using, SQLite Integration can't manipulate. So..."
+"WordPress uses, I made them work with SQLite Integration. But for others "
+"that some plugins are using, SQLite Integration can't manipulate. So..."
 msgstr ""
 "SQLite IntegrationはSQLiteを使います。だから、SQLiteの限界がそのまま、SQLite Integrationの"
 "限界になります。MySQLは単純なSQLエンジンなどというものではなくて、たくさんの拡張機能があります。"
@@ -297,11 +242,11 @@ msgstr ""
 "SQLite Integrationが動作するようにしました。でも、他のプラグインが使っているようなもので、SQLite Integration"
 "が扱えないものもあります。だから..."
 
-#: utilities/documentation.php:69
+#: utilities/documentation.php:68
 msgid "There are some plugins that you can't use in any way.<br />"
 msgstr "どうしても使えないプラグインがあります。"
 
-#: utilities/documentation.php:70
+#: utilities/documentation.php:69
 msgid ""
 "Some plugins can't be activated or work properly. See the &quot;Plugin "
 "Compatibility/Incompatibility&quot; section."
@@ -309,14 +254,14 @@ msgstr ""
 "プラグインの中には、有効化できなかったり、うまく動作しなかったりするものがあります。「プラグインの互換性」"
 "セクションをご覧ください。"
 
-#: utilities/documentation.php:71
+#: utilities/documentation.php:70
 msgid ""
 "There are some plugins that you can't use without rewriting some codes in "
 "them.<br />"
 msgstr ""
 "中のコードを書き換えなければ動作しないプラグインがあります。<br />"
 
-#: utilities/documentation.php:72
+#: utilities/documentation.php:71
 #, php-format
 msgid ""
 "Some plugins do work fine if you rewrite MySQL functions. I made some patch "
@@ -328,7 +273,7 @@ msgstr ""
 "パッチをあてる</a>ページを作りました。<a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration\">"
 "プラグインのページ</a>もご覧ください。"
 
-#: utilities/documentation.php:75
+#: utilities/documentation.php:74
 msgid ""
 "And there may be other problems I overlooked. If you find malfunctionality, "
 "please let me know at the <a href=\"http://wordpress.org/support/plugin/"
@@ -337,11 +282,11 @@ msgstr ""
 "見逃している問題があるかもしれません。不具合を見つけたら、<a href=\"http://wordpress.org/support/"
 "plugin/sqlite-integration\">サポートフォーラム</a>でお知らせください。"
 
-#: utilities/documentation.php:77
+#: utilities/documentation.php:76
 msgid "User Defined Functions"
 msgstr "ユーザ定義関数"
 
-#: utilities/documentation.php:79
+#: utilities/documentation.php:78
 msgid ""
 "SQLite Integration replaces some functions of MySQL with the user defined "
 "functions built in PHP PDO library. But some of the functions are "
@@ -353,55 +298,55 @@ msgstr ""
 "書き換えます。でも、SQLiteでは意味のない関数もあります。たとえば、get_lock()やrelease_lock()"
 "などです。SQLite Integrationは、これらの関数がエラーを出さないようにする以外のことをしていません。"
 
-#: utilities/documentation.php:82
+#: utilities/documentation.php:81
 msgid ""
 "If you want SQLite Integration to execute more functions, you can add the "
-"definition in the file sqlite-integration/functions.php (functions-5-2.php is "
-"for PHP 5.2 or lesser)."
+"definition in the file sqlite-integration/functions.php (functions-5-2.php "
+"is for PHP 5.2 or lesser)."
 msgstr ""
 "SQLite Integrationにもっとさくさんの関数を実行させたいときには、sqlite-integration/functions.php"
 "(functions-5-2.phpはPHP5.2以前用です)に定義を追加することができます。"
 
-#: utilities/documentation.php:85
+#: utilities/documentation.php:84
 msgid "Database Administration and Maintenance"
 msgstr "データベース管理・メンテナンス"
 
-#: utilities/documentation.php:87
+#: utilities/documentation.php:86
 msgid ""
-"SQLite Integration doesn't contain database maintenace functionality, because "
-"there are some other free or proprietary softwares that give you such "
-"functionalities. For example, these are among free softwares:"
+"SQLite Integration doesn't contain database maintenace functionality, "
+"because there are some other free or proprietary softwares that give you "
+"such functionalities. For example, these are among free softwares:"
 msgstr ""
 "SQLite Integrationはメンテナンスの機能を持っていません。というのは、他に同じ機能を提供することができる、"
 "フリーや独占ソフトウェアがあるからです。フリー・ソフトウェアには、次のようなものがあります。"
 
-#: utilities/documentation.php:90
+#: utilities/documentation.php:89
 msgid "my recommendation"
 msgstr "お勧めです"
 
-#: utilities/documentation.php:91
+#: utilities/documentation.php:90
 msgid "unfortunately seems not to maintained..."
 msgstr "残念なことにあまり活発に開発されていないようです..."
 
-#: utilities/documentation.php:94
+#: utilities/documentation.php:93
 msgid ""
 "I'm not sure if future release may have some of the database maintenance "
 "functionality."
 msgstr ""
 "将来のリリースでデータベースのメンテナンス機構を組み込むかどうかはわかりません。"
 
-#: utilities/documentation.php:100
+#: utilities/documentation.php:99
 msgid "Plugin Compatibility/Incompatibility"
 msgstr "プラグインの互換性/非互換性"
 
-#: utilities/documentation.php:102
+#: utilities/documentation.php:101
 msgid ""
 "WordPress without its plugins is a king without people. Of course, you need "
 "plugins, I know."
 msgstr ""
 "プラグインなしのWordPressは、国民のいない王様です。プラグインが使えなければなりません。"
 
-#: utilities/documentation.php:105
+#: utilities/documentation.php:104
 #, php-format
 msgid ""
 "Most of the plugins will work fine with this plugin. But there are some that "
@@ -418,36 +363,36 @@ msgstr ""
 "<a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration\">プラグインのページ</a>"
 "をご覧ください。"
 
-#: utilities/documentation.php:111
+#: utilities/documentation.php:110
 msgid "Plugins Name"
 msgstr "プラグイン名"
 
-#: utilities/documentation.php:112
+#: utilities/documentation.php:111
 msgid "Compatibility"
 msgstr "互換性"
 
-#: utilities/documentation.php:113
+#: utilities/documentation.php:112
 msgid "Reasons"
 msgstr "理由"
 
-#: utilities/documentation.php:127 utilities/utility.php:239
+#: utilities/documentation.php:126 utilities/utility.php:239
 #: utilities/utility.php:241
 msgid "Needs Patch"
 msgstr "パッチが必要"
 
-#: utilities/documentation.php:129 utilities/utility.php:245
+#: utilities/documentation.php:128 utilities/utility.php:245
 msgid "Probably No"
 msgstr "たぶん不可"
 
-#: utilities/documentation.php:131 utilities/utility.php:251
+#: utilities/documentation.php:130 utilities/utility.php:251
 msgid "No"
 msgstr "不可"
 
-#: utilities/documentation.php:141
+#: utilities/documentation.php:140
 msgid "Caching Plugins"
 msgstr "キャッシュ用プラグイン"
 
-#: utilities/documentation.php:143
+#: utilities/documentation.php:142
 msgid ""
 "Some plugins that give you cache functinality might cause problems. It is "
 "because they try to create the db.php file in wp-content directory, which "
@@ -456,7 +401,7 @@ msgstr ""
 "キャッシュの機能を提供するプラグインの中には問題になるものがあります。wp-contentディレクトリにdb.php"
 "ファイルを作ろうとするのですが、SQLite Integrationがすでにそれを使ってしまっているからです。"
 
-#: utilities/documentation.php:146
+#: utilities/documentation.php:145
 msgid ""
 "If those plugins overwrite the db.php file, SQLite Integration doesn't work. "
 "<span class=\"em\">My recommendation is not to use caching plugins</span>. "
@@ -470,15 +415,15 @@ msgstr ""
 "wp-super-cache/\">WP Super Cache</a>のようなものなら試せるかもしれません。db.phpを使わない"
 "からです。でも、保証はありません。ご自分の責任でお試しください。"
 
-#: utilities/documentation.php:149
+#: utilities/documentation.php:148
 msgid "I have not tested none of those caching plugins."
 msgstr "私はこれらのキャッシュ・プラグインをテストしていません。"
 
-#: utilities/documentation.php:151
+#: utilities/documentation.php:150
 msgid "MySQL specific functions"
 msgstr "MySQL用の関数"
 
-#: utilities/documentation.php:153
+#: utilities/documentation.php:152
 msgid ""
 "Some plugins don't use WordPress database functions such as dbDelta(), and "
 "use PHP native MySQL functions when they create and manage tables in the "
@@ -491,15 +436,15 @@ msgstr ""
 "の関数を再定義することを許しません(少なくとも通常のサーバ設定では)。だから、SQLite Integrationは"
 "それらをインターセプトして、書き換えることができません。"
 
-#: utilities/documentation.php:156
+#: utilities/documentation.php:155
 msgid "For example, you can see these codes in Google XML Sitemaps."
 msgstr "たとえば、Google XML Sitemapsにはこのようなコードがあります。"
 
-#: utilities/documentation.php:162
+#: utilities/documentation.php:161
 msgid "or in Camera Slideshow"
 msgstr "あるいは、Camera Slideshowには、こんな部分があります。"
 
-#: utilities/documentation.php:168
+#: utilities/documentation.php:167
 msgid ""
 "Such functions as mysql_get_server_info() or mysql_query() are from the "
 "MySQL driver of PHP. Not only some plugins but WordPress uses them, but "
@@ -511,7 +456,7 @@ msgstr ""
 "でも、SQLite Integrationはこれらを書き換えたり、再定義したりすることができません。もし、あなたが"
 "使いたいプラグインがこれらの関数を使っていたら、うまく動かないか、エラー・メッセージが出るでしょう。"
 
-#: utilities/documentation.php:171
+#: utilities/documentation.php:170
 msgid ""
 "So, you have to rewrite them for SQLite Integration can execute. The two "
 "example above can be rewritten like this:"
@@ -519,7 +464,7 @@ msgstr ""
 "だから、これらの関数は手動で書き換えなければ、SQLite Integrationで実行できません。上の2つの"
 "例は、次のように書き換えればうまくいきます。"
 
-#: utilities/documentation.php:180
+#: utilities/documentation.php:179
 msgid ""
 "As for those functions in WordPress, I overrode the WordPress functions "
 "themselves that contains such MySQL functions as mysql_query() or "
@@ -528,11 +473,11 @@ msgstr ""
 "WordPressで使われているこれらの関数については、mysql_query()やmysql_real_escape_string()"
 "といった関数を含むWordPress関数をオーバーライドしています。"
 
-#: utilities/documentation.php:182
+#: utilities/documentation.php:181
 msgid "FULLTEXT index"
 msgstr "FULLTEXTインデックス"
 
-#: utilities/documentation.php:184
+#: utilities/documentation.php:183
 msgid ""
 "Some plugins use FULLTEXT index of MySQL. Of course SQLite does have the "
 "functionality named &quot;full-text search&quot;. But it is not correlated "
@@ -545,7 +490,7 @@ msgstr ""
 "インデックスではなく、新たなテーブルを作らなければならないものです。構文も異なります。だから、FULLTEXT"
 "インデックスを使うプラグインは使うことができません。"
 
-#: utilities/documentation.php:187
+#: utilities/documentation.php:186
 msgid ""
 "If your language is not written by separating words with spaces, e.g. "
 "Japanese, Chinese or Thai, neither FULLTEXT index nor full-text search work "
@@ -563,82 +508,88 @@ msgstr ""
 "wordpress.org/extend/plugins/related-posts/\">Related Posts</a>のうようなプラグインを"
 "使うことができます。これらは、SQLite Integrationでちゃんと動作します。"
 
-#: utilities/patch.php:53
+#: utilities/patch.php:55
 msgid "Patch command is not found"
 msgstr "パッチコマンドがありません"
 
-#: utilities/patch.php:56
+#: utilities/patch.php:58
 msgid "Patch command is not executable"
 msgstr "パッチコマンドが実行可能ではありません"
 
-#: utilities/patch.php:73
+#: utilities/patch.php:75
 msgid "Patch file name is invalid"
 msgstr "パッチファイルが不正です"
 
-#: utilities/patch.php:77
+#: utilities/patch.php:79
 msgid "Patch file version does not match with that of your plugin."
 msgstr "パッチファイルのバージョンがプラグインのものと一致しません。"
 
-#: utilities/patch.php:86
+#: utilities/patch.php:88
 msgid "Error! Plugin directory is not accessible."
 msgstr "エラーです。プラグインのディレクトリにアクセスできません。"
 
-#: utilities/patch.php:89
+#: utilities/patch.php:91
 msgid "is patched successfully."
 msgstr "パッチを適用しました。"
 
-#: utilities/patch.php:94 utilities/patch.php:121
+#: utilities/patch.php:96
 #, php-format
 msgid "Error! Messages: %s"
-msgstr "エラー。メッセージは: %s"
+msgstr "エラー! メッセージ: %s"
 
-#: utilities/patch.php:118
-msgid "Error!: patches directory is not accessible."
-msgstr "エラー。パッチディレクトリにアクセスできません。"
-
-#: utilities/patch.php:123
+#: utilities/patch.php:120
 #, php-format
 msgid "File %s is deleted."
 msgstr "ファイル%sは削除されました。"
 
-#: utilities/patch.php:138
+#: utilities/patch.php:122
+#, php-format
+msgid "Error! File %s is not deleted."
+msgstr "エラー! ファイル%sは削除されていません。"
+
+#: utilities/patch.php:126
+msgid "Error!: patches directory is not accessible."
+msgstr "エラー! パッチ・ディレクトリにアクセスできません。"
+
+#: utilities/patch.php:142
 msgid "File is uploaded"
 msgstr "ファイルをアップロードしました"
 
-#: utilities/patch.php:142
-msgid "File is not uploaded"
-msgstr "ファイルのアップロードができませんでした"
-
 #: utilities/patch.php:146
+msgid "File is not uploaded"
+msgstr "ファイルはアップロードされていません"
+
+#: utilities/patch.php:150
 msgid "File is not selected"
 msgstr "ファイルが選択されていません"
 
-#: utilities/patch.php:164 utilities/patch.php:166 utilities/patch.php:186
-#: utilities/patch.php:188 utilities/patch.php:208 utilities/patch.php:210
+#: utilities/patch.php:168 utilities/patch.php:170
+#: utilities/patch.php:190 utilities/patch.php:192
+#: utilities/patch.php:212 utilities/patch.php:214
 msgid "You are not allowed to do this operation!"
-msgstr "この操作をする権限がありません"
+msgstr "この操作をする権限がありません!"
 
-#: utilities/patch.php:170 utilities/patch.php:192
+#: utilities/patch.php:174 utilities/patch.php:196
 msgid "Please select patch file(s)"
 msgstr "パッチファイルを選択してください"
 
-#: utilities/patch.php:179
+#: utilities/patch.php:183
 msgid "None of the patches is applied!"
-msgstr "パッチは適用されませんでした。"
+msgstr "パッチは適用されませんでした!"
 
-#: utilities/patch.php:201
+#: utilities/patch.php:205
 msgid "Error! Please remove files manually"
-msgstr "エラー。ファイルを手動で削除してください。"
+msgstr "エラー! ファイルを手動で削除してください"
 
-#: utilities/patch.php:224
+#: utilities/patch.php:228
 msgid "Patch Files Upload and Apply"
 msgstr "パッチファイルのアップロードと適用"
 
-#: utilities/patch.php:225
+#: utilities/patch.php:229
 msgid "What you can do in this page"
 msgstr "このページでできること"
 
-#: utilities/patch.php:227
+#: utilities/patch.php:231
 msgid ""
 "I made patch files for some plugins that are incompatible with SQLite "
 "Integration and need rewriting. And I wrote in the <a href=\"http://dogwood."
@@ -650,7 +601,7 @@ msgstr ""
 "skr.jp/wordpress/sqlite-integration\">プラグイン・ページ</a>で適用の仕方を書きましたが、コマンドライン"
 "での操作が苦手な人もいます。初心者は特にそうでしょう。"
 
-#: utilities/patch.php:230
+#: utilities/patch.php:234
 msgid ""
 "In this page, you can upload patch files and apply them automatically. But "
 "there are some requirements."
@@ -658,7 +609,7 @@ msgstr ""
 "このページでは、パッチファイルをアップロードして、自動的にそれを適用することができます。でも、いくつかの必要"
 "要件があります。"
 
-#: utilities/patch.php:233
+#: utilities/patch.php:237
 msgid ""
 "Think before you leap. Is the plugin to which you are going to apply patch "
 "really necessary for your site? Did you search in the <a href=\"http://"
@@ -668,18 +619,18 @@ msgstr ""
 "<a href=\"http://wordpress.org/extend/plugins/\">Plugin Directory</a>"
 "で代わりになるプラグインを探してみましたか?"
 
-#: utilities/patch.php:234
+#: utilities/patch.php:238
 msgid ""
 "Your PHP script has the permission to create a directory and write a file in "
 "it."
 msgstr ""
 "PHPスクリプトがディレクトリやファイルを作成する権限を持っていなければなりません。"
 
-#: utilities/patch.php:235
+#: utilities/patch.php:239
 msgid "Your PHP scripts can execute exec() function on the server."
 msgstr "PHPスクリプトがサーバ上で、exec()関数を実行できること。"
 
-#: utilities/patch.php:236
+#: utilities/patch.php:240
 msgid ""
 "Your PHP script can execute &quot;patch&quot; shell command.(Script will "
 "check if it is executable or not.)"
@@ -687,17 +638,18 @@ msgstr ""
 "PHPスクリプトが&quot;patch&quot;シェルコマンドを実行できること(実行可能かどうかはスクリプトが"
 "チェックします)。"
 
-#: utilities/patch.php:239
+#: utilities/patch.php:243
 msgid ""
 "If uploading fails, it' very likely that application will fail. When you try "
 "uploading with FTP client, the patch files must be put into the directory wp-"
-"content/uploads/patches/. When constant UPLOADS is defined, script follows it."
+"content/uploads/patches/. When constant UPLOADS is defined, script follows "
+"it."
 msgstr ""
 "ファイルのアップロードが失敗する場合は、パッチの適用も失敗する可能性があります。FTPクライアントでアップロード"
 "するときは、wp-content/uploads/patchesディレクトリに入るようにしてください。UPLOADS定数が定義されている"
 "場合はそれに従います。"
 
-#: utilities/patch.php:242
+#: utilities/patch.php:246
 msgid ""
 "You can create your patch file yourself. When you create one, please test it "
 "on your local server first and check if it works fine without PHP error or "
@@ -708,23 +660,23 @@ msgstr ""
 "出ていないことを確認してください(error_reposting(E_ALL)をセットするとよい)。このページで使いたい"
 "場合は、次のように名前をつけてください。"
 
-#: utilities/patch.php:245
+#: utilities/patch.php:249
 msgid "Use the file name beginning with the plugin directory name."
 msgstr "プラグインのディレクトリ名で始まる名前にする。"
 
-#: utilities/patch.php:246
+#: utilities/patch.php:250
 msgid "Use the plugin version number after the directory name with underscore."
 msgstr "ディレクトリ名の後にアンダースコアとバージョン番号を使う。"
 
-#: utilities/patch.php:247
+#: utilities/patch.php:251
 msgid "Use the suffix .patch."
 msgstr ".patchを拡張子にする。"
 
-#: utilities/patch.php:248
+#: utilities/patch.php:252
 msgid "Use diff command options &quot;-Naur&quot;."
 msgstr "diffコマンドには&quot;-Naur&quot;オプションを使う。"
 
-#: utilities/patch.php:251
+#: utilities/patch.php:255
 msgid ""
 "For example, the patch file for the plugin &quot;Debug Bar&quot; is &quot;"
 "debug-bar_0.8.patch&quot;. Script interprets &quot;debug-bar&quot; as the "
@@ -737,47 +689,47 @@ msgstr ""
 "を対象のバージョンとして解釈します。バージョン番号が対象のものと一致しない場合は、スクリプトはエラー・メッセージ"
 "を出力して、実行を中断します。他のファイル名の場合は実行しません。"
 
-#: utilities/patch.php:254
+#: utilities/patch.php:258
 msgid "How to install, patch and activate plugins"
 msgstr "プラグインのインストール、パッチ、有効化のしかた"
 
-#: utilities/patch.php:256
+#: utilities/patch.php:260
 msgid "Install the plugin (not yet activate it)"
 msgstr "プラグインをインストールします(まだ有効化しないでください)"
 
-#: utilities/patch.php:257
+#: utilities/patch.php:261
 msgid "Upload the patch file (if any) to the server and ppply it in this page"
 msgstr "パッチファイルがあれば、アップロードし、適用します"
 
-#: utilities/patch.php:258
+#: utilities/patch.php:262
 msgid "Back to the installed plugin page and activate it"
 msgstr "インストール済みプラグインのページに戻り、有効化します"
 
-#: utilities/patch.php:260
+#: utilities/patch.php:264
 msgid "How to upgrade plugins"
 msgstr "プラグインのアップグレードのしかた"
 
-#: utilities/patch.php:262
+#: utilities/patch.php:266
 msgid "When upgrading the plugin, it will be safer to follow next steps."
 msgstr "プラグインをアップグレードするときは、安全のために次のステップに従ってください。"
 
-#: utilities/patch.php:265
+#: utilities/patch.php:269
 msgid "Deactivate the plugin"
 msgstr "プラグインを無効化します"
 
-#: utilities/patch.php:266
+#: utilities/patch.php:270
 msgid "Upgrade the plugin"
 msgstr "プラグインをアップグレードします"
 
-#: utilities/patch.php:267
+#: utilities/patch.php:271
 msgid "Upload the patch file (if any) and apply it"
 msgstr "パッチファイルがあればそれをアップロードして適用します"
 
-#: utilities/patch.php:268
+#: utilities/patch.php:272
 msgid "Reactivate the plugin"
 msgstr "再び有効化します"
 
-#: utilities/patch.php:270
+#: utilities/patch.php:274
 msgid ""
 "If there isn't a patch file to match with the newest version of the plugin, "
 "it won't work properly. Please wait for somebody to make one or rewrite the "
@@ -789,78 +741,78 @@ msgstr ""
 "だれかがパッチを作るのを待つか、前バージョンのパッチを参考に自分で書き換えをしてください(それほど難しい"
 "作業ではありません。多くの場合、MySQLの関数をWordPressの関数に置き換えるだけです)。"
 
-#: utilities/patch.php:271
+#: utilities/patch.php:275
 msgid "Upload and Apply"
 msgstr "アップロードと適用"
 
-#: utilities/patch.php:275
+#: utilities/patch.php:279
 msgid "File Select"
 msgstr "ファイルを選択"
 
-#: utilities/patch.php:282
+#: utilities/patch.php:286
 msgid ""
 "Select file from your computer. If the file name is the same as existent "
 "file, this operation will override it."
 msgstr ""
 "あなたのコンピュータにあるファイルを選択します。ファイル名がすでに存在する場合は、それを上書きします。"
 
-#: utilities/patch.php:284
+#: utilities/patch.php:288
 msgid "Upload"
 msgstr "アップロード"
 
-#: utilities/patch.php:289
+#: utilities/patch.php:293
 msgid "Patch files uploaded"
 msgstr "アップロードしたパッチファイル"
 
-#: utilities/patch.php:296
+#: utilities/patch.php:300
 msgid ""
 "Select the file(s) you want to apply to the plugin(s) or you want to delete. "
 "You can select multiple files."
 msgstr ""
 "プラグインに適用したいパッチファイル、または削除したいパッチファイルを選択してください。複数選択できます。"
 
-#: utilities/patch.php:300
+#: utilities/patch.php:304
 msgid "Apply/Hold"
 msgstr "適用/保留"
 
-#: utilities/patch.php:301
+#: utilities/patch.php:305
 msgid "Patch files to apply"
 msgstr "適用するパッチ"
 
-#: utilities/patch.php:317
+#: utilities/patch.php:321
 msgid "Apply patch"
 msgstr "パッチを適用"
 
-#: utilities/patch.php:317
+#: utilities/patch.php:321
 msgid ""
 "Are you sure to apply patch files?\\n\\nClick [Cancel] to stop,[OK] to "
 "continue."
 msgstr ""
 "本当にパッチを適用してもよろしいですか?\\n\\nやめるなら[キャンセル]をクリック、続けるなら[OK]をクリック。"
 
-#: utilities/patch.php:318
+#: utilities/patch.php:322 utilities/utility.php:765
 msgid "Delete file"
 msgstr "ファイルを削除"
 
-#: utilities/patch.php:318
+#: utilities/patch.php:322
 msgid ""
 "Are you sure to delete patch files?\\n\\nClick [Cancel] to stop,[OK] to "
 "continue."
 msgstr ""
 "本当に削除してもよろしいですか?\\n\\nやめるなら[キャンセル]をクリック、続けるなら[OK]をクリック。"
 
-#: utilities/patch.php:329
+#: utilities/patch.php:333
 msgid "Caution about your patch file(s)"
 msgstr "パッチファイルについての注意"
 
-#: utilities/patch.php:333
+#: utilities/patch.php:337
 msgid ""
 "If you don't know where it comes from or who created it, I strongly "
 "recommend that you should see and check the contents of the file. If a "
 "person who created it secretly inserted a malicious codes, it will be "
 "executed by the plugin and may damage your site or your server, for which "
-"damage I don't incur any liability. If you don't understand well, you'd better use "
-"the substitute plugins. Take your own risk, please."
+"damage I don't incur any liability. If you don't understand well, you'd "
+"better use the substitute plugins. Take your own risk, please."
 msgstr ""
 "素性のあやしいパッチファイルがあったら、ファイルの内容を確認することを強くお勧めします。作成者がひそかに"
 "悪意のあるコードを仕込んでいると、プラグインがそれを実行してしまいます。あなたのサイトやサーバが被害を受ける"
@@ -869,7 +821,7 @@ msgstr ""
 
 #: utilities/utility.php:248
 msgid "Probably Yes"
-msgstr "たぶん不可"
+msgstr "たぶん可"
 
 #: utilities/utility.php:254
 msgid "Checked"
@@ -891,24 +843,41 @@ msgstr "有効"
 msgid "Inactive"
 msgstr "無効"
 
-#: utilities/utility.php:336
+#: utilities/utility.php:368
+msgid " was created."
+msgstr "が作成されました。"
+
+#: utilities/utility.php:370
+msgid " was not created."
+msgstr "は作成できませんでした。"
+
+#: utilities/utility.php:391
+#, php-format
+msgid "File %s was deleted."
+msgstr "ファイル%sは削除されました。"
+
+#: utilities/utility.php:393
+msgid "Error! File was not deleted."
+msgstr "エラー! ファイルは削除されていません。"
+
+#: utilities/utility.php:404
 msgid "Welcome to SQLite Integration"
 msgstr "SQLite Integrationにようこそ"
 
-#: utilities/utility.php:338
+#: utilities/utility.php:406
 msgid "Thank you for using SQLite Integration plugin!"
-msgstr "SQLite Integrationをお使いいただき、ありがとうぐざいます。"
+msgstr "SQLite Integrationをお使いいただき、ありがとうございます。"
 
-#: utilities/utility.php:341
+#: utilities/utility.php:409
 msgid ""
 "You read this message, which means you have succeeded in installing "
-"WordPress with this plugin SQLite Integration. Congratulations and enjoy your "
-"Blogging!"
+"WordPress with this plugin SQLite Integration. Congratulations and enjoy "
+"your Blogging!"
 msgstr ""
 "このメッセージを読んでいるということは、インストールの成功したことを意味します。おめでとうございます。ブログをお楽しみ"
 "ください。"
 
-#: utilities/utility.php:344
+#: utilities/utility.php:412
 msgid ""
 "You don't have to set any special settings. In fact there are no other "
 "settings. You can write articles or pages and customize you WordPress in an "
@@ -920,129 +889,129 @@ msgstr ""
 "WordPressをカスタマイズしたりできます。プラグインをインストールしたいですか? そうしましょう。でも、中には"
 "使えないものもあります。プラグインやSQLiteデータベースについての情報をお読みください。"
 
-#: utilities/utility.php:346
+#: utilities/utility.php:414
 msgid ""
 "Deactivation makes this documents and utilities disappear from the "
-"dashboard, but it doesn't affect the functionality of the SQLite Integration. "
-"when uninstalled, it will remove wp-content/uploads/patches directory (if "
-"exists) and wp-content/db.php file altogether."
+"dashboard, but it doesn't affect the functionality of the SQLite "
+"Integration. when uninstalled, it will remove wp-content/uploads/patches "
+"directory (if exists) and wp-content/db.php file altogether."
 msgstr ""
 "無効化すると、ダッシュボードからこのドキュメントとユーティリティを消すことができます。でも、SQLite Integration"
 "の機能には影響ありません。削除のときは、もしあれば、wp-content/uploads/patchesディレクトリと、"
 "wp-content/db.phpファイルを削除します。"
 
-#: utilities/utility.php:349
+#: utilities/utility.php:417
 msgid "Title"
 msgstr "タイトル"
 
-#: utilities/utility.php:350
+#: utilities/utility.php:418
 msgid "Contents"
 msgstr "コンテンツ"
 
-#: utilities/utility.php:355
+#: utilities/utility.php:423
 msgid "You can read documentation about this plugin and plugin compatibility."
 msgstr "このプラグインについてのドキュメントとプラグインの互換性について読むことができます。"
 
-#: utilities/utility.php:359
+#: utilities/utility.php:427
 msgid "You can see database and system information."
 msgstr "データベースとシステムの情報を見ることができます。"
 
-#: utilities/utility.php:363
+#: utilities/utility.php:431
 msgid ""
 "You can see the error log and edit db.php file (if necessary) and optimize "
 "your database."
 msgstr ""
 "エラー・ログを見たり、必要なら、db.phpを編集したり、データベースの最適化をしたりできます。"
 
-#: utilities/utility.php:367
+#: utilities/utility.php:435
 msgid "You can upload patch files and apply them to the incompatible plugins."
 msgstr "パッチファイルをアップロードし、プラグインに適用できます。"
 
-#: utilities/utility.php:396
+#: utilities/utility.php:464
 msgid "System Information"
 msgstr "システム情報"
 
-#: utilities/utility.php:397
+#: utilities/utility.php:465
 msgid "PHP Informations"
 msgstr "PHP情報"
 
-#: utilities/utility.php:402 utilities/utility.php:438
+#: utilities/utility.php:470 utilities/utility.php:506
 msgid "Items"
 msgstr "項目"
 
-#: utilities/utility.php:403
+#: utilities/utility.php:471
 msgid "Description"
 msgstr "説明"
 
-#: utilities/utility.php:408
+#: utilities/utility.php:476
 msgid "WordPress Version"
-msgstr "WordPressのバージョン"
+msgstr "WordPressバージョン"
 
-#: utilities/utility.php:412
+#: utilities/utility.php:480
 msgid "PHP Version"
-msgstr "PHPのバージョン"
+msgstr "PHPバージョン"
 
-#: utilities/utility.php:416
+#: utilities/utility.php:484
 msgid "PDO Support"
 msgstr "PDOサポート"
 
-#: utilities/utility.php:420
+#: utilities/utility.php:488
 msgid "PDO Drivers"
 msgstr "PDOドライバ"
 
-#: utilities/utility.php:424
+#: utilities/utility.php:492
 msgid "PDO Driver for SQLite 3.x"
 msgstr "SQLite 3.x用PDOドライバ"
 
-#: utilities/utility.php:428
+#: utilities/utility.php:496
 msgid "SQLite Library Version"
 msgstr "SQLiteライブラリのバージョン"
 
-#: utilities/utility.php:434
+#: utilities/utility.php:502
 msgid "Your Database Status"
 msgstr "データベースの状態"
 
-#: utilities/utility.php:439
+#: utilities/utility.php:507
 msgid "Status"
 msgstr "状態"
 
-#: utilities/utility.php:445
+#: utilities/utility.php:513
 msgid "Database Size"
-msgstr "データベースのサイズ"
+msgstr "データベース・サイズ"
 
-#: utilities/utility.php:449
+#: utilities/utility.php:517
 msgid "Page Size"
-msgstr "ページサイズ"
+msgstr "ページ・サイズ"
 
-#: utilities/utility.php:453
+#: utilities/utility.php:521
 msgid "Total Number of Pages"
 msgstr "合計のページ数"
 
-#: utilities/utility.php:457
+#: utilities/utility.php:525
 msgid "Unused Page"
 msgstr "未使用ページ"
 
-#: utilities/utility.php:461
+#: utilities/utility.php:529
 msgid "Integrity Check"
 msgstr "整合性チェック"
 
-#: utilities/utility.php:465
+#: utilities/utility.php:533
 msgid "Encoding"
 msgstr "エンコーディング"
 
-#: utilities/utility.php:469
+#: utilities/utility.php:537
 msgid "Collations"
 msgstr "照合順序"
 
-#: utilities/utility.php:481
+#: utilities/utility.php:549
 msgid "Compile Options"
-msgstr "コンパイルオプション"
+msgstr "コンパイル・オプション"
 
-#: utilities/utility.php:495
+#: utilities/utility.php:563
 msgid "Database Tables and Indexes"
 msgstr "データベースのテーブルとインデックス"
 
-#: utilities/utility.php:497
+#: utilities/utility.php:565
 msgid ""
 "Table names in brown are required by WordPress, and those in blue are "
 "created by some plugins. The table sqlite_sequence is not a WordPress table "
@@ -1056,74 +1025,86 @@ msgstr ""
 "格納されています。この値は、テーブル名の隣に括弧つきで表示されます。テーブルやインデックスをここで操作"
 "することはできません。SQLiteManagerのようなユーティリティをお使いください。"
 
-#: utilities/utility.php:502
+#: utilities/utility.php:570
 msgid "Table Name"
 msgstr "テーブル名"
 
-#: utilities/utility.php:503
+#: utilities/utility.php:571
 msgid "System/User"
 msgstr "システム/ユーザ"
 
-#: utilities/utility.php:504
+#: utilities/utility.php:572
 msgid "Index ( Column )"
-msgstr "インデックス ( カラム名 )"
+msgstr "インデックス(カラム名)"
 
-#: utilities/utility.php:529
+#: utilities/utility.php:610
 msgid "Plugin Info"
 msgstr "プラグイン情報"
 
-#: utilities/utility.php:531
+#: utilities/utility.php:612
 msgid "This table shows plugins you have installed and their compatibility."
 msgstr "この表は、インストール済みのプラグインについて、互換性を表示します。"
 
-#: utilities/utility.php:536
+#: utilities/utility.php:617
 msgid "Installed Plugins"
 msgstr "インストール済み"
 
-#: utilities/utility.php:537
+#: utilities/utility.php:618
 msgid "Active/Inactive"
 msgstr "有効/無効"
 
-#: utilities/utility.php:538
+#: utilities/utility.php:619
 msgid "Compatible"
 msgstr "互換性"
 
-#: utilities/utility.php:562
+#: utilities/utility.php:643
 msgid "Log cleared"
 msgstr "ログをクリアしました"
 
-#: utilities/utility.php:565
+#: utilities/utility.php:646
 msgid "Log not cleared"
 msgstr "ログがクリアされませんでした"
 
-#: utilities/utility.php:577
+#: utilities/utility.php:658
 msgid "db.php was saved"
 msgstr "db.phpを保存しました"
 
-#: utilities/utility.php:580
+#: utilities/utility.php:661
 msgid "Error! db.php couldn't be saved"
 msgstr "エラー。db.phpを保存できませんでした"
 
-#: utilities/utility.php:591
+#: utilities/utility.php:672
 #, php-format
 msgid ""
 "Optimization finished. Before optimization: %1$s, After optimization: %2$s."
 msgstr ""
 "最適化が終了しました。最適化前のサイズ: %1$s、最適化後のサイズ: %2$s。"
 
-#: utilities/utility.php:594
+#: utilities/utility.php:675
 msgid "Optimization failed"
 msgstr "最適化に失敗しました"
 
-#: utilities/utility.php:608
-msgid "Database Optimization, Error Log, Init File"
+#: utilities/utility.php:683
+msgid "Couldn't find your database file."
 msgstr "データベースの最適化、エラーログ、初期化ファイル"
 
-#: utilities/utility.php:609
+#: utilities/utility.php:695
+msgid "Please select backup file(s)."
+msgstr "データベースを最適化する"
+
+#: utilities/utility.php:704
+msgid "Error! Please remove file(s) manyally."
+msgstr "エラー! 手動でファイルを削除してください。"
+
+#: utilities/utility.php:718
+msgid "Database Optimization, Error Log, Init File"
+msgstr "データベース最適化、エラー・ログ、初期化ファイル"
+
+#: utilities/utility.php:719
 msgid "Optimize You Database"
 msgstr "データベースを最適化する"
 
-#: utilities/utility.php:611
+#: utilities/utility.php:721
 msgid ""
 "This button sends &quot;vacuum&quot; command to your SQLite database. That "
 "command reclaims space after data has been deleted."
@@ -1131,49 +1112,99 @@ msgstr ""
 "このボタンは&quot;vaccum&quot;コマンドをSQLiteデータベースに発行します。このコマンドは、"
 "データの削除後に空いたスペースを回収します。"
 
-#: utilities/utility.php:619
+#: utilities/utility.php:729
 msgid "Optimize"
 msgstr "最適化"
 
-#: utilities/utility.php:619
+#: utilities/utility.php:729
 msgid ""
 "Are you sure to optimize your database?\\n\\nClick [Cancel] to stop, [OK] to "
 "continue."
 msgstr ""
 "本当にデータベースを最適化しますか?\\n\\nやめるときは[キャンセル]を、続けるなら[OK]をクリック。"
 
-#: utilities/utility.php:622
+#: utilities/utility.php:732
+msgid "Create or Delete backup file(s)"
+msgstr "データベースのバックアップを作る・削除する"
+
+#: utilities/utility.php:734
+msgid ""
+"Click the backup button below if you want to create a current snapshot of "
+"your database file. The backup file is named &lsquo;DB_FILE_NAME.yyyymmdd."
+"zip&rsquo; if PHP zip extension is loaded or &lsquo;DB_FILE_NAME.yyyymmdd."
+"back&rsquo; if not loaded, and is put in the same directory that the database "
+"is in."
+msgstr ""
+"現在のデータベースのコピーを作りたいときには、下のバックアップボタンをクリックしてください。バックアップファイルは、"
+"PHPのzipエクステンションがロードされている場合は、&lsquo;データベース名.yyyymmdd.zip&rsquo;という名前で、"
+"ロードされていない場合は、&lsquo;データベース名.yyyymmdd.back&rsquo;という名前で、データベースと同じディレクトリ"
+"につくられます。"
+
+#: utilities/utility.php:737
+msgid ""
+"If you want to delete the file(s), check the file name and click the Delete "
+"button. You can check multiple files."
+msgstr ""
+"バックアップファイルを削除したい場合は、ファイルをチェックして削除ボタンをクリックしてください。複数ファイルを選択できます。"
+
+#: utilities/utility.php:748
+msgid "Delete"
+msgstr "削除"
+
+#: utilities/utility.php:749
+msgid "Backup Files"
+msgstr "バックアップファイル"
+
+#: utilities/utility.php:764
+msgid "Backup"
+msgstr "バックアップ"
+
+#: utilities/utility.php:764
+msgid ""
+"Are you sure to make a backup file?\\n\\nClick [Cancel] to stop, [OK] to "
+"continue."
+msgstr ""
+"バックアップファイルを作ります。\\n\\n中止する場合は[Cancel]を、続ける場合は[OK]をクリックしてください。"
+
+#: utilities/utility.php:765
+msgid ""
+"Are you sure to delete backup file(s)?\\n\\nClick [Cancel] to stop, [OK] to "
+"continue."
+msgstr ""
+"バックアップファイルを削除します。\\n\\n中止する場合は[Cancel]を、続ける場合は[OK]をクリックしてください。"
+
+#: utilities/utility.php:768
 msgid "SQLite Integration Error Log"
 msgstr "SQLite Integrationのエラーログ"
 
-#: utilities/utility.php:624
+#: utilities/utility.php:770
 msgid ""
-"This is the contents of SQLite Integration error log file(default: wp-content/"
-"database/debug.txt). If you want to clear this file, click the Clear Log "
-"button."
+"This is the contents of SQLite Integration error log file(default: wp-"
+"content/database/debug.txt). If you want to clear this file, click the Clear "
+"Log button."
 msgstr ""
 "SQLite Integrationが使うエラーログ・ファイルの内容です(デフォルトでは、wp-content/database/debug.txt)。"
 "このファイルの内容をクリアするには、ログをクリアのボタンをクリックしてください。"
 
-#: utilities/utility.php:634
+#: utilities/utility.php:780
 msgid "No error messages are found"
 msgstr "エラーメッセージはありません"
 
-#: utilities/utility.php:642
+#: utilities/utility.php:788
 msgid "Clear Log"
 msgstr "ログをクリア"
 
-#: utilities/utility.php:642
+#: utilities/utility.php:788
 msgid ""
 "Are you sure to clear Log?\\n\\nClick [Cancel] to stop, [OK] to continue."
 msgstr ""
 "本当にログをクリアしてもいいですか?\\n\\nやめるなら[キャンセル]を。続けるなら[OK]をクリック。"
 
-#: utilities/utility.php:646
+#: utilities/utility.php:792
 msgid "Edit Initial File (wp-content/db.php)"
 msgstr "初期化ファイル(wp-content/db.php)を編集"
 
-#: utilities/utility.php:648
+#: utilities/utility.php:794
 msgid ""
 "When you go &quot;Plugins &raquo; Edit Plugin&quot; page, you can edit "
 "plugin source file. But you can't see this file there because it is not in "
@@ -1186,13 +1217,165 @@ msgstr ""
 "することができます。この設定は問題を起こすことがあります。<span class=\"alert\">よくわからない場合は"
 "このファイルを変更しないでください</span>。"
 
-#: utilities/utility.php:658
+#: utilities/utility.php:804
 msgid "Save"
 msgstr "保存"
 
-#: utilities/utility.php:658
+#: utilities/utility.php:804
 msgid ""
 "Are you sure to save this file?\\n\\nClick [Cancel] to stop, [OK] to "
 "continue."
 msgstr ""
 "この内容を保存してもよろしいですか?\\n\\nやめるなら[キャンセル]を、続けるなら[OK]をクリック。"
+
+#: database_maintenance.php:314
+msgid "Can't create backup file."
+msgstr "バックアップファイルを作れません。"
+
+#: database_maintenance.php:334
+msgid "Failed: "
+msgstr "失敗: "
+
+#: database_maintenance.php:395
+msgid "Maintenance"
+msgstr "メンテナンス"
+
+#: database_maintenance.php:399
+msgid "Database Maintenace"
+msgstr "データベース・メンテナンス"
+
+#: database_maintenance.php:400
+msgid "Important Notice"
+msgstr "重要なお知らせ"
+
+#: database_maintenance.php:402
+msgid ""
+"When you installed WordPress 3.5.x with SQLite Integration and upgraded to "
+"3.6, your database might not function as expected."
+msgstr ""
+"WordPress 3.5.x を SQLite Integrationを使ってインストールし、3.6 にアップグレードした場合、"
+"データベースが意図したとおりに動作しないかもしれません。"
+
+#: database_maintenance.php:403
+msgid ""
+"This page provide you the database sanity check utility and the restore "
+"utility."
+msgstr ""
+"このページでは、データベースが正常かどうかをチェックするユーティリティと、回復ユーティリティを提供します。"
+
+#: database_maintenance.php:406
+msgid ""
+"Click \"Sanity Check\" button first, and see if you need to fix database or "
+"not. If needed, click \"Fix Database\" button. Afterward you may go to "
+"Miscellaneous page and optimize database (this is not required)."
+msgstr ""
+"「正常チェック」ボタンを最初にクリックして、データベースが修復を必要とするかどうかを見てください。必要なら、"
+"「修復」ボタンをクリックしてください。「いろいろ」ページに移動して、最適化をすることもできます（必須ではありません）。"
+
+#: database_maintenance.php:409
+msgid ""
+"Fix Database procedure will create a database backup file each time the "
+"button clicked. The backup file is named with \"maintenance-backup\", so you "
+"can remove it if you don't need it. Please go to Miscellaneous page and "
+"check if there is one."
+msgstr ""
+"データベースの修復は、ボタンがクリックされるたびにバックアップファイルを作成します。ファイル名には、"
+"\"maintenance-backup\"とついていますので、必要なければ削除してかまいません。"
+"「いろいろ」ページに移動して、バックアップファイルが作成されているかどうかご覧ください。"
+
+#: database_maintenance.php:412
+msgid ""
+"If you installed WordPress 3.6 (not upgraded), you don't have to restore the "
+"database."
+msgstr ""
+"アップグレードではなくて、WordPress 3.6 を最初からインストールした場合は、データベースの修復は"
+"必要ありません。"
+
+#: database_maintenance.php:421
+msgid "Sanity Check"
+msgstr "正常チェック"
+
+#: database_maintenance.php:421
+msgid ""
+"Are you sure to check the database? This will take some time.\\n\\nClick "
+"[Cancel] to stop, [OK] to continue."
+msgstr ""
+"データベースのチェックをします。この操作は少し時間がかかるかもしれません。\\n\\nやめるなら[キャンセル]を、"
+"続けるなら[OK]をクリックしてください。"
+
+#: database_maintenance.php:422
+msgid "Fix database"
+msgstr "修復"
+
+#: database_maintenance.php:422
+msgid ""
+"Are you sure to do fix the database? This will take some time.\\n\\nClick "
+"[Cancel] to stop, [OK] to continue."
+msgstr ""
+"データベースの修復をします。この操作は少し時間がかかるかもしれません。\\n\\nやめるなら[キャンセル]を、"
+"続けるなら[OK]をクリックしてください。"
+
+#: database_maintenance.php:436 database_maintenance.php:446
+msgid "Results"
+msgstr "結果"
+
+#: database_maintenance.php:447
+msgid "Your database restoration is successfully finished!"
+msgstr "データベースの修復が成功しました。"
+
+#: database_maintenance.php:463 database_maintenance.php:474
+msgid "Checked Results"
+msgstr "チェックの結果"
+
+#: database_maintenance.php:468
+msgid " needs restoring."
+msgstr "修復が必要です。"
+
+#: database_maintenance.php:475
+msgid "Your database is OK. You don't have to restore it."
+msgstr "あなたのデータベースは正常です。修復の必要はありません。"
+
+msgid "You can check your database and fix it if needed."
+msgstr "データベースのチェックと修復をすることができます。"
+
+msgid "Table name is not selected."
+msgstr "テーブル名が選択されていません。"
+
+msgid "There's no such table."
+msgstr "テーブルが存在しません。"
+
+msgid "Columns Information"
+msgstr "カラム情報"
+
+msgid ""
+"Select a table name and click \"Display Columns\" button, and you'll see "
+"the column property of that table. This information is for debug use."
+msgstr ""
+"テーブル名を選択して「カラムを表示」ボタンをクリックしてください。そのテーブルのカラム属性を表示します。"
+"この情報はデバッグのために利用されます。"
+
+msgid ""
+"Display columns in the selected table.\\n\\nClick [Cancel] to stop, [OK] to continue."
+msgstr ""
+"選択したテーブルのカラムを表示します。\\n\\nやめるなら、[キャンセル]を、続けるんら、[OK]をクリックしてください。"
+
+msgid "Columns In %s"
+msgstr "%sのカラム"
+
+msgid "Columns Info"
+msgstr "カラム情報"
+
+msgid "Table Name: "
+msgstr "テーブル名"
+
+msgid "Column"
+msgstr "カラム"
+
+msgid "Type"
+msgstr "タイプ"
+
+msgid "Null"
+msgstr "ヌル"
+
+msgid "Default"
+msgstr "デフォルト"
