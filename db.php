@@ -8,6 +8,18 @@
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
+if (!defined('ABSPATH')) { // Oh, you are not WordPress!
+	echo 'Thank you, but you are not allowed to access here.';
+	die();
+}
+
+/**
+ * Notice:
+ * If you want to change the database from SQLite to MySQL or from MySQL to SQLite,
+ * the line below in the wp-config.php will enable you to use MySQL.
+ * define('USE_MYSQL', true);
+ */
+if (defined('USE_MYSQL') && USE_MYSQL === true) return;
 
 function pdo_log_error($message, $data = null) {
   

@@ -38,7 +38,7 @@ class SQLiteIntegrationDocument {
     
     <h3><?php _e('Features', $domain);?></h3>
     <p>
-    <?php _e('This plugin is a successor to <a href="http://wordpress.org/extend/plugins/pdo-for-wordpress/">PDO for WordPress</a>, which enabled WordPress to use SQLite for its database. But PDO for WordPress doesn\'t seem to be maintained any more only to be outdated. SQLite Integration makes use of the basic ideas and framework of PDO for WordPress, adds some new features and updates it to be able to work with the newest version of WordPress(3.7.1).', $domain); ?>
+    <?php _e('This plugin is a successor to <a href="http://wordpress.org/extend/plugins/pdo-for-wordpress/">PDO for WordPress</a>, which enabled WordPress to use SQLite for its database. But PDO for WordPress doesn\'t seem to be maintained any more only to be outdated. SQLite Integration makes use of the basic ideas and framework of PDO for WordPress, adds some new features and updates it to be able to work with the newest version of WordPress(3.8).', $domain); ?>
     </p>
     <p>
     <?php _e('<a href="http://www.sqlite.org/">SQLite Web Page</a> says &mdash; SQLite is a &quot;software library that implements selfcontained, serverless, zero-configuration, transactional SQL database engine&quot;. It is &quot;a good choice for small to medium size websites&quot;. It\'s small and portable, and you don\'t need any database server system.', $domain); ?>
@@ -109,8 +109,8 @@ class SQLiteIntegrationDocument {
   	    <thead>
   	    <tr>
   	      <th data-sort='{"key":"name"}' class="item"><?php _e('Plugins Name', $domain); ?></th>
-  	      <th data-sort='{"key":"compat"}'><?php _e('Compatibility', $domain); ?></th>
-  	      <th data-sort='{"key":"reason"}'><?php _e('Reasons', $domain);?></th>
+  	      <th data-sort='{"key":"compat"}' class="compat"><?php _e('Compatibility', $domain); ?></th>
+  	      <th data-sort='{"key":"reason"}' class="reason"><?php _e('Reasons', $domain);?></th>
   	    </tr>
   	    </thead>
   	    <tbody>
@@ -131,8 +131,8 @@ class SQLiteIntegrationDocument {
               <td><?php _e('No', $domain);?></td>
               <?php endif;?>
               <td><?php echo $plugin_info->reason;?></td>
-            <?php endif;?>
             </tr>
+            <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
   	    </tbody>

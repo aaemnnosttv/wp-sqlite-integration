@@ -9,6 +9,10 @@
  * This is run only once while installation.
  * @return boolean
  */
+if (!defined('ABSPATH')) {
+	echo 'Thank you, but you are not allowed to access this file.';
+	die();
+}
 function make_db_sqlite() {
   include_once PDODIR . 'query_create.class.php';
   include_once ABSPATH . 'wp-admin/includes/schema.php';

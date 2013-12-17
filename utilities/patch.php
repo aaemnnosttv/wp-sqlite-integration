@@ -41,6 +41,7 @@ class PatchUtils {
     $output = array();
     $retval = 0;
     $patch_results = array();
+    $message = '';
     if (isset($_POST['plugin_checked'])) {
       $file_names = $_POST['plugin_checked'];
     } else {

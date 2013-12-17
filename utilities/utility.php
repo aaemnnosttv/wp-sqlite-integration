@@ -405,7 +405,7 @@ class SQLiteIntegrationUtils {
   function welcome() {
     $domain = $this->text_domain;
     if (isset($_GET['page']) && $_GET['page'] == 'sqlite-integration') :?>
-    <div class="wrap" id="sqlite-admin-wrap">
+    <div class="wrap single" id="sqlite-admin-wrap">
     <h2><?php _e('Welcome to SQLite Integration', $domain) ?></h2>
     <p>
       <?php _e('Thank you for using SQLite Integration plugin!', $domain) ?>
@@ -725,7 +725,7 @@ class SQLiteIntegrationUtils {
         	<li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
         </ul>
       </div>
-      <div class="wrap" id="sqlite-admin-wrap">
+      <div class="wrap single" id="sqlite-admin-wrap">
       <h2><?php _e('Database Optimization, Error Log, Init File', $domain)?></h2>
       <h3><?php _e('Optimize You Database', $domain)?></h3>
       <p>

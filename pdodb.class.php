@@ -4,7 +4,10 @@
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
-
+if (!defined('ABSPATH')) {
+	echo 'Thank you, but you are not allowed to accesss this file.';
+	die();
+}
 require_once PDODIR . 'pdoengine.class.php';
 require_once PDODIR . 'install.php';
 

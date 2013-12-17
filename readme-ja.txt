@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.7.1
-Stable tag: 1.4.2
+Tested up to: 3.8
+Stable tag: 1.5
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,23 +30,19 @@ WordPressはMySQLと話していると思っていて、背後で何が起こっ
 
 SQLite Integrationは[PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress)プラグインの後継です。後者は残念なことに、もうメンテナンスされていないようです。SQLite IntegrationはPDO for WordPressの基本的なアイディアと構造を借りて、より多くの機能とユーティリティを追加しました。
 
-= 重要なお知らせ =
+= 特徴 =
 
-このプラグインを使ってWordPress 3.5.x をインストールし、3.6にアップグレードした場合、データベースが意図したとおりに動作していないかもしれません。これに該当する場合は、プラグインを最新版にアップグレードして、管理画面のメンテナンスページに移動し、修復が必要かどうかをチェックしてください。必要なら、そのページで提供しているユーティリティを使って修復をすることができます。
-
-WordPress 3.6 をインストールした場合や、3.5.x を使っている場合は、これに該当しませんので、修復は必要ありません。
-
-= Features =
-
-SQLite Integrationは普通の「プラグイン」ではありません。WordPressをインストールするときに使います。そのため、少し準備が必要です。インストールのセクションを参照してください。[SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/)をご覧になると、もっと詳しい説明を読むことができます。
+SQLite Integrationは普通の「プラグイン」ではありません。WordPressをインストールするときに使わなければなりません。そのため、少し準備が必要です。インストールのセクションを参照してください。[SQLite Integration Page](http://dogwood.skr.jp/wordpress/sqlite-integration/)をご覧になると、もっと詳しい説明を読むことができます。
 
 インストールに成功したら、MySQLを使う他のWordPressと同じように使うことができます。オプションとして、管理パネルでこのプラグインを有効化することができます。有効化すると有益な情報と説明を見ることができます。これは必須ではありませんが、お勧めします。
 
-= Backward Compatibility =
+ローカルマシンにこのプラグインを使ってWordPressをインストールし、本番の環境ではMySQLを使いたいという場合を考えて、wp-config.phpでどちらのデータベースを使うかを制御できるようにしました。
+
+= 後方互換性 =
 
 現在[PDO for WordPress](http://wordpress.org/extend/plugins/pdo-for-wordpress)をお使いの場合は、データベースを移行することができます。インストールのセクションをご覧ください。
 
-= Support =
+= サポート =
 
 下の方法でコンタクトを取ってください。
 
@@ -55,29 +51,48 @@ SQLite Integrationは普通の「プラグイン」ではありません。WordP
 
 注意: WordPress.orgはMySQL以外のデータベースを正式にサポートしていません。だから、WordPress.orgからのサポートは得られません。フォーラムに投稿しても、回答を得ることはまずないでしょう。また、パッチをあてたプラグインを使う場合は、そのプラグインの作者からのサポートはないものと思ってください。自分でリスクを負う必要があります。
 
-= Translation =
+= 翻訳 =
 
 ドキュメントは英語で書かれています。日本語のカタログファイルと、.potファイルがアーカイブに含まれています。もしあなたの言語に翻訳をしたら、知らせてください。
 
-== Installation ==
+== インストール ==
 
 このプラグインは他のプラグインとはちがいます。管理パネルのプラグイン・ページでインストールすることはできません。
 
 まず、WordPressのインストールを準備しなければなりません。Codexの[Installing Wordpress ](http://codex.wordpress.org/Installing_WordPress)をご覧ください。
 
-必要要件をチェックし、WordPressのアーカイブを展開したら、wp-config-sample.phpをwp-config.phpにリネームして、[Codex page](http://codex.wordpress.org/Editing_wp-config.php)に書いてあるように、少し編集する必要があります。データベースの設定*以外*の部分を設定してください。
+必要要件をチェックし、WordPressのアーカイブを展開したら、wp-config-sample.phpをwp-config.phpにリネームして、[Codex page](http://codex.wordpress.org/Editing_wp-config.php)に書いてあるように、少し編集する必要があります。
 
-終わったら、オプションの設定を書き加えることができます。次の説明に従ってください。
+= 基本設定 =
+
+SQLiteだけを使いたい場合は、wp-conifg.phpの下の部分だけを編集してください。
+
+* 認証用ユニークキー
+* WordPressデータベーステーブルの接頭辞
+* ローカル言語(日本語版では、jaがすでに設定されています)
+
+これでお終いです。他の部分は変更する必要はありません。
+
+SQLiteとMySQLを交互に使いたい場合は、「MySQLの設定」セクションを編集する必要があります。また、wp-config.phpに下の1行を追加してください。
+
+`define('USE_MYSQL', false);
+// 編集が必要なのはここまでです !`
+
+この定義は、WordPressがSQLiteを使うようにさせるものです。MySQLを使いたい場合は、'false'を'true'に変えるか、この行自体を削除してください。
+
+= オプションの設定 =
+
+基本設定が終わったら、オプションの設定を書き加えることができます。これは必須ではありませんので、必要がなければ、編集作業は終了です。
 
 * デフォルト(wp-content/database)とは違うディレクトリにSQLiteデータベース・ファイルを置きたい場合は、次の行を追加してください(最後のスラッシュを忘れずに)。
 	
-	`define('DB_DIR', '/home/youraccount/database_directory/');`
+`define('DB_DIR', '/home/youraccount/database_directory/');`
 	
 	注意: PHPスクリプトがこのディレクトリを作ったり、中にファイルを書き込んだりする権限を持っていることが必要です。
 	
 * デフォルト(.ht.sqlite)とは違うデータベース・ファイル名を使いたい場合は、次の行を追加してください。
 	
-	`define('DB_FILE', 'database_file_name');`
+`define('DB_FILE', 'database_file_name');`
 	
 	注意: PDO for WordPressをお使いの方は、「データベースを移行する」のセクションをご覧ください。
 
@@ -85,11 +100,13 @@ SQLite Integrationは普通の「プラグイン」ではありません。WordP
 
 wp-config.phpの準備が終わったら、次のステップに進みます。
 
-1. プラグインのアーカイブを展開します。
+1. SQLite Integrationのアーカイブをダウンロードします。
 
-2. アーカイブに含まれるdb.phpファイルをwp-contentディレクトリに移動(またはコピー)してください。
+2. プラグインのアーカイブを展開します。
 
-3. sqlite-wordpressディレクトリをwp-content/plugin/ディレクトリの下に移動してください。
+3. アーカイブに含まれるdb.phpファイルをwp-contentディレクトリにコピーしてください。
+
+4. sqlite-wordpressディレクトリをwp-content/plugin/ディレクトリの下に移動してください。
 
   `wordpress/wp-contents/db.php`
 	
@@ -125,7 +142,7 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 
 これでおしまいです。忘れずに必要要件とWordPressのバージョンをチェックしてください。*SQLite IntegrationはWordPress 3.2.x以前のものでは動作しません。*
 
-== Frequently Asked Questions ==
+== よくある質問 ==
 
 = データベース・ファイルが作られません =
 
@@ -170,9 +187,17 @@ wp-config.phpの準備が終わったら、次のステップに進みます。
 
 == Upgrade Notice ==
 
-SQLite Integrationのアップグレードに失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
+WordPress 3.8 に対応しました。バグフィクスが少し、機能拡張も少しあります。自動アップグレードで失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
 
 == Changelog ==
+
+= 1.5 (2013-12-17) =
+* WordPress 3.8 でのインストールと動作テストをしました。
+* SQLite と MySQL を交互に使えるようにしました。
+* readme-ja.txt のインストールの説明をかえました。
+* SQLite のコンパイルオプション'ENABLE_UPDATE_DELETE_LIMIT'をチェックするようにしました。
+* WordPress 3.8 の管理画面に合わせて sytle を変更しました。
+* グローバルで動くファイルへのダイレクトアクセスを制限するようにしました。
 
 = 1.4.2 (2013-11-06) =
 * ダッシュボードに表示される情報についてのバグを修正しました。

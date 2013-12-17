@@ -4,7 +4,7 @@ Plugin Name: SQLite Integration
 Plugin URI: http://dogwood.skr.jp/wordpress/sqlite-integration/
 Description: SQLite Integration is the plugin that enables WordPress to use SQLite. If you don't have MySQL and want to build a WordPress website, it's for you.
 Author: Kojima Toshiyasu
-Version: 1.4.2
+Version: 1.5
 Author URI: http://dogwood.skr.jp
 Text Domain: sqlite-integration
 Domain Path: /languages
@@ -29,6 +29,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
  * Globals
  */
+if (!defined('ABSPATH')) {
+	echo 'Thank you, but you are not allowed to access this file.';
+	die();
+}
 $siteurl = get_option('siteurl');
 define('SQLiteDir', dirname(plugin_basename(__FILE__)));
 define('SQLiteFilePath', dirname(__FILE__));
@@ -168,7 +172,7 @@ class SQLiteIntegration {
       add_action('admin_print_styles-'.$welcome_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$util_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$edit_db, array($this, 'add_style_sheet'));
-      add_action('admin_print_styles-'.$doc_page, array($this, 'add_doc_style_sheet'));
+      add_action('admin_print_styles-'.$doc_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$patch_page, array($this, 'add_style_sheet'));
       add_action('admin_print_scripts-'.$util_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$doc_page, array($this, 'add_sqlite_script'));
@@ -194,7 +198,7 @@ class SQLiteIntegration {
       add_action('admin_print_styles-'.$welcome_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$util_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$edit_db, array($this, 'add_style_sheet'));
-      add_action('admin_print_styles-'.$doc_page, array($this, 'add_doc_style_sheet'));
+      add_action('admin_print_styles-'.$doc_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$patch_page, array($this, 'add_style_sheet'));
       add_action('admin_print_scripts-'.$util_page, array($this, 'add_sqlite_script'));
       add_action('admin_print_scripts-'.$doc_page, array($this, 'add_sqlite_script'));
@@ -221,22 +225,23 @@ class SQLiteIntegration {
    * Styles and JavaScripts
    */
   function add_style_sheet() {
-    $style_url = SQLiteUrl . '/styles/style.css';
-    $style_file = SQLiteFilePath . '/styles/style.css';
+  	global $current_user;
+  	get_currentuserinfo();
+  	$admin_color = get_user_meta($current_user->ID, 'admin_color', true);
+  	if ($admin_color == 'fresh') {
+  		$stylesheet_file = 'style.min.css';
+  	} else {
+	  	$stylesheet_file = $admin_color . '.min.css';
+  	}
+    $style_url = SQLiteUrl . '/styles/' . $stylesheet_file;
+    $style_file = SQLiteFilePath . '/styles/' . $stylesheet_file;
     if (file_exists($style_file)) {
       wp_enqueue_style('sqlite_integration_stylesheet', $style_url);
     }
   }
-  function add_doc_style_sheet() {
-    $style_url = SQLiteUrl . '/styles/doc.css';
-    $style_file = SQLiteFilePath . '/styles/doc.css';
-    if (file_exists($style_file)) {
-      wp_enqueue_style('sqlite_integration_doc_style', $style_url);
-    }
-  }
   function add_sqlite_script() {
-    $script_url = SQLiteUrl . '/js/sqlite.js';
-    $script_file = SQLiteFilePath . '/js/sqlite.js';
+    $script_url = SQLiteUrl . '/js/sqlite.min.js';
+    $script_file = SQLiteFilePath . '/js/sqlite.min.js';
     if (file_exists($script_file)) {
       wp_enqueue_script('sqlite-integration', $script_url, 'jquery');
     }
