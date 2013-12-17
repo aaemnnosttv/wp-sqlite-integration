@@ -78,7 +78,7 @@ If you want to use SQLite and MySQL interchangeably, you must edit the database 
 `define('USE_MYSQL', false);
 /* That's all, stop editing! Happy blogging. */`
 
-This definition makes WordPress use SQLite. If you want to change the database to MySQL, change 'false' to 'true' or just delete this line.
+This definition makes WordPress use SQLite. If you want to change the database to MySQL, change 'false' to 'true'.
 
 = Optional settings =
 

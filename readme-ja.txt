@@ -78,7 +78,7 @@ SQLiteとMySQLを交互に使いたい場合は、「MySQLの設定」セクシ�
 `define('USE_MYSQL', false);
 // 編集が必要なのはここまでです !`
 
-この定義は、WordPressがSQLiteを使うようにさせるものです。MySQLを使いたい場合は、'false'を'true'に変えるか、この行自体を削除してください。
+この定義は、WordPressがSQLiteを使うようにさせるものです。MySQLを使いたい場合は、'false'を'true'に変えてください。
 
 = オプションの設定 =
 
