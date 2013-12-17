@@ -3,7 +3,7 @@
  * This file contains PatchUtils class
  * 
  * @package SQLite Integration
- * @since 1.1
+ * @author Kojima Toshiyasu
  *
  */
 class PatchUtils {
@@ -34,11 +34,14 @@ class PatchUtils {
    * @return boolean|array
    */
   private function apply_patches() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     $installed_plugins = array();
     $file_names = array();
     $output = array();
     $retval = 0;
     $patch_results = array();
+    $message = '';
     if (isset($_POST['plugin_checked'])) {
       $file_names = $_POST['plugin_checked'];
     } else {
@@ -103,6 +106,8 @@ class PatchUtils {
    * @return boolean|array
    */
   private function delete_patch_files() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     $file_names = array();
     $rm_results = array();
     if (isset($_POST['plugin_checked'])) {
@@ -110,18 +115,16 @@ class PatchUtils {
     } else {
       return false;
     }
-    $command = 'rm -f';
-    foreach ($file_names as $file) {
-      if (chdir(SQLitePatchDir)) {
-        exec("$command $file", $output, $retval);
-      } else {
-        $rm_results[$file] = __('Error!: patches directory is not accessible.', $domain);
-      }
-      if ($retval > 0) {
-        $rm_results[$file] = sprintf(__('Error! Messages: %s', $domain), $output);
-      } else {
-        $rm_results[$file] = sprintf(__('File %s is deleted.', $domain), $file);
-      }
+    if (chdir(SQLitePatchDir)) {
+    	foreach ($file_names as $file) {
+    		if (unlink($file)) {
+    			$rm_results[$file] = sprintf(__('File %s is deleted.', $domain), $file);
+    		} else {
+    			$rm_results[$file] = sprintf(__('Error! File %s is not deleted.', $domain), $file);
+    		}
+    	}
+    } else {
+    	$rm_results[$file] = __('Error!: patches directory is not accessible.', $domain);
     }
     return $rm_results;
   }
@@ -130,6 +133,8 @@ class PatchUtils {
    * No return values.
    */
   private function upload_file() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     if (!file_exists(SQLitePatchDir) || !is_dir(SQLitePatchDir)) {
       mkdir(SQLitePatchDir, 0705, true);
     }
@@ -198,7 +203,7 @@ class PatchUtils {
         }
         echo '</div>';
       } else {
-        $message = __('Error! Please remove files manually');
+        $message = __('Error! Please remove files manually', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
       }
     }
@@ -218,6 +223,7 @@ class PatchUtils {
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=sys-info"><?php _e('System Info', $domain);?></a></li>
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=setting-file"><?php _e('Miscellaneous', $domain);?></a></li>
         <li class="menu-selected"><?php _e('Patch Utility', $domain);?></li>
+        <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
       </ul>
     </div>
     <div class="wrap" id="sqlite-admin-wrap">

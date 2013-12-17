@@ -2,7 +2,7 @@
 /**
  * 
  * @package SQLite Integration
- * @author kjm
+ * @author Kojima Toshiyasu
  *
  */
 class SQLiteIntegrationUtils {
@@ -198,7 +198,7 @@ class SQLiteIntegrationUtils {
     $db_file = FQDB;
     if (file_exists($db_file)) {
       $size = filesize($db_file);
-      clearstatcache(false, $db_file);
+      clearstatcache(true, $db_file);
       return $this->convert_to_formatted_number($size);
     }
   }
@@ -329,10 +329,83 @@ class SQLiteIntegrationUtils {
     }
   }
 
+  /**
+   * function to parse FQDBDIR and return backup database files
+   */
+  private function get_backup_files() {
+  	$db_name = basename(FQDB);
+  	$names_to_exclude = array('.', '..', '.htaccess', 'debug.txt', '.ht.sqlite', $db_name);
+  	$backup_files = array();
+  	if (is_dir(FQDBDIR)) {
+  		if ($dir_handle = opendir(FQDBDIR)) {
+  			while (($file_name = readdir($dir_handle)) !== false) {
+  				if (in_array($file_name, $names_to_exclude)) continue;
+  				$backup_files[] = $file_name;
+  			}
+  		}
+  	}
+  	return $backup_files;
+  }
+  
+  /**
+   * function to create backup file
+   */
+  private function backup_db() {
+  	$result = array();
+  	$database_file = FQDB;
+  	$db_name = basename(FQDB);
+  	if (!file_exists($database_file)) {
+  		return false;
+  	}
+  	$today = date("Ymd");
+  	if (!extension_loaded('zip')) {
+  		$backup_file = $database_file . '.' . $today . '.back';
+  		if (copy($database_file, $backup_file)) {
+  			$result['success'] = basename($backup_file) . __(' was created.', $domain);
+  		} else {
+  			$result['error'] = basename($backup_file) . __(' was not created.', $domain);
+  		}
+  	} else {
+  		$backup_file = $database_file . '.' . $today . '.zip';
+  		$zip = new ZipArchive();
+  		$res = $zip->open($backup_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+  		if ($res === true) {
+  			$zip->addFile($database_file, $db_name);
+  			$result['success'] = basename($backup_file) . __(' was created.', $domain);
+  		} else {
+  			$result['error'] = basename($backup_file) . __(' was not created.', $domain);
+  		}
+  		$zip->close();
+  	}
+  	return $result;
+  }
+  
+  private function delete_backup_db() {
+  	global $utils;
+  	$domain = $utils->text_domain;
+  	$file_names = array();
+  	$results = array();
+  	if (isset($_POST['backup_checked'])) {
+  		$file_names = $_POST['backup_checked'];
+  	} else {
+  		return false;
+  	}
+  	if (chdir(FQDBDIR)) {
+  		foreach ($file_names as $file) {
+  			if (unlink($file)) {
+  				$results[$file] = sprintf(__('File %s was deleted.', $domain), $file);
+  			} else {
+  				$results[$file] = sprintf(__('Error! File was not deleted.', $domain), $file);
+  			}
+  		}
+  	}
+  	return $results;
+  }
+  
   function welcome() {
     $domain = $this->text_domain;
     if (isset($_GET['page']) && $_GET['page'] == 'sqlite-integration') :?>
-    <div class="wrap" id="sqlite-admin-wrap">
+    <div class="wrap single" id="sqlite-admin-wrap">
     <h2><?php _e('Welcome to SQLite Integration', $domain) ?></h2>
     <p>
       <?php _e('Thank you for using SQLite Integration plugin!', $domain) ?>
@@ -366,6 +439,10 @@ class SQLiteIntegrationUtils {
         	<td><a href="<?php echo $this->show_parent();?>?page=patch"><?php _e('Patch Utility', $domain)?></a></td>
         	<td><?php _e('You can upload patch files and apply them to the incompatible plugins.', $domain)?></td>
         </tr>
+        <tr>
+        	<td><a href="<?php echo $this->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></td>
+        	<td><?php _e('You can check your database and fix it if needed.', $domain);?></td>
+        </tr>
       </tbody>
     </table>
     </div>
@@ -390,6 +467,7 @@ class SQLiteIntegrationUtils {
         <li class="menu-selected"><?php _e('System Info', $domain);?></li>
         <li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=setting-file"><?php _e('Miscellaneous', $domain);?></a></li>
         <li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=patch"><?php _e('Patch Utility', $domain);?></a></li>
+        <li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
       </ul>
     </div>
     <div class="wrap" id="sqlite-admin-wrap">
@@ -608,6 +686,35 @@ class SQLiteIntegrationUtils {
         echo '<div id="message" class="updated fade">'.$messages.'</div>';
       }
     }
+    if (isset($_POST['backup_db'])) {
+			check_admin_referer('sqliteintegration-backup-manip-stats');
+			$results = $this->backup_db();
+			if ($results === false) {
+				$message = __('Couldn\'t find your database file.');
+				echo '<div id="message" class="updated fade">'.$message.'</div>';
+			} elseif (is_array($results) && array_key_exists('success', $results)) {
+				echo '<div id="message" class="updated fade">'.$results['success'].'</div>';
+			} else {
+				echo '<div id="message" class="update fade">'.$results['error'].'</div>';
+			}
+		}
+		if (isset($_POST['delete_backup_files'])) {
+			check_admin_referer('sqliteintegration-backup-manip-stats');
+			$results = $this->delete_backup_db();
+			if ($results === false) {
+				$message = __('Please select backup file(s).', $domain);
+				echo '<div id="message" class="updated fade">'.$message.'</div>';
+			} elseif (is_array($results) && count($results) > 0) {
+				echo '<div id="message" class="updated fade">';
+				foreach ($results as $key => $val) {
+					echo $val.'<br />';
+				}
+				echo '</div>';
+			} else {
+				$message = __('Error! Please remove file(s) manyally.', $domain);
+				echo '<div id="message" class="updated fade">'.$message.'</div>';
+			}
+		}
     if (isset($_GET['page']) && $_GET['page'] == 'setting-file') :?>
       <div class="navigation">
         <ul class="navi-menu">
@@ -615,9 +722,10 @@ class SQLiteIntegrationUtils {
           <li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=sys-info"><?php _e('System Info', $domain) ?></a></li>
           <li class="menu-selected"><?php _e('Miscellaneous', $domain);?></li>
           <li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=patch"><?php _e('Patch Utility', $domain)?></a></li>
+        	<li class="menu-item"><a href="<?php echo $this->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
         </ul>
       </div>
-      <div class="wrap" id="sqlite-admin-wrap">
+      <div class="wrap single" id="sqlite-admin-wrap">
       <h2><?php _e('Database Optimization, Error Log, Init File', $domain)?></h2>
       <h3><?php _e('Optimize You Database', $domain)?></h3>
       <p>
@@ -632,7 +740,43 @@ class SQLiteIntegrationUtils {
       <input type="submit" name="sqlitewordpress_db_optimize" value="<?php _e('Optimize', $domain)?>" onclick="return confirm('<?php _e('Are you sure to optimize your database?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" class="button-primary">
       </p>
       </form>
-      <h3><?php _e('SQLite Integration Error Log', $domain)?></h3>
+      <h3><?php _e('Create or Delete backup file(s)', $domain);?></h3>
+      <p>
+      	<?php _e('Click the backup button below if you want to create a current snapshot of your database file. The backup file is named &lsquo;DB_FILE_NAME.yyyymmdd.zip&rsquo; if PHP zip extension is loaded or &lsquo;DB_FILE_NAME.yyyymmdd.back&rsquo; if not loaded, and is put in the same directory that the database is in.', $domain);?>
+      </p>
+      <p>
+      	<?php _e('If you want to delete the file(s), check the file name and click the Delete button. You can check multiple files.', $domain);?>
+      </p>
+      <?php $backup_files = $this->get_backup_files();?>
+      <form action="" method="post" id="delete-backup-form">
+      	<?php if (function_exists('wp_nonce_field')) {
+      		wp_nonce_field('sqliteintegration-backup-manip-stats');
+      	}
+      	?>
+      	<table class="widefat page fixed" id="backup-files">
+      		<thead>
+      			<tr>
+      				<th class="item"><?php _e('Delete', $domain);?></th>
+      				<th data-sort='{"key":"name"}'><?php _e('Backup Files', $domain);?></th>
+      			</tr>
+      		</thead>
+      		<tbody>
+      			<?php if (!empty($backup_files)) : ?>
+      			<?php foreach ($backup_files as $file) : ?>
+      			<tr data-table='{"name":"<?php echo $file;?>"}'>
+      				<td><input type="checkbox" id="backup_check" name="backup_checked[]" value="<?php echo $file;?>"/></td>
+      				<td><?php echo $file;?></td>
+      			</tr>
+      			<?php endforeach;?>
+      			<?php endif;?>
+      		</tbody>
+      	</table>
+      	<p>
+	      <input type="submit" name="backup_db" class="button-primary" value="<?php _e('Backup', $domain);?>" onclick="return confirm('<?php _e('Are you sure to make a backup file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
+	      <input type="submit" name="delete_backup_files" class="button-primary" value="<?php _e('Delete file', $domain);?>" onclick="return confirm('<?php _e('Are you sure to delete backup file(s)?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
+      	</p>
+      </form>
+      <h3><?php _e('SQLite Integration Error Log', $domain);?></h3>
       <p>
       <?php _e('This is the contents of SQLite Integration error log file(default: wp-content/database/debug.txt). If you want to clear this file, click the Clear Log button.', $domain)?>
       </p>
@@ -641,7 +785,7 @@ class SQLiteIntegrationUtils {
         wp_nonce_field('sqlitewordpress-log-reset-stats');
       }
       ?>
-      <textarea name="errorlog" id="errorlog" cols="85" rows="10">
+      <textarea name="errorlog" id="errorlog" cols="70" rows="10">
 <?php $ret_val = $this->show_error_log();
       if ($ret_val === false || empty($ret_val)) {
         $message = __('No error messages are found', $domain);
@@ -665,7 +809,7 @@ class SQLiteIntegrationUtils {
         wp_nonce_field('sqlitewordpress-db-save-stats');
       }
       ?>
-      <textarea name="dbfile" id="dbfile" cols="85" rows="30">
+      <textarea name="dbfile" id="dbfile" cols="70" rows="10">
 <?php $this->show_db_php();?></textarea>
       <p>
       <input type="submit" name="sqlitewordpress_db_save" value="<?php _e('Save')?>" onclick="return confirm('<?php _e('Are you sure to save this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" class="button-primary">
