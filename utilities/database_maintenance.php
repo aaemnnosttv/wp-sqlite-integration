@@ -1,9 +1,27 @@
 <?php
 /**
- * database check and restoration
+ * This file defines DatabaseMaintenance class.
+ * 
+ * When WordPress was upgraded from 3.5.x to 3.6, SQLite Integration couldn't manipulate
+ * dbDelta() function of WordPress. As a result, there are some tables whose default
+ * values are missing.
+ * 
+ * This class checks the table schemas and restore the default value if necessary.
  * This file is for temporary use and will be removed or changed in the future release.
+ * 
+ * @package SQLite Integration
+ * @author Kojima Toshiyasu
  */
 class DatabaseMaintenance {
+	/**
+	 * Method to check the table schemas.
+	 * 
+	 * If there are any broken tables, it returns the array of the table names to be fixed.
+	 * If not, it returns true.
+	 * 
+	 * @return boolean|multitype:string
+	 * @access private
+	 */
 	private function sanity_check() {
 		global $wpdb;
 		$results_table = array();
@@ -155,6 +173,15 @@ class DatabaseMaintenance {
 			return $results_table;
 		}
 	}
+	/**
+	 * Method to do the fixing job to the broken tables.
+	 * 
+	 * If the job succeeded, it returns string of success message.
+	 * If failed, it returns the array of the failed query for debugging.
+	 * 
+	 * @return string|array of string
+	 * @access private
+	 */
 	private function do_fix_database() {
 		global $wpdb, $wp_version, $utils;
 		$global_schema_to_change = array(
@@ -343,7 +370,14 @@ class DatabaseMaintenance {
 			return $return_val;
 		}
 	}
-	
+	/**
+	 * Method to return the result of SHOW COLUMNS query.
+	 * 
+	 * It returns the result of SHOW COLUMNS query as an object if the table exists.
+	 * It returns the error message if the table doesn't exist.
+	 * 
+	 * @return string|object
+	 */
 	private function show_columns() {
 		global $wpdb, $utils;
 		$domain = $utils->text_domain;
@@ -360,7 +394,13 @@ class DatabaseMaintenance {
 			return $results;
 		}
 	}
-
+	/**
+	 * Method to create a back up file of the database.
+	 * 
+	 * It returns true if success, false if failure.
+	 * 
+	 * @return boolean
+	 */
 	private function maintenance_backup() {
 		$result = array();
 		$database_file = FQDB;
@@ -390,7 +430,10 @@ class DatabaseMaintenance {
 		}
 		return $result;
 	}
-
+	/**
+	 * Method to display the maintenance page on the admin panel.
+	 * 
+	 */
 	function show_maintenance_page() {
 		global $utils, $wpdb;
 		$domain = $utils->text_domain;

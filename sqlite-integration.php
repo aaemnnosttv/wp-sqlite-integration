@@ -27,7 +27,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /**
- * Globals
+ * This file defines global constants and defines SQLiteIntegration class.
+ * 
+ * @package SQLite Integration
+ * @author Kojima Toshiyasu
  */
 if (!defined('ABSPATH')) {
 	echo 'Thank you, but you are not allowed to access this file.';
@@ -69,17 +72,17 @@ if (!class_exists('DatabaseMaintenance')) {
 }
 
 /**
- * This class is for WordPress Administration Panel
+ * This class is for WordPress Administration Panel.
+ * 
  * This class and other utility classes don't affect the base functionality
  * of the plugin.
  * 
- * @package SQLite Integration
- * @author Kojima Toshiyasu
- *
  */
 class SQLiteIntegration {
   /**
-   * This constructor does everything needed
+   * Constructor.
+   * 
+   * This constructor does everything needed for the administration panel.
    */
   function __construct() {
     if (function_exists('register_activation_hook')) {
@@ -99,8 +102,10 @@ class SQLiteIntegration {
   }
 
   /**
-   * Nothing to install
-   * for future use...
+   * Function to install on multisite or single site.
+   * 
+   * There really is nothing to install for now. It is for future use...
+   * 
    */
   function install() {
     global $wpdb;
@@ -120,15 +125,18 @@ class SQLiteIntegration {
   }
   
   /**
-   * Nothing to do...
+   * Function to install something.
+   * 
+   * We have nothing to do for now.
    * We show menu and documents only to the network administrator
    */
   function _install() {
   }
   
   /**
-   * Is it better that we remove wp-content/db.php and wp-content/patches
-   * directory?...
+   * Function to uninstall plugin.
+   * 
+   * This will remove wp-content/db.php and wp-content/patches direcotry.
    * If you migrate the site to the sever with MySQL, you have only to
    * migrate the data in the database.
    */
@@ -155,6 +163,8 @@ class SQLiteIntegration {
   }
   
   /**
+   * Function to manipulate the admin panel, stylesheet and JavaScript.
+   * 
    * We use class method to show pages and want to load style files and script
    * files only in our plugin documents, so we need add_submenu_page with parent
    * slug set to null. This means that menu items are added but hidden from the
@@ -183,8 +193,9 @@ class SQLiteIntegration {
   }
   
   /**
-   * Network admin can only see documents and manipulate patch files.
-   * So, capability is set to manage_network_options.
+   * Function to manipulate network admin panel.
+   * 
+   * Capability is set to manage_network_options.
    */
   function add_network_pages() {
     global $utils, $doc, $patch_utils, $maintenance;
@@ -209,7 +220,9 @@ class SQLiteIntegration {
   }
   
   /**
-   * Japanese catalog is only available
+   * Function to initialize textdomain.
+   * 
+   * Japanese catalog is only available.
    */
   function textdomain_init() {
    global $utils;
@@ -222,7 +235,10 @@ class SQLiteIntegration {
   }
 
   /**
-   * Styles and JavaScripts
+   * Function to initialize stylesheet on the admin panel.
+   * 
+   * This determines which stylesheet to use depending on the users' choice
+   * of admin_color.
    */
   function add_style_sheet() {
   	global $current_user;
@@ -239,6 +255,10 @@ class SQLiteIntegration {
       wp_enqueue_style('sqlite_integration_stylesheet', $style_url);
     }
   }
+  /**
+   * Function to register the JavaScript file.
+   * 
+   */
   function add_sqlite_script() {
     $script_url = SQLiteUrl . '/js/sqlite.min.js';
     $script_file = SQLiteFilePath . '/js/sqlite.min.js';

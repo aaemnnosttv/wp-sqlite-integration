@@ -1,6 +1,9 @@
-/*
- * script for SQLite Integration
- * this file is only included on the documentation page and the utilities page
+/**
+ * This is a part of SQLite Integration.
+ * 
+ * This script is only included on the documentation and utility page.
+ * 
+ * @author Kojima Toshiyasu
  */
 jQuery(document).ready(function($) {
 	var $table = null;

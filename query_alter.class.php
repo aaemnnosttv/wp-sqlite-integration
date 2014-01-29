@@ -1,13 +1,26 @@
 <?php
 /**
- * The class for manipulating ALTER query
+ * The class for manipulating ALTER query.
+ * 
  * newly supports multiple variants
+ * 
  * @package SQLite Integration
  * @author Kojima Toshiyasu
  */
 class AlterQuery {
+	/**
+	 * Variable to store the rewritten query string.
+	 * @var string
+	 */
   public $_query = null;
-
+  
+  /**
+   * Function to split the query string to the tokens and call apropreate functions.
+   * 
+   * @param string @query
+   * @parm string $query_type
+   * @return boolean | stirng
+   */
   public function rewrite_query($query, $query_type) {
     if (stripos($query, $query_type) === false) {
       return false;
@@ -73,7 +86,13 @@ class AlterQuery {
     }
     return $this->_query;
   }
-
+	/**
+	 * Function to analyze ALTER TABLE command and sets the data to an array.
+	 * 
+	 * @param string $command
+	 * @return boolean|array
+	 * @access private
+	 */
   private function command_tokenizer($command) {
     $tokens = array();
     if (preg_match('/^(ADD|DROP|RENAME|MODIFY|CHANGE|ALTER)\\s*(\\w+)?\\s*(\\w+(\(.+\)|))?\\s*/ims', $command, $match)) {
@@ -204,7 +223,15 @@ class AlterQuery {
       return $tokens;
     }
   }
-  
+  /**
+   * Function to split multiple commands into an array and return it.
+   * 
+   * This function is deprecated.
+   * 
+   * @access private
+   * @param unknown $command
+   * @return multitype:string unknown Ambigous <string, unknown>
+   */
   private function split_multiple($command) {
     $out = true;
     $command_array = array();
@@ -245,7 +272,13 @@ class AlterQuery {
     }
     return $command_array;
   }
-  
+  /**
+   * Function to handle single command.
+   * 
+   * @access private
+   * @param array of string $queries
+   * @return string
+   */
   private function handle_single_command($queries) {
     $tokenized_query = $queries;
     if (stripos($tokenized_query['command'], 'add column') !== false) {
@@ -263,7 +296,13 @@ class AlterQuery {
     }
     return $query;
   }
-
+	/**
+	 * Function to handle ADD PRIMARY KEY.
+	 * 
+	 * @access private
+	 * @param array of string $queries
+	 * @return array of string
+	 */
   private function handle_add_primary_key($queries) {
     $tokenized_query = $queries;
     $tbl_name = $tokenized_query['table_name'];
@@ -287,7 +326,13 @@ class AlterQuery {
     }
     return $query;
   }
-  
+  /**
+   * Function to handle DROP PRIMARY KEY.
+   * 
+   * @access private
+   * @param array of string $queries
+   * @return array of string
+   */
   private function handle_drop_primary_key($queries) {
     $tokenized_query = $queries;
     $temp_table = 'temp_'.$tokenized_query['table_name'];
@@ -315,7 +360,13 @@ class AlterQuery {
     }
     return $query;
   }
-  
+  /**
+   * Function to handle MODIFY COLUMN.
+   * 
+   * @access private
+   * @param array of string $queries
+   * @return string|array of string
+   */
   private function handle_modify_command($queries) {
     $tokenized_query = $queries;
     $temp_table = 'temp_'.$tokenized_query['table_name'];
@@ -347,7 +398,13 @@ class AlterQuery {
     }
     return $query;
   }
-  
+  /**
+   * Function to handle CHANGE COLUMN.
+   * 
+   * @access private
+   * @param array of string $queries
+   * @return string|array of string
+   */
   private function handle_change_command($queries) {
     $col_check = false;
     $old_fields = '';
@@ -401,7 +458,13 @@ class AlterQuery {
     }
     return $query;
   }
-  
+  /**
+   * Function to handle ALTER COLUMN.
+   * 
+   * @access private
+   * @param array of string $queries
+   * @return string|array of string
+   */
   private function handle_alter_command($queries) {
     $tokenized_query = $queries;
     $temp_table = 'temp_'.$tokenized_query['table_name'];
@@ -461,7 +524,9 @@ class AlterQuery {
     return $query;
   }
   /**
-   * Change the field definition to SQLite compatible data type.
+   * Function to change the field definition to SQLite compatible data type.
+   * 
+   * @access private
    * @param string $col_name
    * @param string $col_def
    * @return string
@@ -488,7 +553,12 @@ class AlterQuery {
     }
     return $def_string;
   }
-  
+  /**
+   * Variable to store the data definition table.
+   * 
+   * @access private
+   * @var associative array
+   */
   private $array_types = array(
   		'bit'        => 'INTEGER', 'bool'       => 'INTEGER',
   		'boolean'    => 'INTEGER', 'tinyint'    => 'INTEGER',

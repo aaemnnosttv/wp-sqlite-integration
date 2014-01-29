@@ -1,16 +1,23 @@
 <?php
 /**
- * This file contains PatchUtils class
+ * This file defines PatchUtils class.
  * 
  * @package SQLite Integration
  * @author Kojima Toshiyasu
- *
+ */
+/**
+ * This class provides the methods for patching utilities.
+ * 
  */
 class PatchUtils {
   /**
-   * Reads wp-content/uploads/patches directory and returns file names in it.
+   * Method to read the patch directory and returns the list of the files in it.
+   * 
+   * It reads wp-content/uploads/patches directory and returns file names in it.
    * If directory contains none, returns empty array.
+   * 
    * @return array
+   * @access private
    */
   private function get_patch_files() {
     $patch_files = array();
@@ -28,10 +35,14 @@ class PatchUtils {
     }
   }
   /**
-   * Execute patch command and apply it to the target plugins.
+   * Method to apply patch to the plugins.
+   * 
+   * It executes patch command and apply it to the target plugins.
    * If patch file(s) is not selected, returns false.
    * Or else returns array contains messages.
+   * 
    * @return boolean|array
+   * @access private
    */
   private function apply_patches() {
   	global $utils;
@@ -100,10 +111,14 @@ class PatchUtils {
     return $patch_results;
   }
   /**
-   * Delete uploaded patch file(s).
+   * Method to remove patch file(s) from the server.
+   * 
+   * It deletes uploaded patch file(s).
    * If patch file(s) is not selected, returns false.
    * Or else returns array contains messages.
+   * 
    * @return boolean|array
+   * @access private
    */
   private function delete_patch_files() {
   	global $utils;
@@ -129,8 +144,15 @@ class PatchUtils {
     return $rm_results;
   }
   /**
-   * Uploads a patch file.
+   * Method to upload patch file(s) to the server.
+   * 
+   * It uploads a patch file to the server. You must have the permission to write to the
+   * temporary directory. If there isn't SQLitePatchDir, this method will create it and
+   * set the permission to 0705.
+   * 
    * No return values.
+   * 
+   * @access private
    */
   private function upload_file() {
   	global $utils;
@@ -153,7 +175,8 @@ class PatchUtils {
     }
   }
   /**
-   * Displays patch util page
+   * Method to display the patch utility page on the admin panel.
+   * 
    */
   function show_patch_page() {
     global $utils;

@@ -1,17 +1,20 @@
 <?php
 /**
+ * This file contains the only one function wp_install().
+ * 
  * @package SQLite Integration
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
 
-/**
- * This function overrides wp_install() in wp-admin/includes/upgrade.php
- */
 if (!defined('ABSPATH')) {
 	echo 'Thank you, but you are not allowed to access this file.';
 	die();
 }
+
+/**
+ * This function overrides wp_install() in wp-admin/includes/upgrade.php
+ */
 function wp_install($blog_title, $user_name, $user_email, $public, $deprecated = '', $user_password = '') {
   if (!empty($deprecated))
     _deprecated_argument(__FUNCTION__, '2.6');

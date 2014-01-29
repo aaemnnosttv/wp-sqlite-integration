@@ -1,53 +1,154 @@
 <?php
 /**
+ * This file defines PDOEngine class.
+ * 
  * @package SQLite Integration
- * @author Kojima Toshiyasu, Justin Adie
+ * @author Kojima Toshiyasu
  *
  */
 
 /**
- * This class does the real work
- * accepts a request from wpdb class, initialize PDO instance,
- * execute SQL statement, and returns the results to wpdb class.
+ * This class extends PDO class and does the real work.
+ * 
+ * It accepts a request from wpdb class, initialize PDO instance,
+ * execute SQL statement, and returns the results to WordPress.
  */
 class PDOEngine extends PDO {
+	/**
+	 * Class variable to check if there is an error.
+	 * 
+	 * @var boolean
+	 */
   public  $is_error = false;
-  public  $found_rows_result;
+  /**
+   * Class variable which is used for CALC_FOUND_ROW query.
+   * 
+   * @var unsigned integer
+   */
+  public  $found_rows_result = null;
+  /**
+   * Class variable to store the rewritten queries.
+   * 
+   * @var array
+   * @access private
+   */
   private $rewritten_query;
+  /**
+   * Class variable to have what kind of query to execute.
+   * 
+   * @var string
+   * @access private
+   */
   private $query_type;
+  /**
+   * Class variable to store the result of the query.
+   * 
+   * @var reference to the PHP object
+   * @access private
+   */
   private $results = null;
+  /**
+   * Class variable to store the results of the query.
+   * 
+   * This is for the backward compatibility.
+   * 
+   * @var reference to the PHP object
+   * @access private
+   */
   private $_results = null;
+  /**
+   * Class variable to reference to the PDO instance.
+   * 
+   * @var PDO object
+   * @access private
+   */
   private $pdo;
+  /**
+   * Class variable to store the query string prepared to execute.
+   * 
+   * @var string|array
+   */
   private $prepared_query;
+  /**
+   * Class variable to store the values in the query string.
+   * 
+   * @var array
+   * @access private
+   */
   private $extracted_variables = array();
+  /**
+   * Class variable to store the error messages.
+   * 
+   * @var array
+   * @access private
+   */
   private $error_messages = array();
+  /**
+   * Class variable to store the file name and function to cause error.
+   * 
+   * @var array
+   * @access private
+   */
   private $errors;
+  /**
+   * Class variable to store the query strings.
+   * 
+   * @var array
+   */
   public  $queries = array();
+  /**
+   * Class variable to store the affected row id.
+   * 
+   * @var unsigned integer
+   * @access private
+   */
   private $last_insert_id;
+  /**
+   * Class variable to store the number of rows affected.
+   * 
+   * @var unsigned integer
+   */
   private $affected_rows;
+  /**
+   * Class variable to store the queried column names.
+   * 
+   * @var array
+   */
   private $column_names;
   private $num_rows;
   private $return_value;
   private $can_insert_multiple_rows = false;
   private $param_num;
+  /**
+   * Varible to check if there is an active transaction.
+   * @var boolean
+   */
   protected $has_active_transaction = false;
 
   /**
    * Constructor
-   * @param
+   * 
+   * @param none
    */
   function __construct() {
     $this->init();
   }
+  /**
+   * Destructor
+   * 
+   * @return boolean
+   */
   function __destruct() {
     $this->pdo = null;
     return true;
   }
   
   /**
-   * Function to initialize database
-   * checks if there's a database directory and database file, creates the tables,
-   * and binds the user defined function to the pdo object
+   * Function to initialize database.
+   * 
+   * It checks if there's a database directory and database file, creates the tables,
+   * and binds the user defined function to the pdo object.
+   * 
    * @return boolean
    */
   private function init() {
@@ -105,8 +206,9 @@ class PDOEngine extends PDO {
   }
 
   /**
-   * Make database direcotry and .htaccess file
-   * executed once while installation process
+   * This function makes database direcotry and .htaccess file.
+   * 
+   * It is executed only once when the installation begins.
    */
   private function prepare_directory() {
     global $wpdb;
@@ -140,13 +242,20 @@ class PDOEngine extends PDO {
     return true;
   }
   /**
-   * Make database file itself and WordPress tables
-   * executed once while installation process
+   * function to call install() function which overrides WordPress install().
+   * 
+   * This function is executed only once during the installation process.
    */
   private function make_sqlite_tables() {
     require_once PDODIR . 'install.php';
   }
-  
+  /**
+   * Function to execute query().
+   * 
+   * @param $query full SQL statement string
+   * @return mixed according to the query type
+   * @see PDO::query()
+   */
   public function query($query) {
     $this->flush();
     
@@ -158,9 +267,17 @@ class PDOEngine extends PDO {
     }
     switch (strtolower($this->query_type)) {
       case 'foundrows':
-        $this->results = $this->found_rows_result;
-        $this->num_rows = count($this->results);
-        $this->found_rows_result = null;
+				$_column = array('FOUND_ROWS()' => '');
+				$column = array();
+				if (!is_null($this->found_rows_result)) {
+					$this->num_rows = count($this->found_rows_result);
+					foreach ($this->found_rows_result[0] as $key => $value) {
+						$_column['FOUND_ROWS()'] = $value;
+					}
+					$column[] = new ObjectArray($_column);
+					$this->results = $column;
+					$this->found_rows_result = null;
+				}
         break;
       case 'insert':
         if ($this->can_insert_multiple_rows) {
@@ -206,30 +323,63 @@ class PDOEngine extends PDO {
         break;
     }
     if (defined('PDO_DEBUG') && PDO_DEBUG === true) {
-      file_put_contents(FQDBDIR . 'debug.txt', $this->get_debug_info(), FLIE_APPEND);
+      file_put_contents(FQDBDIR . 'debug.txt', $this->get_debug_info(), FILE_APPEND);
     }
     return $this->return_value;
   }
-
+	/**
+	 * Function to return inserted row id.
+	 * 
+	 * @return unsigned integer
+	 */
   public function get_insert_id() {
     return $this->last_insert_id;
   }
+  /**
+   * Function to return the number of rows affected.
+   * 
+   * @return unsigned integer
+   */
   public function get_affected_rows() {
     return $this->affected_rows;
   }
+  /**
+   * Function to return the queried column names.
+   * 
+   * @return string
+   */
   public function get_columns() {
     return $this->column_names;
   }
+  /**
+   * Function to return the queried result data.
+   * 
+   * @return mixed
+   */
   public function get_query_results() {
     return $this->results;
   }
+  /**
+   * Function to return the number of rows from the queried result.
+   * 
+   * @return unsigned integer
+   */
   public function get_num_rows() {
     return $this->num_rows;
   }
+  /**
+   * Function to return the queried results according to the query types.
+   * 
+   * @return mixed
+   */
   public function get_return_value() {
     return $this->return_value;
   }
-
+	/**
+	 * Function to return error messages.
+	 * 
+	 * @return string
+	 */
 	public function get_error_message(){
 		if (count($this->error_messages) === 0){
 			$this->is_error = false;
@@ -257,15 +407,21 @@ class PDOEngine extends PDO {
 		return $output;
 	
 	}
-	
+	/**
+	 * Function to return information about query string for debugging.
+	 * 
+	 * @return string
+	 */
 	private function get_debug_info(){
 	  $output = '';
 	  foreach ($this->queries as $q){
-	    $output .= $q ."\r\n";
+	    $output .= $q ."\n";
 	  }
 	  return $output;
 	}
-	
+	/**
+	 * Function to clear previous data.
+	 */
 	private function flush(){
 	  $this->rewritten_query     = '';
 	  $this->query_type          = '';
@@ -282,7 +438,15 @@ class PDOEngine extends PDO {
 	  $this->queries             = array();
 	  $this->param_num           = 0;
 	}
-	
+	/**
+	 * Function to include the apropreate class files.
+	 * 
+	 * It is not a good habit to change the include files programatically.
+	 * Needs to be fixed some other way.
+	 * 
+	 * @param string $query_type
+	 * @return object reference to apropreate driver
+	 */
 	private function prepare_engine($query_type = null) {
 	  if (stripos($query_type, 'create') !== false) {
 	    require_once PDODIR . 'query_create.class.php';
@@ -296,7 +460,11 @@ class PDOEngine extends PDO {
 	  }
 	  return $engine;
 	}
-	
+	/**
+	 * Function to create a PDO statement object from the query string.
+	 * 
+	 * @return PDOStatement
+	 */
   private function prepare_query(){
 		$this->queries[] = 'Prepare: ' . $this->prepared_query;
 		$reason = 0;
@@ -317,12 +485,21 @@ class PDOEngine extends PDO {
 		}
 		return $statement;
 	}
-
+	/**
+	 * Function to execute PDO statement object.
+	 * 
+	 * This function executes query and sets the variables to give back to WordPress.
+	 * The variables are class fields. So if success, no return value. If failure, it
+	 * returns void and stops.
+	 * 
+	 * @param object $statement of PDO statement
+	 * @return boolean
+	 */
 	private function execute_query($statement) {
 		$reason = 0;
 		$message = '';
 		if (!is_object($statement))
-		  return;
+		  return false;
 		if (count($this->extracted_variables) > 0) {
 			$this->queries[] = 'Executing: ' . var_export($this->extracted_variables, true);
 			do {
@@ -413,11 +590,18 @@ class PDOEngine extends PDO {
 			  break;
 		}
 	}
-	
+	/**
+	 * Function to extract field data to an array and prepare the query statement.
+	 * 
+	 * If original SQL statement is CREATE query, this function do nothing and return
+	 * true. This returned value is not used.
+	 * 
+	 * @return boolean
+	 */
 	private function extract_variables() {
 		if ($this->query_type == 'create') {
 			$this->prepared_query = $this->rewritten_query;
-			return;
+			return true;
 		}
 		
 		//long queries can really kill this
@@ -440,7 +624,12 @@ class PDOEngine extends PDO {
 		$this->queries[]= 'With Placeholders: ' . $query;
 		$this->prepared_query = $query;
 	}
-	
+	/**
+	 * Call back function to replace field data with PDO parameter.
+	 * 
+	 * @param string $matches
+	 * @return string
+	 */
 	private function replace_variables_with_placeholders($matches) {
 		//remove the wordpress escaping mechanism
 		$param = stripslashes($matches[0]);
@@ -464,8 +653,11 @@ class PDOEngine extends PDO {
 	}
 
 	/**
-   * takes the query string ,determines the type and returns the type string
-   * if the query is the type PDO for Wordpress can't executes, returns false
+	 * Function to determine which query type the argument is.
+	 * 
+   * It takes the query string ,determines the type and returns the type string.
+   * If the query is the type that SQLite Integration can't executes, returns false.
+   * 
    * @param string $query
    * @return boolean|string
    */
@@ -499,8 +691,11 @@ class PDOEngine extends PDO {
   }
 
   /**
-   * SQLite version 3.7.11 began support multiple rows insert with values
+   * Function to execute INSERT query for SQLite version 3.7.11 or later.
+   * 
+   * SQLite version 3.7.11 began to support multiple rows insert with values
    * clause. This is for that version or later.
+   * 
    * @param string $query
    */
   private function execute_insert_query_new($query) {
@@ -512,7 +707,11 @@ class PDOEngine extends PDO {
     $this->execute_query($statement);
   }
   /**
-   * executes the INSERT query for SQLite version 3.7.10 or lesser
+   * Function to execute INSERT query for SQLite version 3.7.10 or lesser.
+   * 
+   * It executes the INSERT query for SQLite version 3.7.10 or lesser. It is
+   * necessary to rewrite multiple row values.
+   * 
    * @param string $query
    */
   private function execute_insert_query($query) {
@@ -566,7 +765,10 @@ class PDOEngine extends PDO {
   }
 
   /**
-   * helper function for execute_insert_query()
+   * Function to help rewriting multiple row values insert query.
+   * 
+   * It splits the values clause into an array to execute separately.
+   * 
    * @param string $values
    * @return array
    */
@@ -605,7 +807,8 @@ class PDOEngine extends PDO {
   }
   
   /**
-   * function to execute CREATE query
+   * Function to execute CREATE query.
+   * 
    * @param string
    * @return boolean
    */
@@ -640,9 +843,9 @@ class PDOEngine extends PDO {
     }
     return true;
   }
-
   /**
-   * function to execute ALTER TABLE query
+   * Function to execute ALTER TABLE query.
+   * 
    * @param string
    * @return boolean
    */
@@ -693,10 +896,10 @@ class PDOEngine extends PDO {
   }
  
    /**
-   * function to execute SHOW VARIABLES query
+   * Function to execute SHOW VARIABLES query
    * 
-   * This query is meaningless for SQLite. This function returns null data and
-   * avoid the error message.
+   * This query is meaningless for SQLite. This function returns null data with some
+   * exceptions and only avoids the error message.
    * 
    * @param string
    * @return ObjectArray
@@ -720,7 +923,11 @@ class PDOEngine extends PDO {
     $this->return_value = $this->num_rows;
     return true;
   }
-  
+  /**
+   * Function to format the queried data to that of MySQL.
+   * 
+   * @param string $engine
+   */
   private function process_results($engine) {
     if (in_array($this->query_type, array('describe', 'desc', 'showcolumns'))) {
       $this->convert_to_columns_object();
@@ -732,7 +939,17 @@ class PDOEngine extends PDO {
       $this->results = $this->_results;
     }
   }
-
+	/**
+	 * Function to format the error messages and put out to the file.
+	 * 
+	 * When $wpdb::suppress_errors is set to true or $wpdb::show_errors is set to false,
+	 * the error messages are ignored.
+	 * 
+	 * @param string $line where the error occurred.
+	 * @param string $function to indicate the function name where the error occurred.
+	 * @param string $message
+	 * @return boolean
+	 */
   private function set_error ($line, $function, $message){
     global $wpdb;
     $this->errors[] = array("line"=>$line, "function"=>$function);
@@ -742,9 +959,13 @@ class PDOEngine extends PDO {
     if (!$wpdb->show_errors) return false;
     file_put_contents (FQDBDIR .'debug.txt', "Line $line, Function: $function, Message: $message \n", FILE_APPEND);
   }
-  
   /**
-   *	method that takes the associative array of query results and creates a numeric array of anonymous objects
+   * Function to change the queried data to PHP object format.
+   * 
+   * It takes the associative array of query results and creates a numeric
+   * array of anonymous objects
+   * 
+   * @access private
    */
   private function convert_to_object(){
     $_results = array();
@@ -757,11 +978,13 @@ class PDOEngine extends PDO {
     }
     $this->results = $_results;
   }
-  
   /**
-   * method to rewrite pragma results to mysql compatible array
+   * Function to convert the SHOW COLUMNS query data to an object.
+   * 
+   * It rewrites pragma results to mysql compatible array
    * when query_type is describe, we use sqlite pragma function.
-   * see pdo_sqlite_driver.php
+   * 
+   * @access private
    */
   private function convert_to_columns_object() {
     $_results = array();
@@ -788,8 +1011,12 @@ class PDOEngine extends PDO {
     $this->results = $_results;
   }
   /**
-   * rewrites the result of SHOW INDEX to the Object compatible with MySQL
+   * Function to convert SHOW INDEX query data to PHP object.
+   * 
+   * It rewrites the result of SHOW INDEX to the Object compatible with MySQL
    * added the WHERE clause manipulation (ver 1.3.1)
+   * 
+   * @access private
    */
   private function convert_to_index_object() {
     $_results = array();
@@ -873,7 +1100,11 @@ class PDOEngine extends PDO {
     }
     $this->results = $_results;
   }
-
+	/**
+	 * Function to the CHECK query data to an object.
+	 * 
+	 * @access private
+	 */
   private function convert_result_check_or_analyze() {
   	$results = array();
   	if ($this->query_type == 'check') {
@@ -895,9 +1126,12 @@ class PDOEngine extends PDO {
   	$this->results = $_results;
   }
   /**
-   * function to get SQLite library version
-   * this is used for checking if SQLite can execute multiple rows insert
+   * Function to check SQLite library version.
+   * 
+   * This is used for checking if SQLite can execute multiple rows insert.
+   * 
    * @return version number string or 0
+   * @access private
    */
   private function get_sqlite_version() {
     try {
@@ -910,8 +1144,10 @@ class PDOEngine extends PDO {
     }
   }
   /**
-   * function call to PDO::beginTransaction()
+   * Function to call PDO::beginTransaction().
+   * 
    * @see PDO::beginTransaction()
+   * @return boolean
    */
   public function beginTransaction() {
   	if ($this->has_active_transaction) {
@@ -922,7 +1158,8 @@ class PDOEngine extends PDO {
   	}
   }
   /**
-   * function call to PDO::commit()
+   * Function to call PDO::commit().
+   * 
    * @see PDO::commit()
    */
   public function commit() {
@@ -930,7 +1167,8 @@ class PDOEngine extends PDO {
   	$this->has_active_transaction = false;
   }
   /**
-   * function call to PDO::rollBack()
+   * Function to call PDO::rollBack().
+   * 
    * @see PDO::rollBack()
    */
   public function rollBack() {
@@ -939,6 +1177,11 @@ class PDOEngine extends PDO {
   }
 }
 
+/**
+ * Class to change queried data to PHP object.
+ * 
+ * @author kjm
+ */
 class ObjectArray {
   function __construct($data = null,&$node= null) {
     foreach ($data as $key => $value) {

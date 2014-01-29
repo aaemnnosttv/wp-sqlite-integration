@@ -156,12 +156,12 @@ msgid ""
 "SQLite for its database. But PDO for WordPress doesn't seem to be maintained "
 "any more only to be outdated. SQLite Integration makes use of the basic "
 "ideas and framework of PDO for WordPress, adds some new features and updates "
-"it to be able to work with the newest version of WordPress(3.8)."
+"it to be able to work with the newest version of WordPress(3.8.1)."
 msgstr ""
 "このプラグインは<a href=\"http://wordpress.org/extend/plugins/pdo-for-wordpress/\">"
 "PDO for WordPress</a>の後継です。PDO for WordPressはWordPressでSQLiteを使えるようにする"
 "ものでしたが、もうメンテナンスされていないようで、古くなってしまいました。SQLite Integrationは、その基本的な"
-"考えと枠組みを使って、新たな機能を追加し、最新のWordPress(3.8)で動作するように"
+"考えと枠組みを使って、新たな機能を追加し、最新のWordPress(3.8.1)で動作するように"
 "したものです。"
 
 #: utilities/documentation.php:43
@@ -243,7 +243,7 @@ msgstr ""
 "が扱えないものもあります。だから..."
 
 #: utilities/documentation.php:68
-msgid "There are some plugins that you can't use in any way.<br />"
+msgid "There are some plugins that you can't use. No way around.<br />"
 msgstr "どうしても使えないプラグインがあります。"
 
 #: utilities/documentation.php:69
@@ -266,7 +266,7 @@ msgstr ""
 msgid ""
 "Some plugins do work fine if you rewrite MySQL functions. I made some patch "
 "files and <a href=\"%s?page=patch\">Patch Utility</a>. See also the <a href="
-"\"http://dogwood.skr.jp/wordpress/sqlite-integration\">Plugin Page</a> for "
+"\"http://dogwood.skr.jp/wordpress/sqlite-integration\">SQLite Integration page</a> for "
 "more details."
 msgstr ""
 "MySQLの関数を書き換えると動作するプラグインがあります。いくつかはパッチファイルと、<a href=\"%s?page=patch\">"
@@ -349,9 +349,7 @@ msgstr ""
 #: utilities/documentation.php:104
 #, php-format
 msgid ""
-"Most of the plugins will work fine with this plugin. But there are some that "
-"you need to rewrite some codes in them, and there are others that you can't "
-"use with this plugin. This is the list of the problematic plugins (far from "
+"This is the list of the problematic plugins (far from "
 "complete). You can see informations about your installed plugins in the <a "
 "href=\"%s?page=sys-info\">System Info</a> page. To see more details, please "
 "visit the <a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration"
@@ -387,126 +385,6 @@ msgstr "たぶん不可"
 #: utilities/documentation.php:130 utilities/utility.php:251
 msgid "No"
 msgstr "不可"
-
-#: utilities/documentation.php:140
-msgid "Caching Plugins"
-msgstr "キャッシュ用プラグイン"
-
-#: utilities/documentation.php:142
-msgid ""
-"Some plugins that give you cache functinality might cause problems. It is "
-"because they try to create the db.php file in wp-content directory, which "
-"file SQLite Integration is using."
-msgstr ""
-"キャッシュの機能を提供するプラグインの中には問題になるものがあります。wp-contentディレクトリにdb.php"
-"ファイルを作ろうとするのですが、SQLite Integrationがすでにそれを使ってしまっているからです。"
-
-#: utilities/documentation.php:145
-msgid ""
-"If those plugins overwrite the db.php file, SQLite Integration doesn't work. "
-"<span class=\"em\">My recommendation is not to use caching plugins</span>. "
-"Even so, if you want a caching plugin, you could try <a href=\"http://"
-"wordpress.org/extend/plugins/wp-super-cache/\">WP Super Cache</a>, which "
-"doesn't use db.php file. But no warranty, try at your own risk."
-msgstr ""
-"これらのプラグインがdb.phpファイルを上書きすると、SQLite Integrationは動作しなくなります。"
-"<span class=\"em\">私のお勧めは、キャッシュ・プラグインを使わないというものです</span>。"
-"それでも、どうしても使いたいということであれば、<a href=\"http://wordpress.org/extend/plugins/"
-"wp-super-cache/\">WP Super Cache</a>のようなものなら試せるかもしれません。db.phpを使わない"
-"からです。でも、保証はありません。ご自分の責任でお試しください。"
-
-#: utilities/documentation.php:148
-msgid "I have not tested none of those caching plugins."
-msgstr "私はこれらのキャッシュ・プラグインをテストしていません。"
-
-#: utilities/documentation.php:150
-msgid "MySQL specific functions"
-msgstr "MySQL用の関数"
-
-#: utilities/documentation.php:152
-msgid ""
-"Some plugins don't use WordPress database functions such as dbDelta(), and "
-"use PHP native MySQL functions when they create and manage tables in the "
-"database. But PHP doesn't permit redefining of the native functions (at "
-"least, under ordinary server setting). So SQLite Integration can't intercept "
-"and rewrite those functions."
-msgstr ""
-"プラグインの中にはデータベースにアクセスするのに、WordPressが提供するdbDelta()のような関数を使わず、"
-"PHPのmysqlドライバの提供する関数を使って、テーブルを作ったり、操作したりするものがあります。PHPは組み込み"
-"の関数を再定義することを許しません(少なくとも通常のサーバ設定では)。だから、SQLite Integrationは"
-"それらをインターセプトして、書き換えることができません。"
-
-#: utilities/documentation.php:155
-msgid "For example, you can see these codes in Google XML Sitemaps."
-msgstr "たとえば、Google XML Sitemapsにはこのようなコードがあります。"
-
-#: utilities/documentation.php:161
-msgid "or in Camera Slideshow"
-msgstr "あるいは、Camera Slideshowには、こんな部分があります。"
-
-#: utilities/documentation.php:167
-msgid ""
-"Such functions as mysql_get_server_info() or mysql_query() are from the "
-"MySQL driver of PHP. Not only some plugins but WordPress uses them, but "
-"SQLite Integration has no way to rewrite or redefine them. If the plugin you "
-"want to use has those functions in it, it won't work or give the error "
-"messages."
-msgstr ""
-"mysql_get_server_info()やmysql_query()といった関数は、PHPのドライバが提供するものです。"
-"でも、SQLite Integrationはこれらを書き換えたり、再定義したりすることができません。もし、あなたが"
-"使いたいプラグインがこれらの関数を使っていたら、うまく動かないか、エラー・メッセージが出るでしょう。"
-
-#: utilities/documentation.php:170
-msgid ""
-"So, you have to rewrite them for SQLite Integration can execute. The two "
-"example above can be rewritten like this:"
-msgstr ""
-"だから、これらの関数は手動で書き換えなければ、SQLite Integrationで実行できません。上の2つの"
-"例は、次のように書き換えればうまくいきます。"
-
-#: utilities/documentation.php:179
-msgid ""
-"As for those functions in WordPress, I overrode the WordPress functions "
-"themselves that contains such MySQL functions as mysql_query() or "
-"mysql_real_escape_string()."
-msgstr ""
-"WordPressで使われているこれらの関数については、mysql_query()やmysql_real_escape_string()"
-"といった関数を含むWordPress関数をオーバーライドしています。"
-
-#: utilities/documentation.php:181
-msgid "FULLTEXT index"
-msgstr "FULLTEXTインデックス"
-
-#: utilities/documentation.php:183
-msgid ""
-"Some plugins use FULLTEXT index of MySQL. Of course SQLite does have the "
-"functionality named &quot;full-text search&quot;. But it is not correlated "
-"with that of MySQL. In fact it is not an &quot;index&quot; and requires "
-"another new table for that. And it has a different syntax. So you can't use "
-"the plugins which uses FULLTEXT index"
-msgstr ""
-"プラグインの中には、MySQLのFULLTEXTインデックスを使うものがあります。もちろん、SQLiteにも、&quot;"
-"full-text search&quot;という機能があります。でも、これはMySQLのものとは違います。、実際は"
-"インデックスではなく、新たなテーブルを作らなければならないものです。構文も異なります。だから、FULLTEXT"
-"インデックスを使うプラグインは使うことができません。"
-
-#: utilities/documentation.php:186
-msgid ""
-"If your language is not written by separating words with spaces, e.g. "
-"Japanese, Chinese or Thai, neither FULLTEXT index nor full-text search work "
-"effectively. Even if your language is space-separating-words one, you don't "
-"have to be disappointed. Whatever languages you use, you can use <a href="
-"\"http://wordpress.org/extend/plugins/wordpress-23-related-posts-plugin/"
-"\">WordPress Related Posts</a> or <a href=\"http://wordpress.org/extend/"
-"plugins/related-posts/\">Related Posts</a> or others. They are working fine "
-"with SQLite Integration!"
-msgstr ""
-"あなたの言語が、日本語や中国語やタイ語のように、スペースで単語を区切らない言語の場合、FULLTEXT"
-"インデックスもfull-text searchも有効に働きません。あなたの言語が分かち書きをするものだとしても、"
-"がっかりする必要はありません。<a href=\"http://wordpress.org/extend/plugins/"
-"wordpress-23-related-posts-plugin/\">WordPress Related Posts</a>や<a href=\"http://"
-"wordpress.org/extend/plugins/related-posts/\">Related Posts</a>のうようなプラグインを"
-"使うことができます。これらは、SQLite Integrationでちゃんと動作します。"
 
 #: utilities/patch.php:55
 msgid "Patch command is not found"

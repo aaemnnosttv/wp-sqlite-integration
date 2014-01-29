@@ -1,21 +1,38 @@
 <?php
 /**
+ * This file defines SQLiteIntegrationUtils class.
  * 
  * @package SQLite Integration
  * @author Kojima Toshiyasu
- *
+ */
+/**
+ * This class provides global $text_domain variable and defines some utility methods.
+ * 
  */
 class SQLiteIntegrationUtils {
-  
+  /**
+   * Varible to store textdomain string for all the plugin files.
+   * 
+   * @var string
+   */
   public $text_domain = 'sqlite-integration';
 
+  /**
+   * Constructor
+   * 
+   * It does nothing.
+   */
   function __construct() {
   }
 
   /**
-   * function to return contents of 'FQDBDIR/debug.txt'.
-   * if the file is not existent, returns false.
+   * Method to read a error log file and returns its contents.
+   * 
+   * 'FQDBDIR/debug.txt' is the log file name.
+   * If this file is not existent, returns false.
+   * 
    * @return string|boolean
+   * @access private
    */
   private function show_error_log() {
     $file = FQDBDIR . 'debug.txt';
@@ -27,8 +44,10 @@ class SQLiteIntegrationUtils {
     }
   }
   /**
-   * function to clear the contents of 'FQDBIR/debug.txt'
+   * Method to clear the contents of the error log file.
+   * 
    * @return boolean
+   * @access private
    */
   private function clear_log_file() {
     $result = false;
@@ -49,10 +68,16 @@ class SQLiteIntegrationUtils {
   }
   
   /**
-   * function to return associative array of system informations
+   * Method to get system information from the server and returns its data.
+   * 
+   * Returned value is an associative array of system informations.
+   * <code>
    * sys_info['WordPress'] => WordPress Version
    * sys_info['PHP']       => PHP Version
+   * </code>
+   * 
    * @return array
+   * @access private
    */
   private function get_system_info() {
     global $wp_version;
@@ -62,8 +87,12 @@ class SQLiteIntegrationUtils {
     return $sys_info;
   }
   /**
-   * function to return various database information
-   * @return assoc array
+   * Method to get database information from the database and returns its data.
+   * 
+   * Returned value is an associative array.
+   * 
+   * @return array
+   * @access private
    */
   private function get_database_status() {
     global $wpdb;
@@ -93,10 +122,16 @@ class SQLiteIntegrationUtils {
     return $status;
   }
   /**
-   * function to return associative array
+   * Method to get table information and returns its data.
+   * 
+   * Returned value is an associative array like:
+   * <code>
    * array( table name => array( index name ( column name )))
+   * </code>
    * for each table in the database
+   * 
    * @return array
+   * @access private
    */
   private function get_tables_info() {
     global $wpdb;
@@ -116,8 +151,12 @@ class SQLiteIntegrationUtils {
     return $table_info;
   }
   /**
-   * function to return the autoincremented values of each table
+   * Method to get the autoincremented values of each table and returns it.
+   * 
+   * The data is from sqlite_sequence table.
+   * 
    * @return assoc array name => sequence, or false
+   * @access private
    */
   private function get_sequence() {
     global $wpdb;
@@ -133,9 +172,12 @@ class SQLiteIntegrationUtils {
     }
   }
   /**
-   * function to return contents of 'wp-content/db.php' file
-   * if the file is not existent, returns false.
+   * Method to show the contents of 'wp-content/db.php' file.
+   * 
+   * If this file is not existent, shows message and returns false.
+   * 
    * @return string|boolean
+   * @access private
    */
   private function show_db_php() {
     if (defined('WP_CONTENT_DIR')) {
@@ -156,9 +198,11 @@ class SQLiteIntegrationUtils {
     }
   }
   /**
-   * function to get the textarea contents and write into db.php file
+   * Method to get the textarea content and write it to db.php file.
+   * 
    * @param string $contents
    * @return boolean
+   * @access private
    */
   private function save_db_php($contents) {
     if (defined('WP_CONTENT_DIR')) {
@@ -181,9 +225,13 @@ class SQLiteIntegrationUtils {
     return true;
   }
   /**
-   * function to optimize database file
-   * only to give vacuum command to SQLite
+   * Method to optimize SQLite database.
+   * 
+   * This only gives VACUUM command to SQLite database. This query is rewritten in
+   * the query.class.php file.
+   * 
    * @return boolean
+   * @access private
    */
   private function optimize_db() {
     global $wpdb;
@@ -191,8 +239,10 @@ class SQLiteIntegrationUtils {
     return $result;
   }
   /**
-   * function to get SQLite database file size
+   * Method to get SQLite database file size.
+   * 
    * @return string
+   * @access private
    */
   private function get_database_size() {
     $db_file = FQDB;
@@ -203,9 +253,11 @@ class SQLiteIntegrationUtils {
     }
   }
   /**
-   * function to format file size to unit byte
+   * Method to format the file size number to the unit byte.
+   * 
    * @param integer $size
    * @return string
+   * @access private
    */
   private function convert_to_formatted_number($size) {
     $unim = array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
@@ -218,7 +270,10 @@ class SQLiteIntegrationUtils {
   }
   
   /**
-   * function to echo plugins info table component
+   * Method to echo plugins info table component.
+   * 
+   * @return nothing returned.
+   * @access private
    */
   private function show_plugins_info() {
     $domain = $this->text_domain;
@@ -279,9 +334,11 @@ class SQLiteIntegrationUtils {
   }
 
   /**
-   * function to return output of phpinfo() as an array
-   * See PHP Manual
+   * Method to return output of phpinfo() as an array.
+   * 
+   * @See PHP Manual
    * @return array
+   * @access private
    */
   private function parse_php_modules() {
     ob_start();
@@ -313,9 +370,11 @@ class SQLiteIntegrationUtils {
     return $modules;
   }
   /**
-   * function to echo PHP module info
+   * Method to echo PHP module info.
+   * 
    * @param string $module_name
    * @param string $setting_name
+   * @access private
    */
   private function get_module_setting($module_name, $setting_name) {
     $module_info = $this->parse_php_modules();
@@ -330,7 +389,10 @@ class SQLiteIntegrationUtils {
   }
 
   /**
-   * function to parse FQDBDIR and return backup database files
+   * Method to parse FQDBDIR and return backup database files.
+   * 
+   * @return nothing returned.
+   * @access private
    */
   private function get_backup_files() {
   	$db_name = basename(FQDB);
@@ -348,7 +410,10 @@ class SQLiteIntegrationUtils {
   }
   
   /**
-   * function to create backup file
+   * Method to create backup database file.
+   * 
+   * @return string array
+   * @access private
    */
   private function backup_db() {
   	$result = array();
@@ -379,7 +444,12 @@ class SQLiteIntegrationUtils {
   	}
   	return $result;
   }
-  
+	/**
+	 * Method to delete backup database file(s).
+	 * 
+	 * @return boolean|string
+	 * @access private
+	 */
   private function delete_backup_db() {
   	global $utils;
   	$domain = $utils->text_domain;
@@ -401,7 +471,10 @@ class SQLiteIntegrationUtils {
   	}
   	return $results;
   }
-  
+  /**
+   * Method to show Welcome page.
+   * 
+   */
   function welcome() {
     $domain = $this->text_domain;
     if (isset($_GET['page']) && $_GET['page'] == 'sqlite-integration') :?>
@@ -446,12 +519,11 @@ class SQLiteIntegrationUtils {
       </tbody>
     </table>
     </div>
-
     <?php endif;
   }
-
   /**
-   * function to show Utiliy page contents
+   * Method to show Untility page.
+   * 
    */
   function show_utils() {
     $domain = $this->text_domain;
@@ -638,7 +710,8 @@ class SQLiteIntegrationUtils {
   }
 
   /**
-   * function to show Setting File page
+   * Method to show Setting File page.
+   * 
    */
   function edit_db_file() {
     $domain = $this->text_domain;

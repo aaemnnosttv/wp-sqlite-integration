@@ -1,11 +1,12 @@
 <?php
 /**
- * This file must be placed in the directory
+ * This file defines some constant required for SQLite Integration.
  * 
- *   wordpress/wp-content/db.php
+ * This file must be placed in the directory wordpress/wp-content/db.php.
+ * WordPress loads this file automatically.
  * 
  * @package SQLite Integration
- * @author Kojima Toshiyasu, Justin Adie
+ * @author Kojima Toshiyasu
  *
  */
 if (!defined('ABSPATH')) { // Oh, you are not WordPress!
@@ -13,11 +14,13 @@ if (!defined('ABSPATH')) { // Oh, you are not WordPress!
 	die();
 }
 
-/**
- * Notice:
+/*
+ * USE_MYSQL is a directive for using MySQL for database.
  * If you want to change the database from SQLite to MySQL or from MySQL to SQLite,
  * the line below in the wp-config.php will enable you to use MySQL.
+ * <code>
  * define('USE_MYSQL', true);
+ * </code>
  */
 if (defined('USE_MYSQL') && USE_MYSQL === true) return;
 
@@ -35,7 +38,7 @@ function pdo_log_error($message, $data = null) {
 <head>
   <title>WordPress &rsaquo; Error</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="stylesheet" href="{$admin_dir}install.css" type="text/css" />
+  <link rel="stylesheet" href="{$admin_dir}css/install.css" type="text/css" />
 </head>
 <body>
   <h1 id="logo"><img alt="WordPress" src="{$admin_dir}images/wordpress-logo.png" /></h1>
@@ -60,12 +63,16 @@ if (!extension_loaded('pdo_sqlite')) {
 	pdo_log_error('PDO Driver for SQLite is missing.', 'Your PHP installtion appears not to have the right PDO drivers loaded. These are required for this version of WordPress and the type of database you have specified.');
 }
 
-/**
+/*
  * Notice:
  * Your scripts have the permission to create directories or files on your server.
  * If you write in your wp-config.php like below, we take these definitions.
  * define('DB_DIR', '/full_path_to_the_database_directory/');
  * define('DB_FILE', 'database_file_name');
+ */
+
+/*
+ * PDODIR is SQLite Integration installed directory.
  */
 if (defined('WP_PLUGIN_DIR')) {
   define('PDODIR', WP_PLUGIN_DIR . '/sqlite-integration/');
@@ -76,7 +83,10 @@ if (defined('WP_PLUGIN_DIR')) {
     define('PDODIR', ABSPATH . 'wp-content/plugins/sqlite-integration/');
   }
 }
-
+/*
+ * FQDBDIR is a directory where the sqlite database file is placed.
+ * If DB_DIR is defined, it is used as FQDBDIR.
+ */
 if (defined('DB_DIR')) {
   if (substr(DB_DIR, -1, 1) != '/') {
     define('FQDBDIR', DB_DIR . '/');
@@ -90,13 +100,18 @@ if (defined('DB_DIR')) {
     define('FQDBDIR', ABSPATH . 'wp-content/database/');
   }
 }
-
+/*
+ * FQDB is a database file name. If DB_FILE is defined, it is used
+ * as FQDB.
+ */
 if ( defined('DB_FILE' )) {
   define('FQDB', FQDBDIR . DB_FILE);
 } else {
   define('FQDB', FQDBDIR . '.ht.sqlite');
 }
-
+/*
+ * UDF_FILE is a file that contains user defined functions.
+ */
 if (version_compare(PHP_VERSION, '5.3', '<')) {
   define('UDF_FILE', PDODIR . 'functions-5-2.php');
 } elseif (version_compare(PHP_VERSION, '5.3', '>=')) {

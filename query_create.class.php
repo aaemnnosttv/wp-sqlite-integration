@@ -1,12 +1,14 @@
 <?php
 /**
+ * This file defines CreateQuery class.
+ * 
  * @package SQLite Integration
- * @author Kojima Toshiyasu, Justin Adie
+ * @author Kojima Toshiyasu
  */
  
 /**
- * Provides a class for rewriting create queries
- * this class borrows its inspiration from the work done on tikiwiki.
+ * This class provides a function to rewrite CREATE query.
+ * 
  */
 class CreateQuery{
 
@@ -17,20 +19,25 @@ class CreateQuery{
 	private $has_primary_key = false;
 	
 	/**
-	 *	initialises the object properties
-	 *	@param string $query	the query being processed
-	 *	@return string|array	the processed (rewritten) query
+	 * Function to rewrite query.
+	 * 
+	 * @param string $query	the query being processed
+	 * @return string|array	the processed (rewritten) query
 	 */
 	public function rewrite_query($query){
 		$this->_query = $query;
 		$this->_errors [] = '';
 		if (preg_match('/^CREATE\\s*(UNIQUE|FULLTEXT|)\\s*INDEX/ims', $this->_query, $match)) {
+			// we manipulate CREATE INDEX query in PDOEngine.class.php
+			// FULLTEXT index creation is simply ignored.
 			if (isset($match[1]) && stripos($match[1], 'fulltext') !== false) {
 				return 'SELECT 1=1';
 			} else {
 				return $this->_query;
 			}
 		} elseif (preg_match('/^CREATE\\s*(TEMP|TEMPORARY|)\\s*TRIGGER\\s*/im', $this->_query)) {
+			// if WordPress comes to use foreign key constraint, trigger will be needed.
+			// we don't use it for now.
 			return $this->_query;
 		}
 		$this->get_table_name();
@@ -50,11 +57,12 @@ class CreateQuery{
 		
 		return $this->post_process();
 	}
-	
 	/**
-	 * Method for getting the table name from the create query.
-	 * taken from PDO for WordPress
-	 * we don't need 'IF NOT EXISTS', so we changed the pattern.
+	 * Method to get table name from the query string.
+	 * 
+	 * IF NOT EXISTS is removed for the easy regular expression usage.
+	 * It will be added at the end of the process.
+	 * @access private
 	 */
 	private function get_table_name(){
 		// $pattern = '/^\\s*CREATE\\s*(TEMP|TEMPORARY)?\\s*TABLE\\s*(IF NOT EXISTS)?\\s*([^\(]*)/imsx';
@@ -63,9 +71,10 @@ class CreateQuery{
       $this->table_name = trim($matches[1]);
     }
 	}
-	
 	/**
-	 * Method for changing the field type to SQLite compatible type.
+	 * Method to change the MySQL field types to SQLite compatible types.
+	 * 
+	 * @access private
 	 */
 	private function rewrite_field_types(){
 		$array_types = array (
@@ -95,33 +104,43 @@ class CreateQuery{
 			}
 		}
 	}
-
 	/**
-	 * Method for stripping the comments from the SQL statement
+	 * Method for stripping the comments from the SQL statement.
+	 * 
+	 * @access private
 	 */	
 	private function rewrite_comments(){
 		$this->_query = preg_replace("/# --------------------------------------------------------/","-- ******************************************************",$this->_query);
 		$this->_query = preg_replace("/#/","--",$this->_query);
 	}
-	
 	/**
-	 * Method for stripping the engine and other stuffs
+	 * Method for stripping the engine and other stuffs.
+	 * 
+	 * TYPE, ENGINE and AUTO_INCREMENT are removed here.
+	 * @access private
 	 */	
 	private function rewrite_engine_info(){
 		$this->_query = preg_replace("/\\s*(TYPE|ENGINE)\\s*=\\s*.*(?<!;)/ims",'',$this->_query);
 		$this->_query = preg_replace("/ AUTO_INCREMENT\\s*=\\s*[0-9]*/ims",'',$this->_query);
 	}
-	
 	/**
-	 * Method for stripping unsigned
+	 * Method for stripping unsigned.
+	 * 
+	 * UNSIGNED INT(EGER) is converted to INTEGER here.
+	 * 
+	 * @access private
 	 */		
 	private function rewrite_unsigned(){
 		$this->_query  = preg_replace('/\\bunsigned\\b/ims', ' ', $this->_query);
 	}
-	
 	/**
-	 * Method for rewriting auto_increment
-	 * if the field type is 'integer primary key', it is automatically autoincremented
+	 * Method for rewriting primary key auto_increment.
+	 * 
+	 * If the field type is 'INTEGER PRIMARY KEY', it is automatically autoincremented
+	 * by SQLite. There's a little difference between PRIMARY KEY and AUTOINCREMENT, so
+	 * we may well convert to PRIMARY KEY only.
+	 * 
+	 * @access private
 	 */	
 	private function rewrite_autoincrement(){
 	  $this->_query = preg_replace('/\\bauto_increment\\s*primary\\s*key\\s*(,)?/ims', ' PRIMARY KEY AUTOINCREMENT \\1', $this->_query, -1, $count);
@@ -130,9 +149,10 @@ class CreateQuery{
 			$this->has_primary_key = true;
 		}
 	}
-	
 	/**
-	 * Method for rewriting primary key
+	 * Method for rewriting primary key.
+	 * 
+	 * @access private
 	 */	
 	private function rewrite_primary_key(){
 		if ($this->has_primary_key) {
@@ -142,17 +162,19 @@ class CreateQuery{
 		  $this->_query = preg_replace('/\\bprimary\\s*key\\s*.*?\\s*(\(.*?\))/im', 'PRIMARY KEY \\1', $this->_query);
 		}
 	}
-	
 	/**
-	 * Method for rewriting unique key
+	 * Method for rewriting unique key.
+	 * 
+	 * @access private
 	 */	
 	private function rewrite_unique_key(){
 		$this->_query  = preg_replace_callback('/\\bunique key\\b([^\(]*)(\([^\)]*\))/ims', array($this, '_rewrite_unique_key'), $this->_query);
 	}
-	
 	/**
-	 * Callback method for rewrite_unique_key
+	 * Callback method for rewrite_unique_key.
+	 * 
 	 * @param array	$matches	an array of matches from the Regex
+	 * @access private
 	 */
 	private function _rewrite_unique_key($matches){
 	  $index_name = trim($matches[1]);
@@ -174,46 +196,53 @@ class CreateQuery{
 		$this->index_queries[] = "CREATE UNIQUE INDEX $index_name ON " . $tbl_name .$col_name;
 		return '';
 	}
-	
 	/**
-	 * Method for handling ENUM fields
-	 * SQLite doesn't support enum, so we change it to check constraint
+	 * Method for handling ENUM fields.
+	 * 
+	 * SQLite doesn't support enum, so we change it to check constraint.
+	 * 
+	 * @access private
 	 */
 	private function rewrite_enum(){
 		$pattern = '/(,|\))([^,]*)enum\((.*?)\)([^,\)]*)/ims';
 		$this->_query  = preg_replace_callback($pattern, array($this, '_rewrite_enum'), $this->_query);
 	}
-	
 	/**
-	 * Method for the callback function rewrite_enum and rewrite_set
+	 * Call back method for rewrite_enum() and rewrite_set().
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_enum($matches){
 		$output = $matches[1] . ' ' . $matches[2]. ' TEXT '. $matches[4].' CHECK ('.$matches[2].' IN ('.$matches[3].')) ';
 		return $output;
 	}
-
 	/**
-	 * Method for rewriting usage of set
-	 * whilst not identical to enum, they are similar and sqlite does not
-	 * support either.
+	 * Method for rewriting usage of set.
+	 * 
+	 * It is similar but not identical to enum. SQLite does not support either.
+	 * 
+	 * @access private
 	 */
 	private function rewrite_set(){
 		$pattern = '/\b(\w)*\bset\\s*\((.*?)\)\\s*(.*?)(,)*/ims';
 		$this->_query  = preg_replace_callback($pattern, array($this, '_rewrite_enum'), $this->_query);
 	}
-	
 	/**
-	 * Method for rewriting usage of key to create an index
-	 * sqlite cannot create non-unique indices as part of the create query
-	 * so we need to create an index by hand and append it to the create query
+	 * Method for rewriting usage of key to create an index.
+	 * 
+	 * SQLite cannot create non-unique indices as part of the create query,
+	 * so we need to create an index by hand and append it to the create query.
+	 * 
+	 * @access private
 	 */
 	private function rewrite_key(){
 		$this->_query = preg_replace_callback('/,\\s*(KEY|INDEX)\\s*(\\w+)?\\s*(\(.*(?<!\\d)\))/im', array($this, '_rewrite_key'), $this->_query);
 	}
-
 	/**
-	 * Callback method for rewrite_key
+	 * Callback method for rewrite_key.
+	 * 
 	 * @param array	$matches	an array of matches from the Regex
+	 * @access private
 	 */	
 	private function _rewrite_key($matches){
 	  $index_name = trim($matches[2]);
@@ -237,13 +266,24 @@ class CreateQuery{
 		$this->index_queries[] = 'CREATE INDEX '. $index_name . ' ON ' . $tbl_name . $col_name ;
 		return '';
 	}
+	/**
+	 * Call back method to remove unnecessary string.
+	 * 
+	 * This method is deprecated.
+	 * 
+	 * @param string $match
+	 * @return string whose length is zero
+	 * @access private
+	 */
 	private function _remove_length($match) {
 	  return '';
 	}
 	/**
-	 * Method to assemble the main query and index queries into an array
-	 * to be returned to the base class
-	 * @return	array
+	 * Method to assemble the main query and index queries into an array.
+	 * 
+	 * It return the array of the queries to be executed separately.
+	 * @return array
+	 * @access private
 	 */
 	private function post_process(){
 		$mainquery = $this->_query;
@@ -260,10 +300,12 @@ class CreateQuery{
     return $return_val;
 	}
 	/**
-	 * Method to add IF NOT EXISTS to query defs
-	 * sometimes, if upgrade.php is being called, wordpress seems to want to run
-	 * new create queries. this stops the query from throwing an error and halting
-	 * output
+	 * Method to add IF NOT EXISTS to query string.
+	 * 
+	 * This adds IF NOT EXISTS to every query string, which prevent the exception
+	 * from being thrown.
+	 * 
+	 * @access private
 	 */
 	private function add_if_not_exists(){
 		$pattern_table = '/^\\s*CREATE\\s*(TEMP|TEMPORARY)?\\s*TABLE\\s*(IF NOT EXISTS)?\\s*/ims';
@@ -273,9 +315,10 @@ class CreateQuery{
 		  $this->index_queries[$i] = preg_replace($pattern_index, 'CREATE $1 INDEX IF NOT EXISTS ', $this->index_queries[$i]);
 		}
 	}
-
 	/**
-	 * Method to strip back ticks
+	 * Method to strip back ticks.
+	 * 
+	 * @access private
 	 */	
 	private function strip_backticks(){
 		$this->_query = str_replace('`', '', $this->_query);
@@ -283,9 +326,13 @@ class CreateQuery{
       $query = str_replace('`', '', $query);
     }
 	}
-	
 	/**
-	 * Method to remove the character set information from within mysql queries
+	 * Method to remove the character set information from within mysql queries.
+	 * 
+	 * This removes DEFAULT CHAR(ACTER) SET and COLLATE, which is meaningless for
+	 * SQLite.
+	 * 
+	 * @access private
 	 */	
 	private function rewrite_character_set(){
 		$pattern_charset = '/\\b(default\\s*character\\s*set|default\\s*charset|character\\s*set)\\s*(?<!\()[^ ]*/im';

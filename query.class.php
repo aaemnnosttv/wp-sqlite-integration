@@ -1,21 +1,33 @@
 <?php
 /**
+ * This file defines PDOSQLiteDriver class.
+ * 
  * @package SQLite Integration
- * @author  Kojima Toshiyasu, Justin Adie
+ * @author  Kojima Toshiyasu
  */
 
 /**
- *	base class for sql rewriting except CREATE, ALTER TABLE
+ * This class is for rewriting various query string except CREATE and ALTER.
+ * 
  */
-
 class PDOSQLiteDriver {
 
-	//required variables
+	/**
+	 * Variable to indicate the query types.
+	 * 
+	 * @var string $query_type
+	 */
 	public $query_type = '';
+	/**
+	 * Variable to store query string.
+	 * 
+	 * @var string
+	 */
 	public $_query = '';
 
 	/**
-	 * function to determin which functions to use
+	 * Method to rewrite a query string for SQLite to execute.
+	 * 
 	 * @param strin $query
 	 * @param string $query_type
 	 * @return string
@@ -57,14 +69,14 @@ class PDOSQLiteDriver {
 		    $this->_rewrite_between();
 		    break;
 		  case 'insert':
-		    $this->_strip_backticks();
+		    $this->_safe_strip_backticks();
 		    $this->_execute_duplicate_key_update();
 		    $this->_rewrite_insert_ignore();
 		    $this->_rewrite_regexp();
 		    $this->_fix_date_quoting();
 		    break;
 		  case 'update':
-		    $this->_strip_backticks();
+		    $this->_safe_strip_backticks();
 		    $this->_rewrite_update_ignore();
 // 		    $this->_rewrite_date_sub();
 		    $this->_rewrite_limit_usage();
@@ -81,7 +93,7 @@ class PDOSQLiteDriver {
 		    $this->_delete_workaround();
 		    break;
 		  case 'replace':
-		    $this->_strip_backticks();
+		    $this->_safe_strip_backticks();
 		    $this->_rewrite_date_sub();
 		    $this->_rewrite_regexp();
 		    break;
@@ -102,7 +114,9 @@ class PDOSQLiteDriver {
 	}
 	
 	/**
-	 * method to dummy the SHOW TABLES query
+	 * method to handle SHOW TABLES query.
+	 * 
+	 * @access private
 	 */
 	private function _handle_show_query(){
 	  $table_name = '';
@@ -117,28 +131,62 @@ class PDOSQLiteDriver {
 		}
 		$this->_query = "SELECT name FROM sqlite_master WHERE type='table'" . $suffix . ' ORDER BY name DESC';
 	}
-	
 	/**
-	 * method to strip all column qualifiers (backticks) from a query
+	 * Method to strip all column qualifiers (backticks) from a query.
+	 * 
+	 * All the back quotes in the query string are removed automatically.
+	 * So it must not be used when INSERT, UPDATE or REPLACE query is executed.
+	 * 
+	 * @access private
 	 */
 	private function _strip_backticks(){
 		$this->_query = str_replace('`', '', $this->_query);
 	}
-	
 	/**
-	 * method to emulate the SQL_CALC_FOUND_ROWS placeholder for mysql
+	 * Method to strip all column qualifiers (backticks) from a query except post data.
+	 * 
+	 * All the back quotes execpt user data to be inserted are revomved automatically.
+	 * This method must be used when INSERT, UPDATE or REPLACE query is executed.
+	 * 
+	 * @access private
+	 */
+	private function _safe_strip_backticks() {
+		$query_string = '';
+		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$literal = false;
+		$query_string = '';
+		foreach ($tokens as $token) {
+			if ($token == "'") {
+				if ($literal) {
+					$literal = false;
+				} else {
+					$literal = true;
+				}
+			} else {
+				if ($literal === false && strpos($token, '`') !== false) {
+					$token = str_replace('`', '', $token);
+				}
+			}
+			$query_string .= $token;
+		}
+		$this->_query = $query_string;
+	}
+	/**
+	 * Method to emulate the SQL_CALC_FOUND_ROWS placeholder for MySQL.
 	 *
-	 * this is a kind of tricky play.
+	 * This is a kind of tricky play.
 	 * 1. remove SQL_CALC_FOUND_ROWS option, and give it to the pdo engine
 	 * 2. make another $wpdb instance, and execute SELECT COUNT(*) query
-	 * 3. give the returned value to the original instance variable
+	 * 3. give the returned value to the original instance variable without LIMIT
 	 * 
-	 * when SQL statement contains GROUP BY option, SELECT COUNT query doesn't
+	 * When SQL statement contains GROUP BY option, SELECT COUNT query doesn't
 	 * go well. So we remove the GROUP BY, which means the returned value may
 	 * be a approximate one.
 	 * 
-	 * this kind of statement is required for WordPress to calculate the paging.
+	 * This kind of statement is required for WordPress to calculate the paging.
 	 * see also WP_Query class in wp-includes/query.php
+	 * 
+	 * @access private
 	 */
 	private function _handle_sql_count(){
 		if (stripos($this->_query, 'SELECT SQL_CALC_FOUND_ROWS') !== false){
@@ -153,38 +201,46 @@ class PDOSQLiteDriver {
 			$_wpdb = new PDODB();
 			$result = $_wpdb->query($unlimited_query);
 			$wpdb->dbh->found_rows_result = $_wpdb->last_result;
+			$_wpdb = null;
 		}
 	}
-	
 	/**
-	 * transforms a select query to a select count(*)
+	 * Call back method to change SELECT query to SELECT COUNT().
+	 * 
+	 * revised for version 1.5.1
 	 *
 	 * @param	string $query	the query to be transformed
-	 * @return	string			the transformed query
+	 * @return string the transformed query
+	 * @access private
 	 */
 	private function __transform_to_count($query){
-		$pattern = '/^\\s*SELECT\\s*(DISTINCT|)?.*?FROM\b/imsx';
+		$pattern = '/^\\s*SELECT\\s*(DISTINCT|)?.*?FROM\b/isx';
 		$_query = preg_replace($pattern, 'SELECT \\1 COUNT(*) FROM ', $query);
 		return $_query;
 	}
-	
 	/**
-	 * rewrites the insert ignore phrase for sqlite
+	 * Method to rewrite INSERT IGNORE to INSERT OR IGNORE.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_insert_ignore(){
 		$this->_query = str_ireplace('INSERT IGNORE', 'INSERT OR IGNORE ', $this->_query); 
 	}
-
 	/**
-	 * rewrites the update ignore phrase for sqlite
+	 * Method to rewrite UPDATE IGNORE to UPDATE OR IGNORE.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_update_ignore(){
 		$this->_query = str_ireplace('UPDATE IGNORE', 'UPDATE OR IGNORE ', $this->_query); 
 	}
-	
-	
 	/**
-	 * rewrites the date_add function for udf to manipulate
+	 * Method to rewrite DATE_ADD() function.
+	 * 
+	 * DATE_ADD has a parameter PHP function can't parse, so we quote the list and
+	 * pass it to the user defined function.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_date_add(){
 		//(date,interval expression unit)
@@ -194,9 +250,13 @@ class PDOSQLiteDriver {
       $this->_query = preg_replace($pattern, " date_add($matches[1], $expression) ", $this->_query);
     }
 	}
-	
 	/**
-	 * rewrite the data_sub function for udf to manipulate
+	 * Method to rewrite DATE_SUB() function.
+	 * 
+	 * DATE_SUB has a parameter PHP function can't parse, so we quote the list and
+	 * pass it to the user defined function.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_date_sub(){
 		//(date,interval expression unit)
@@ -206,21 +266,28 @@ class PDOSQLiteDriver {
       $this->_query = preg_replace($pattern, " date_sub($matches[1], $expression) ", $this->_query);
     }
 	}
-	
 	/**
-	 * handles the create query
-	 * this function won't be used... See PDOEngine class
+	 * Method to handle CREATE query.
+	 * 
+	 * If the query is CREATE query, it will be passed to the query_create.class.php.
+	 * So this method can't be used. It's here for safety.
+	 * 
+	 * @access private
 	 */
 	private function _handle_create_query(){
-		require_once PDODIR.'query_create.class.php';
+		require_once PDODIR . 'query_create.class.php';
 		$engine = new CreateQuery();
 		$this->_query = $engine->rewrite_query($this->_query);
 		$engine = null;
 	}
 	
 	/**
-	 * handles the ALTER query
-	 * this function won't be used... See PDOEngine class
+	 * Method to handle ALTER query.
+	 * 
+	 * If the query is ALTER query, it will be passed ot the query_alter.class.php.
+	 * So this method can't be used. It is here for safety.
+	 * 
+	 * @access private
 	 */
 	private function _handle_alter_query(){
 	  require_once PDODIR . 'query_alter.class.php';
@@ -230,8 +297,12 @@ class PDOSQLiteDriver {
 	}
 	
 	/**
-	 *	handles DESCRIBE or DESC query
-	 * this is required in the WordPress install process
+	 * Method to handle DESCRIBE or DESC query.
+	 * 
+	 * DESCRIBE is required for WordPress installation process. DESC is
+	 * an alias for DESCRIBE, but it is not used in core WordPress.
+	 * 
+	 * @access private
 	 */
 	private function _handle_describe_query(){
 		// $this->_query = "select 1=1";
@@ -241,12 +312,16 @@ class PDOSQLiteDriver {
       $this->_query = "PRAGMA table_info($tablename)";
 		}
 	}
-	
 	/**
+	 * Method to remove LIMIT clause from DELETE or UPDATE query.
+	 * 
 	 * The author of the original 'PDO for WordPress' says update method of wpdb
 	 * insists on adding LIMIT. But the newest version of WordPress doesn't do that.
 	 * Nevertheless some plugins use DELETE with LIMIT, UPDATE with LIMIT.
-	 * We need to exclude sub query's LIMIT.
+	 * We need to exclude sub query's LIMIT. And if SQLite is compiled with
+	 * ENABLE_UPDATE_DELETE_LIMIT option, we don't remove it.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_limit_usage(){
 		$_wpdb = new PDODB();
@@ -259,29 +334,47 @@ class PDOSQLiteDriver {
 	  }
 	}
 	/**
+	 * Method to remove ORDER BY clause from DELETE or UPDATE query.
+	 * 
 	 * SQLite compiled without SQLITE_ENABLE_UPDATE_DELETE_LIMIT option can't
 	 * execute UPDATE with ORDER BY, DELETE with GROUP BY.
 	 * We need to exclude sub query's GROUP BY.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_order_by_usage() {
+		$_wpdb = new PDODB();
+		$options = $_wpdb->get_results('PRAGMA compile_options');
+		foreach ($options as $opt) {
+			if (stripos($opt->compile_option, 'ENABLE_UPDATE_DELETE_LIMIT') !== false) return;
+		}
 	  if (stripos($this->_query, '(select') === false) {
 	    $this->_query = preg_replace('/\\s*ORDER\\s*BY\\s*.*$/i', '', $this->_query);
 	  }
 	}
-	
+	/**
+	 * Method to handle TRUNCATE query.
+	 * 
+	 * @access private
+	 */
 	private function _handle_truncate_query(){
 		$pattern = '/TRUNCATE TABLE (.*)/im';
 		$this->_query = preg_replace($pattern, 'DELETE FROM $1', $this->_query);
 	}
 	/**
-	 * rewrites use of Optimize queries in mysql for sqlite.
-	 * table name is ignored.
+	 * Method to handle OPTIMIZE query.
+	 * 
+	 * Original query has the table names, but they are simply ignored.
+	 * Table names are meaningless in SQLite.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_optimize(){
 		$this->_query ="VACUUM";
 	}
-	
 	/**
+	 * Method to rewrite day.
+	 * 
 	 * Jusitn Adie says: some wp UI interfaces (notably the post interface)
 	 * badly composes the day part of the date leading to problems in sqlite
 	 * sort ordering etc.
@@ -289,59 +382,79 @@ class PDOSQLiteDriver {
 	 * I don't understand that...
 	 * 
 	 * @return void
+	 * @access private
 	 */
 	private function _rewrite_badly_formed_dates(){
 		$pattern = '/([12]\d{3,}-\d{2}-)(\d )/ims';
 		$this->_query = preg_replace($pattern, '${1}0$2', $this->_query);
 	}
-	
 	/**
-	 * function to remove unsupported index hinting from mysql queries
+	 * Method to remove INDEX HINT.
 	 * 
-	 * @return void 
+	 * @return void
+	 * @access private
 	 */
 	private function _delete_index_hints(){
 		$pattern = '/\\s*(use|ignore|force)\\s+index\\s*\(.*?\)/i';
 		$this->_query = preg_replace($pattern, '', $this->_query);
 	}
-	
 	/**
-	 * Fix the date string and quote. This is required for the calendar widget.
+	 * Method to fix the date string and quoting.
 	 * 
-	 * where month(fieldname)=08 becomes month(fieldname)='8'
-	 * where month(fieldname)='08' becomes month(fieldname)='8'
+	 * This is required for the calendar widget.
+	 * 
+	 * WHERE month(fieldname)=08 is converted to month(fieldname)='8'
+	 * WHERE month(fieldname)='08' is converted to month(fieldname)='8'
 	 * 
 	 * I use preg_replace_callback instead of 'e' option because of security reason.
 	 * cf. PHP manual (regular expression)
 	 * 
 	 * @return void
+	 * @access private
 	 */
 	private function _fix_date_quoting() {
 		$pattern = '/(month|year|second|day|minute|hour|dayofmonth)\\s*\((.*?)\)\\s*=\\s*["\']?(\d{1,4})[\'"]?\\s*/im';
 		$this->_query = preg_replace_callback($pattern, array($this, '__fix_date_quoting'), $this->_query);
 	}
+	/**
+	 * Call back method to rewrite date string.
+	 * 
+	 * @param string $match
+	 * @return string
+	 * @access private
+	 */
 	private function __fix_date_quoting($match) {
 		$fixed_val = "{$match[1]}({$match[2]})='" . intval($match[3]) . "' ";
 		return $fixed_val;
 	}
-	
+	/**
+	 * Method to rewrite REGEXP() function.
+	 * 
+	 * This method changes function name to regexpp() and pass it to the user defined
+	 * function.
+	 * 
+	 * @access private
+	 */
 	private function _rewrite_regexp(){
 		$pattern = '/\s([^\s]*)\s*regexp\s*(\'.*?\')/im';
 		$this->_query = preg_replace($pattern, ' regexpp(\1, \2)', $this->_query);
 	}
-
 	/**
-	 * rewrites boolean to numeral
-	 * SQLite doesn't support true/false type
+	 * Method to rewrite boolean to number.
+	 * 
+	 * SQLite doesn't support true/false type, so we need to convert them to 1/0.
+	 * 
+	 * @access private
 	 */
 	private function _rewrite_boolean() {
 	  $query = str_ireplace('TRUE', "1", $this->_query);
 	  $query = str_ireplace('FALSE', "0", $query);
 	  $this->_query = $query;
 	}
-
 	/**
-	 * method to execute SHOW COLUMNS query
+	 * Method to handl SHOW COLUMN query.
+	 * 
+	 * @access private
 	 */
   private function _handle_show_columns_query() {
     $pattern_like = '/^\\s*SHOW\\s*(COLUMNS|FIELDS)\\s*FROM\\s*(.*)?\\s*LIKE\\s*(.*)?/i';
@@ -357,10 +470,12 @@ class PDOSQLiteDriver {
       $this->_query = $query_string;
     }
   }
-
   /**
-   * method to execute SHOW INDEX query
+   * Method to handle SHOW INDEX query.
+   * 
    * Moved the WHERE clause manipulation to pdoengin.class.php (ver 1.3.1)
+   * 
+   * @access private
    */
   private function _handle_show_index() {
     $pattern = '/^\\s*SHOW\\s*(?:INDEX|INDEXES|KEYS)\\s*FROM\\s*(\\w+)?/im';
@@ -370,13 +485,14 @@ class PDOSQLiteDriver {
       $this->_query = "SELECT * FROM sqlite_master WHERE tbl_name='$table_name'";
     }
   }
-
   /**
-   * function to rewrite ON DUPLICATE KEY UPDATE statement
-   * I use SELECT query and check if INSERT is allowed or not
-   * Rewriting procedure looks like a detour, but I've got another way.
+   * Method to handle ON DUPLICATE KEY UPDATE statement.
+   * 
+   * First we use SELECT query and check if INSERT is allowed or not.
+   * Rewriting procedure looks like a detour, but I've got no other way.
    * 
    * @return void
+   * @access private
    */
   private function _execute_duplicate_key_update() {
     $update = false;
@@ -509,7 +625,14 @@ class PDOSQLiteDriver {
 //       $this->_query = $replace_query;
 //     }
   }
-  
+  /**
+   * Method to rewrite BETWEEN A AND B clause.
+   * 
+   * This clause is the same form as natural language, so we have to check if it is
+   * in the data or SQL statement.
+   * 
+   * @access private
+   */
   private function _rewrite_between() {
   	$pattern = '/\\s*(\\w+)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s]*)?\\s*/ims';
   	if (preg_match($pattern, $this->_query, $match)) {
@@ -517,11 +640,11 @@ class PDOSQLiteDriver {
   		$min_value    = trim($match[2]);
   		$max_value    = trim($match[3]);
   		$max_value    = rtrim($max_value);
-  		$tokens = preg_split("/(''|'|,|)/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
+  		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
   		$literal = false;
   		$rewriting = false;
   		foreach ($tokens as $token) {
-  			if (strpos($token, "'") !== false) {
+  			if ($token == "'") {
   				if ($literal) {
   					$literal = false;
   				} else {
@@ -541,10 +664,15 @@ class PDOSQLiteDriver {
   	}
   }
   /**
-   * workaround function to avoid DELETE with JOIN
+   * Method to avoid DELETE with JOIN statement.
+   * 
    * wp-admin/includes/upgrade.php contains 'DELETE ... JOIN' statement.
    * This query can't be replaced with regular expression or udf, so we
-   * replace all the statement with another.
+   * replace all the statement with another. But this query was used in
+   * the very old version of WordPress when it was upgraded. So we won't
+   * have no chance that this method should be used.
+   * 
+   * @access private
    */
   private function _delete_workaround() {
     global $wpdb;
@@ -556,7 +684,13 @@ class PDOSQLiteDriver {
     }
   }
   /**
+   * Method to suppress errors.
    * 
+   * When the query string is the one that this class can't manipulate,
+   * the query string is replaced with the one that always returns true
+   * and does nothing.
+   * 
+   * @access private
    */
   private function _return_true() {
   	$this->_query = 'SELECT 1=1';
