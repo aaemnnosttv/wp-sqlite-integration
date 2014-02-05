@@ -3,6 +3,7 @@
  * 
  * This script is only included on the documentation and utility page.
  * 
+ * @package SQLite Integration
  * @author Kojima Toshiyasu
  */
 jQuery(document).ready(function($) {

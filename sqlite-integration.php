@@ -36,12 +36,21 @@ if (!defined('ABSPATH')) {
 	echo 'Thank you, but you are not allowed to access this file.';
 	die();
 }
+/*
+ * This will be activated after the installation is finished.
+ * So you can use all the functionality of WordPress.
+ */
 $siteurl = get_option('siteurl');
+/*
+ * Defines basic constants.
+ */
 define('SQLiteDir', dirname(plugin_basename(__FILE__)));
 define('SQLiteFilePath', dirname(__FILE__));
 define('SQLiteDirName', basename(SQLiteFilePath));
 define('SQLiteUrl', $siteurl . '/wp-content/plugins/' . SQLiteDir);
-
+/*
+ * Defines patch file upload directory.
+ */
 if (defined('UPLOADS')) {
   define('SQLitePatchDir', UPLOADS . '/patches');
 } else {
@@ -51,9 +60,13 @@ if (defined('UPLOADS')) {
     define('SQLitePatchDir', ABSPATH . 'wp-content/uploads/patches');
   }
 }
-
+/*
+ * Plugin compatibility file in json format.
+ */
 define('SQLiteListFile', SQLiteFilePath . '/utilities/plugin_lists.json');
-
+/*
+ * Instantiates utility classes.
+ */
 if (!class_exists('SQLiteIntegrationUtils')) {
   require_once SQLiteFilePath . '/utilities/utility.php';
   $utils = new SQLiteIntegrationUtils();
@@ -83,6 +96,8 @@ class SQLiteIntegration {
    * Constructor.
    * 
    * This constructor does everything needed for the administration panel.
+   * 
+   * @param no parameter is provided.
    */
   function __construct() {
     if (function_exists('register_activation_hook')) {
@@ -98,14 +113,19 @@ class SQLiteIntegration {
     } else {
       add_action('admin_menu', array($this, 'add_pages'));
     }
+    // See the docstring for download_backup_db() in utilities/utility.php
+    // We need this registration process.
+    add_action('admin_init', array('SQLiteIntegrationUtils', 'download_backup_db'));
     add_action('plugins_loaded', array($this, 'textdomain_init'));
   }
 
   /**
-   * Function to install on multisite or single site.
+   * Method to install on multisite or single site.
    * 
    * There really is nothing to install for now. It is for future use...
    * 
+   * @param no parameter is provided.
+   * @return returns null.
    */
   function install() {
     global $wpdb;
@@ -125,25 +145,31 @@ class SQLiteIntegration {
   }
   
   /**
-   * Function to install something.
+   * Method to install something.
    * 
    * We have nothing to do for now.
-   * We show menu and documents only to the network administrator
+   * We show menu and documents only to the network administrator.
+   * 
+   * @param no parameter is provided.
+   * @return no return values.
    */
   function _install() {
   }
   
   /**
-   * Function to uninstall plugin.
+   * Method to uninstall plugin.
    * 
    * This will remove wp-content/db.php and wp-content/patches direcotry.
    * If you migrate the site to the sever with MySQL, you have only to
    * migrate the data in the database.
+   * 
+   * @param no parameter is provided.
+   * @return no return values.
    */
   function uninstall() {
     // remove patch files and patch directory
     if (file_exists(SQLitePatchDir) && is_dir(SQLitePatchDir)) {
-      $dir_handle = opendir(SQLitePatchDir);
+      $dir_handle        = opendir(SQLitePatchDir);
       while (($file_name = readdir($dir_handle)) !== false) {
         if ($file_name != '.' && $file_name != '..') {
           unlink(SQLitePatchDir.'/'.$file_name);
@@ -163,21 +189,24 @@ class SQLiteIntegration {
   }
   
   /**
-   * Function to manipulate the admin panel, stylesheet and JavaScript.
+   * Method to manipulate the admin panel, stylesheet and JavaScript.
    * 
    * We use class method to show pages and want to load style files and script
    * files only in our plugin documents, so we need add_submenu_page with parent
    * slug set to null. This means that menu items are added but hidden from the
    * users.
+   * 
+   * @param no parameter is provided.
+   * @return no return values.
    */
   function add_pages() {
     global $utils, $doc, $patch_utils, $maintenance;
     if (function_exists('add_options_page')) {
-      $welcome_page = add_options_page(__('SQLite Integration'), __('SQLite Integration'), 'manage_options', 'sqlite-integration', array($utils, 'welcome'));
-      $util_page = add_submenu_page(null, 'System Info', 'System Info', 'manage_options', 'sys-info', array($utils, 'show_utils'));
-      $edit_db   = add_submenu_page(null, 'Setting File', 'Setting File', 'manage_options', 'setting-file', array($utils, 'edit_db_file'));
-      $doc_page  = add_submenu_page(null, 'Documentation', 'Documentation', 'manage_options', 'doc', array($doc, 'show_doc'));
-      $patch_page = add_submenu_page(null, 'Patch Utility', 'Patch Utility', 'manage_options', 'patch', array($patch_utils, 'show_patch_page'));
+      $welcome_page     = add_options_page(__('SQLite Integration'), __('SQLite Integration'), 'manage_options', 'sqlite-integration', array($utils, 'welcome'));
+      $util_page        = add_submenu_page(null, 'System Info', 'System Info', 'manage_options', 'sys-info', array($utils, 'show_utils'));
+      $edit_db          = add_submenu_page(null, 'Setting File', 'Setting File', 'manage_options', 'setting-file', array($utils, 'edit_db_file'));
+      $doc_page         = add_submenu_page(null, 'Documentation', 'Documentation', 'manage_options', 'doc', array($doc, 'show_doc'));
+      $patch_page       = add_submenu_page(null, 'Patch Utility', 'Patch Utility', 'manage_options', 'patch', array($patch_utils, 'show_patch_page'));
       $maintenance_page = add_submenu_page(null, 'DB Maintenance', 'DB Maintenance', 'manage_options', 'maintenance', array($maintenance, 'show_maintenance_page'));
       add_action('admin_print_styles-'.$welcome_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$util_page, array($this, 'add_style_sheet'));
@@ -193,18 +222,21 @@ class SQLiteIntegration {
   }
   
   /**
-   * Function to manipulate network admin panel.
+   * Method to manipulate network admin panel.
    * 
    * Capability is set to manage_network_options.
+   * 
+   * @param no parameter is provided.
+   * @return no return values.
    */
   function add_network_pages() {
     global $utils, $doc, $patch_utils, $maintenance;
     if (function_exists('add_options_page')) {
-      $welcome_page = add_submenu_page('settings.php', __('SQLite Integration'), __('SQLite Integration'), 'manage_network_options', 'sqlite-integration', array($utils, 'welcome'));
-      $util_page = add_submenu_page(null, 'System Info', 'System Info', 'manage_network_options', 'sys-info', array($utils, 'show_utils'));
-      $edit_db   = add_submenu_page(null, 'Setting File', 'Setting File', 'manage_network_options', 'setting-file', array($utils, 'edit_db_file'));
-      $doc_page  = add_submenu_page(null, 'Documentation', 'Documentation', 'manage_network_options', 'doc', array($doc, 'show_doc'));
-      $patch_page = add_submenu_page(null, 'Patch Utility', 'Patch Utility', 'manage_network_options', 'patch', array($patch_utils, 'show_patch_page'));
+      $welcome_page     = add_submenu_page('settings.php', __('SQLite Integration'), __('SQLite Integration'), 'manage_network_options', 'sqlite-integration', array($utils, 'welcome'));
+      $util_page        = add_submenu_page(null, 'System Info', 'System Info', 'manage_network_options', 'sys-info', array($utils, 'show_utils'));
+      $edit_db          = add_submenu_page(null, 'Setting File', 'Setting File', 'manage_network_options', 'setting-file', array($utils, 'edit_db_file'));
+      $doc_page         = add_submenu_page(null, 'Documentation', 'Documentation', 'manage_network_options', 'doc', array($doc, 'show_doc'));
+      $patch_page       = add_submenu_page(null, 'Patch Utility', 'Patch Utility', 'manage_network_options', 'patch', array($patch_utils, 'show_patch_page'));
       $maintenance_page = add_submenu_page(null, 'DB Maintenance', 'DB Maintenance', 'manage_network_options', 'maintenance', array($maintenance, 'show_maintenance_page'));
       add_action('admin_print_styles-'.$welcome_page, array($this, 'add_style_sheet'));
       add_action('admin_print_styles-'.$util_page, array($this, 'add_style_sheet'));
@@ -220,9 +252,12 @@ class SQLiteIntegration {
   }
   
   /**
-   * Function to initialize textdomain.
+   * Method to initialize textdomain.
    * 
    * Japanese catalog is only available.
+   * 
+   * @param no parameter is provided.
+   * @return no return values.
    */
   function textdomain_init() {
    global $utils;
@@ -235,10 +270,14 @@ class SQLiteIntegration {
   }
 
   /**
-   * Function to initialize stylesheet on the admin panel.
+   * Method to initialize stylesheet on the admin panel.
    * 
    * This determines which stylesheet to use depending on the users' choice
-   * of admin_color.
+   * of admin_color. Each stylesheet imports style.css and change the color
+   * of the admin dashboard.
+   * 
+   * @param no parameter is provided.
+   * @return no return values.
    */
   function add_style_sheet() {
   	global $current_user;
@@ -249,18 +288,23 @@ class SQLiteIntegration {
   	} else {
 	  	$stylesheet_file = $admin_color . '.min.css';
   	}
-    $style_url = SQLiteUrl . '/styles/' . $stylesheet_file;
+    $style_url  = SQLiteUrl . '/styles/' . $stylesheet_file;
     $style_file = SQLiteFilePath . '/styles/' . $stylesheet_file;
     if (file_exists($style_file)) {
       wp_enqueue_style('sqlite_integration_stylesheet', $style_url);
     }
   }
   /**
-   * Function to register the JavaScript file.
+   * Method to register the JavaScript file.
    * 
+   * To register the JavaScript file. It's only for the admin dashboard.
+   * It won't included in web pages.
+   * 
+   * @param no parameter is provided.
+   * @return no return value.
    */
   function add_sqlite_script() {
-    $script_url = SQLiteUrl . '/js/sqlite.min.js';
+    $script_url  = SQLiteUrl . '/js/sqlite.min.js';
     $script_file = SQLiteFilePath . '/js/sqlite.min.js';
     if (file_exists($script_file)) {
       wp_enqueue_script('sqlite-integration', $script_url, 'jquery');

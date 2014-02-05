@@ -306,7 +306,11 @@ class SQLiteIntegrationUtils {
                 $compat = __('No', $domain);
                 break;
               case 'Checked':
-                $compat = __('Checked', $domain);
+              	if (!empty($plugin_info->informed) && stripos($plugin_info->informed, 'Users\' Information') !== false) {
+              		$compat = __('Checked*', $domain);
+              	} else {
+                	$compat = __('Checked', $domain);
+              	}
                 break;
               default:
                 $compat = __('Not Checked', $domain);
@@ -416,6 +420,7 @@ class SQLiteIntegrationUtils {
    * @access private
    */
   private function backup_db() {
+  	$domain = $this->text_domain;
   	$result = array();
   	$database_file = FQDB;
   	$db_name = basename(FQDB);
@@ -447,12 +452,13 @@ class SQLiteIntegrationUtils {
 	/**
 	 * Method to delete backup database file(s).
 	 * 
-	 * @return boolean|string
+	 * Users can delete multiple files at a time.
+	 * 
+	 * @return false if file names aren't checked, empty array if failed, array of messages if succeeded.
 	 * @access private
 	 */
   private function delete_backup_db() {
-  	global $utils;
-  	$domain = $utils->text_domain;
+  	$domain = $this->text_domain;
   	$file_names = array();
   	$results = array();
   	if (isset($_POST['backup_checked'])) {
@@ -470,6 +476,53 @@ class SQLiteIntegrationUtils {
   		}
   	}
   	return $results;
+  }
+  /**
+   * Method to download a backup file.
+   * 
+   * This method uses header() function, so we have to register this function using
+   * admin_init action hook. It must also be declared as public. We check HTTP_REFERER
+   * and input button name, and ,after that, wp_nonce. When the admin_init is executed
+   * it only returns true.
+   * 
+   * The database file might be several hundred mega bytes, so we don't use readfile()
+   * but use fread() instead.
+   * 
+   * Users can download one file at a time.
+   * 
+   * @return 1 if the file name isn't checked, 2 if multiple files are checked, true if succeeded.
+   */
+  static function download_backup_db() {
+  	if (is_multisite()) {
+  		$script_url = network_admin_url('settings.php?page=setting-file');
+  	} else {
+  		$script_url = admin_url('options-general.php?page=setting-file');
+  	}
+  	if (isset($_POST['download_backup_file']) && stripos($_SERVER['HTTP_REFERER'], $script_url) !== false) {
+  		check_admin_referer('sqliteintegration-backup-manip-stats');
+  		if (!isset($_POST['backup_checked'])) return 1;
+  		$file_names = array();
+  		$file_names = $_POST['backup_checked'];
+  		if (count($file_names) != 1) return 2;
+  		$file_name = $file_names[0];
+  		$file_path = FQDBDIR . $file_name;
+			$download_file_name = get_bloginfo('name') . '_' . $file_name;
+  		header('Pragma: public');
+  		header('Cache-Control: must-revalidate,post-check=0,pre-check=0');
+  		header('Content-Type: application/force-download');
+  		header('Content-Type: application/octet-stream');
+  		header('Content-Type: application/download');
+  		header('Content-Disposition: attachment; filename='.$download_file_name.';');
+  		header('Content-Transfer-Encoding: binary');
+  		header('Content-Length: '.filesize($file_path));
+  		$fp = fopen($file_path, 'r');
+  		while (!feof($fp)) {
+  			echo fread($fp, 65536);
+  			flush();
+  		}
+  		fclose($fp);
+  	}
+  	return true;
   }
   /**
    * Method to show Welcome page.
@@ -705,6 +758,9 @@ class SQLiteIntegrationUtils {
     <?php $this->show_plugins_info();?>
     </tbody>
     </table>
+    <p>
+    <?php _e('"Checked*" with an asterisk is from the users\' information. I didn\'t check myself yet. If you found any malfunctioning, please let me know.', $domain);?>
+    </p>
     </div>
     <?php endif;
   }
@@ -788,6 +844,24 @@ class SQLiteIntegrationUtils {
 				echo '<div id="message" class="updated fade">'.$message.'</div>';
 			}
 		}
+		if (isset($_POST['download_backup_file'])) {
+			check_admin_referer('sqliteintegration-backup-manip-stats');
+			$message = '';
+			$result = self::download_backup_db();
+			if ($result !== true) {
+				switch($result) {
+					case 1:
+						$message = __('Please select backup file.', $domain);
+						break;
+					case 2:
+						$message = __('Please select one file at a time.', $domain);
+						break;
+					default:
+						break;
+				}
+				echo '<div id="message" class="updated fade">' . $message . '</div>';
+			}
+		}
     if (isset($_GET['page']) && $_GET['page'] == 'setting-file') :?>
       <div class="navigation">
         <ul class="navi-menu">
@@ -820,6 +894,9 @@ class SQLiteIntegrationUtils {
       <p>
       	<?php _e('If you want to delete the file(s), check the file name and click the Delete button. You can check multiple files.', $domain);?>
       </p>
+      <p>
+      	<?php _e('If you want to download a file, check the file name and click the Download button. Please check one file at a time.', $domain);?>
+      </p>
       <?php $backup_files = $this->get_backup_files();?>
       <form action="" method="post" id="delete-backup-form">
       	<?php if (function_exists('wp_nonce_field')) {
@@ -829,7 +906,7 @@ class SQLiteIntegrationUtils {
       	<table class="widefat page fixed" id="backup-files">
       		<thead>
       			<tr>
-      				<th class="item"><?php _e('Delete', $domain);?></th>
+      				<th class="item"><?php _e('Delete/Download', $domain);?></th>
       				<th data-sort='{"key":"name"}'><?php _e('Backup Files', $domain);?></th>
       			</tr>
       		</thead>
@@ -847,7 +924,8 @@ class SQLiteIntegrationUtils {
       	<p>
 	      <input type="submit" name="backup_db" class="button-primary" value="<?php _e('Backup', $domain);?>" onclick="return confirm('<?php _e('Are you sure to make a backup file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
 	      <input type="submit" name="delete_backup_files" class="button-primary" value="<?php _e('Delete file', $domain);?>" onclick="return confirm('<?php _e('Are you sure to delete backup file(s)?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" />
-      	</p>
+	      <input type="submit" name="download_backup_file" class="button-primary" value="<?php _e('Download', $domain);?>" onclick="return confirm('<?php _e('Are you sure to download backup file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')"/>
+	      </p>
       </form>
       <h3><?php _e('SQLite Integration Error Log', $domain);?></h3>
       <p>

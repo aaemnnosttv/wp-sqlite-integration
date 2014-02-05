@@ -1,6 +1,8 @@
 /**
  * This file is a part of SQLite Integration.
  *
+ * @package SQLite Integration
+ * @author Kojima Toshiyasu
  */
 @CHARSET "UTF-8";
 #sqlite-admin-wrap h2,
@@ -110,10 +112,13 @@ h3 {
 }
 p {
   text-indent: 15px;
-  line-height: 150%;
+  line-height: 160%;
 	font-size: 11pt;
 	margin-left: 10px;
 	margin-right: 10px;
+}
+li {
+  line-height: 130%;
 }
 table#sys-info{
 /*   width: 600px; */
@@ -190,7 +195,7 @@ input.button-primary {
 }
 table#patch-files .item,
 table#backup-files .item {
-  width: 40px;
+  width: 150px;
 }
 .alert {
   color: rgb(255, 0, 0);

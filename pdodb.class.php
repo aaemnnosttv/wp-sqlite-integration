@@ -149,7 +149,22 @@ class PDODB extends wpdb {
 			</div>";
     }
   }
-
+	/**
+	 * Method to flush cached data.
+	 * 
+	 * This overrides wpdb::flush(). This is not necessarily overridden, because
+	 * $result will never be resource.
+	 * 
+	 * @see wpdb::flush
+	 */
+  function flush() {
+  	$this->last_result = array();
+  	$this->col_info    = null;
+  	$this->last_query  = null;
+  	$this->rows_affected = $this->num_rows = 0;
+  	$this->last_error  = '';
+		$this->result      = null;
+  }
   /**
    * Method to do the database connection.
    * 
@@ -234,8 +249,9 @@ class PDODB extends wpdb {
    * This overrides wpdb::load_col_info(), which uses a mysql function.
    * 
    * @see wpdb::load_col_info()
+   * @access protected
    */
-  function load_col_info() {
+  protected function load_col_info() {
     if ($this->col_info)
       return;
     $this->col_info = $this->dbh->get_columns();
@@ -266,13 +282,14 @@ class PDODB extends wpdb {
    * 
    * This overrides wpdb::db_version() to avoid using MySQL function.
    * It returns mysql version number, but it means nothing for SQLite.
-   * So it return the required mysql version.
+   * So it return the newest mysql version.
    * 
    * @see wpdb::db_version()
    */
   function db_version() {
-    global $required_mysql_version;
-    return $required_mysql_version;
+//     global $required_mysql_version;
+//     return $required_mysql_version;
+		return '5.5';
   }
 }
 

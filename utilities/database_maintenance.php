@@ -3,14 +3,19 @@
  * This file defines DatabaseMaintenance class.
  * 
  * When WordPress was upgraded from 3.5.x to 3.6, SQLite Integration couldn't manipulate
- * dbDelta() function of WordPress. As a result, there are some tables whose default
- * values are missing.
+ * dbDelta() function of WordPress as expected. As a result, there are some tables whose
+ * default values are missing.
  * 
- * This class checks the table schemas and restore the default value if necessary.
  * This file is for temporary use and will be removed or changed in the future release.
  * 
  * @package SQLite Integration
  * @author Kojima Toshiyasu
+ */
+/** 
+ * This class provide the methods to check the table schemas and restore if necessary.
+ * 
+ * Each method is a private function except the one to show admin page.
+ * 
  */
 class DatabaseMaintenance {
 	/**

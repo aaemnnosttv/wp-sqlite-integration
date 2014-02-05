@@ -12,10 +12,40 @@
  */
 class CreateQuery{
 
-	private $_query = '';
-	private $index_queries = array();
-	private $_errors = array();
-	private $table_name = '';
+	/**
+	 * The query string to be rewritten in this class.
+	 * 
+	 * @var string
+	 * @access private
+	 */
+	private $_query          = '';
+	/**
+	 * The array to contain CREATE INDEX queries.
+	 * 
+	 * @var array of strings
+	 * @access private
+	 */
+	private $index_queries   = array();
+	/**
+	 * The array to contain error messages.
+	 * 
+	 * @var array of string
+	 * @access private
+	 */
+	private $_errors         = array();
+	/**
+	 * Variable to have the table name to be executed.
+	 * 
+	 * @var string
+	 * @access private
+	 */
+	private $table_name      = '';
+	/**
+	 * Variable to check if the query has the primary key.
+	 * 
+	 * @var boolean
+	 * @access private
+	 */
 	private $has_primary_key = false;
 	
 	/**
@@ -25,7 +55,7 @@ class CreateQuery{
 	 * @return string|array	the processed (rewritten) query
 	 */
 	public function rewrite_query($query){
-		$this->_query = $query;
+		$this->_query     = $query;
 		$this->_errors [] = '';
 		if (preg_match('/^CREATE\\s*(UNIQUE|FULLTEXT|)\\s*INDEX/ims', $this->_query, $match)) {
 			// we manipulate CREATE INDEX query in PDOEngine.class.php
@@ -60,8 +90,9 @@ class CreateQuery{
 	/**
 	 * Method to get table name from the query string.
 	 * 
-	 * IF NOT EXISTS is removed for the easy regular expression usage.
+	 * 'IF NOT EXISTS' clause is removed for the easy regular expression usage.
 	 * It will be added at the end of the process.
+	 * 
 	 * @access private
 	 */
 	private function get_table_name(){
@@ -73,6 +104,8 @@ class CreateQuery{
 	}
 	/**
 	 * Method to change the MySQL field types to SQLite compatible types.
+	 * 
+	 * Order of the key value is important. Don't change it.
 	 * 
 	 * @access private
 	 */
@@ -126,7 +159,8 @@ class CreateQuery{
 	/**
 	 * Method for stripping unsigned.
 	 * 
-	 * UNSIGNED INT(EGER) is converted to INTEGER here.
+	 * SQLite doesn't have unsigned int data type. So UNSIGNED INT(EGER) is converted
+	 * to INTEGER here.
 	 * 
 	 * @access private
 	 */		
@@ -178,8 +212,8 @@ class CreateQuery{
 	 */
 	private function _rewrite_unique_key($matches){
 	  $index_name = trim($matches[1]);
-	  $col_name = trim($matches[2]);
-    $tbl_name = $this->table_name;
+	  $col_name   = trim($matches[2]);
+    $tbl_name   = $this->table_name;
 	  $_wpdb = new PDODB();
 	  $results = $_wpdb->get_results("SELECT name FROM sqlite_master WHERE type='index'");
 	  $_wpdb = null;
@@ -246,7 +280,7 @@ class CreateQuery{
 	 */	
 	private function _rewrite_key($matches){
 	  $index_name = trim($matches[2]);
-	  $col_name = trim($matches[3]);
+	  $col_name   = trim($matches[3]);
 	  if (preg_match('/\([0-9]+?\)/', $col_name, $match)) {
 	    $col_name = preg_replace_callback('/\([0-9]+?\)/', array($this, '_remove_length'), $col_name);
 	  }
@@ -282,21 +316,22 @@ class CreateQuery{
 	 * Method to assemble the main query and index queries into an array.
 	 * 
 	 * It return the array of the queries to be executed separately.
+	 * 
 	 * @return array
 	 * @access private
 	 */
 	private function post_process(){
 		$mainquery = $this->_query;
 		do{
-			$count = 0;
+			$count     = 0;
 			$mainquery = preg_replace('/,\\s*\)/imsx',')', $mainquery, -1, $count);
 		} while ($count > 0);
 		do {
-		  $count = 0;
+		  $count     = 0;
 		  $mainquery = preg_replace('/\(\\s*?,/imsx', '(', $mainquery, -1, $count);
 		} while ($count > 0);
 		$return_val[] = $mainquery;
-		$return_val = array_merge($return_val, $this->index_queries);
+		$return_val   = array_merge($return_val, $this->index_queries);
     return $return_val;
 	}
 	/**
@@ -309,14 +344,14 @@ class CreateQuery{
 	 */
 	private function add_if_not_exists(){
 		$pattern_table = '/^\\s*CREATE\\s*(TEMP|TEMPORARY)?\\s*TABLE\\s*(IF NOT EXISTS)?\\s*/ims';
-		$this->_query = preg_replace($pattern_table, 'CREATE $1 TABLE IF NOT EXISTS ', $this->_query);
+		$this->_query  = preg_replace($pattern_table, 'CREATE $1 TABLE IF NOT EXISTS ', $this->_query);
 		$pattern_index = '/^\\s*CREATE\\s*(UNIQUE)?\\s*INDEX\\s*(IF NOT EXISTS)?\\s*/ims';
 		for ($i = 0; $i < count($this->index_queries); $i++) {
 		  $this->index_queries[$i] = preg_replace($pattern_index, 'CREATE $1 INDEX IF NOT EXISTS ', $this->index_queries[$i]);
 		}
 	}
 	/**
-	 * Method to strip back ticks.
+	 * Method to strip back quotes.
 	 * 
 	 * @access private
 	 */	
@@ -335,10 +370,11 @@ class CreateQuery{
 	 * @access private
 	 */	
 	private function rewrite_character_set(){
-		$pattern_charset = '/\\b(default\\s*character\\s*set|default\\s*charset|character\\s*set)\\s*(?<!\()[^ ]*/im';
+		$pattern_charset  = '/\\b(default\\s*character\\s*set|default\\s*charset|character\\s*set)\\s*(?<!\()[^ ]*/im';
 		$pattern_collate1 = '/\\s*collate\\s*[^ ]*(?=,)/im';
     $pattern_collate2 = '/\\s*collate\\s*[^ ]*(?<!;)/im';
-    $patterns = array($pattern_charset, $pattern_collate1, $pattern_collate2);
-		$this->_query = preg_replace($patterns, '', $this->_query);
+    $patterns         = array($pattern_charset, $pattern_collate1, $pattern_collate2);
+		$this->_query     = preg_replace($patterns, '', $this->_query);
 	}
 }
+?>

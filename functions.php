@@ -84,6 +84,9 @@ class PDOSQLiteUDFS {
       'inet_aton'      => 'inet_aton',
       'datediff'       => 'datediff',
   		'locate'         => 'locate',
+			'utc_date'       => 'utc_date',
+			'utc_time'       => 'utc_time',
+			'utc_timestamp'  => 'utc_timestamp',
 			'version'        => 'version'
   );
   /**
@@ -225,7 +228,8 @@ class PDOSQLiteUDFS {
   /**
    * Method to emulate MySQL SUBSTRING() function.
    * 
-   * This function rewrites the function name to SQLite compatible substr().
+   * This function rewrites the function name to SQLite compatible substr(),
+   * which can manipulate UTF-8 characters.
    * 
    * @param string $text
    * @param integer $pos representing the start point.
@@ -640,17 +644,45 @@ class PDOSQLiteUDFS {
   	}
   }
 	/**
-	 * Method to return MySQL version.
-	 * 
-	 * This function only returns WordPress $required_mysql_version, because it is
-	 * meaningless for SQLite database.
+	 * Method to return GMT date in the string format.
 	 * 
 	 * @param none
-	 * @return string representing the version number
+	 * @return string formatted GMT date 'dddd-mm-dd'
+	 */
+	public function utc_date() {
+		return gmdate('Y-m-d', time());
+	}
+	/**
+	 * Method to return GMT time in the string format.
+	 * 
+	 * @param none
+	 * @return string formatted GMT time '00:00:00'
+	 */
+	public function utc_time() {
+		return gmdate('H:i:s', time());
+	}
+	/**
+	 * Method to return GMT time stamp in the string format.
+	 * 
+	 * @param none
+	 * @return string formatted GMT timestamp 'yyyy-mm-dd 00:00:00'
+	 */
+	public function utc_timestamp() {
+		return gmdate('Y-m-d H:i:s', time());
+	}
+	/**
+	 * Method to return MySQL version.
+	 * 
+	 * This function only returns the current newest version number of MySQL,
+	 * because it is meaningless for SQLite database.
+	 * 
+	 * @param none
+	 * @return string representing the version number: major_version.minor_version
 	 */
 	public function version() {
-    global $required_mysql_version;
-    return $required_mysql_version;
+//    global $required_mysql_version;
+//    return $required_mysql_version;
+		return '5.5';
 	}
 }
 ?>

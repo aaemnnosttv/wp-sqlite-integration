@@ -37,68 +37,68 @@ class PDOSQLiteDriver {
  		$this->_query = $query;
 		switch ($this->query_type) {
 		  case 'truncate':
-		    $this->_handle_truncate_query();
+		    $this->handle_truncate_query();
 		    break;
 		  case 'alter':
-		    $this->_handle_alter_query();
+		    $this->handle_alter_query();
 		    break;
 		  case 'create':
-		    $this->_handle_create_query();
+		    $this->handle_create_query();
 		    break;
 		  case 'describe':
 		  case 'desc':
-		    $this->_handle_describe_query();
+		    $this->handle_describe_query();
 		    break;
 		  case 'show':
-		    $this->_handle_show_query();
+		    $this->handle_show_query();
 		    break;
 		  case 'showcolumns':
-		    $this->_handle_show_columns_query();
+		    $this->handle_show_columns_query();
 		    break;
 		  case 'showindex':
-		    $this->_handle_show_index();
+		    $this->handle_show_index();
 		    break;
 		  case 'select':
-		    $this->_strip_backticks();
-		    $this->_handle_sql_count();
-		    $this->_rewrite_date_sub();
-		    $this->_delete_index_hints();
-		    $this->_rewrite_regexp();
-		    $this->_rewrite_boolean();
-		    $this->_fix_date_quoting();
-		    $this->_rewrite_between();
+		    $this->strip_backticks();
+		    $this->handle_sql_count();
+		    $this->rewrite_date_sub();
+		    $this->delete_index_hints();
+		    $this->rewrite_regexp();
+		    $this->rewrite_boolean();
+		    $this->fix_date_quoting();
+		    $this->rewrite_between();
 		    break;
 		  case 'insert':
-		    $this->_safe_strip_backticks();
-		    $this->_execute_duplicate_key_update();
-		    $this->_rewrite_insert_ignore();
-		    $this->_rewrite_regexp();
-		    $this->_fix_date_quoting();
+		    $this->safe_strip_backticks();
+		    $this->execute_duplicate_key_update();
+		    $this->rewrite_insert_ignore();
+		    $this->rewrite_regexp();
+		    $this->fix_date_quoting();
 		    break;
 		  case 'update':
-		    $this->_safe_strip_backticks();
-		    $this->_rewrite_update_ignore();
+		    $this->safe_strip_backticks();
+		    $this->rewrite_update_ignore();
 // 		    $this->_rewrite_date_sub();
-		    $this->_rewrite_limit_usage();
-		    $this->_rewrite_order_by_usage();
-		    $this->_rewrite_regexp();
-		    $this->_rewrite_between();
+		    $this->rewrite_limit_usage();
+		    $this->rewrite_order_by_usage();
+		    $this->rewrite_regexp();
+		    $this->rewrite_between();
 		    break;
 		  case 'delete':
-		    $this->_strip_backticks();
-		    $this->_rewrite_limit_usage();
-		    $this->_rewrite_order_by_usage();
-		    $this->_rewrite_date_sub();
-		    $this->_rewrite_regexp();
-		    $this->_delete_workaround();
+		    $this->strip_backticks();
+		    $this->rewrite_limit_usage();
+		    $this->rewrite_order_by_usage();
+		    $this->rewrite_date_sub();
+		    $this->rewrite_regexp();
+		    $this->delete_workaround();
 		    break;
 		  case 'replace':
-		    $this->_safe_strip_backticks();
-		    $this->_rewrite_date_sub();
-		    $this->_rewrite_regexp();
+		    $this->safe_strip_backticks();
+		    $this->rewrite_date_sub();
+		    $this->rewrite_regexp();
 		    break;
 		  case 'optimize':
-		    $this->_rewrite_optimize();
+		    $this->rewrite_optimize();
 		    break;
 		  case 'pragma':
 		  	break;
@@ -106,7 +106,7 @@ class PDOSQLiteDriver {
 		  	if (defined(WP_DEBUG) && WP_DEBUG) {
 		  		break;
 		  	} else {
-			  	$this->_return_true();
+			  	$this->return_true();
 			  	break;
 		  	}
 		}
@@ -118,9 +118,9 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _handle_show_query(){
+	private function handle_show_query(){
 	  $table_name = '';
-		$pattern = '/^\\s*SHOW\\s*TABLES\\s*.*?(LIKE\\s*(.*))$/im';
+		$pattern    = '/^\\s*SHOW\\s*TABLES\\s*.*?(LIKE\\s*(.*))$/im';
 		if (preg_match($pattern, $this->_query, $matches)) {
 		  $table_name = str_replace(array("'", ';'), '', $matches[2]);
 		}
@@ -139,7 +139,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _strip_backticks(){
+	private function strip_backticks(){
 		$this->_query = str_replace('`', '', $this->_query);
 	}
 	/**
@@ -150,10 +150,10 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _safe_strip_backticks() {
+	private function safe_strip_backticks() {
 		$query_string = '';
-		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
-		$literal = false;
+		$tokens       = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$literal      = false;
 		$query_string = '';
 		foreach ($tokens as $token) {
 			if ($token == "'") {
@@ -188,16 +188,15 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _handle_sql_count(){
+	private function handle_sql_count(){
 		if (stripos($this->_query, 'SELECT SQL_CALC_FOUND_ROWS') !== false){
 			global $wpdb;
 			// first strip the code. this is the end of rewriting process
-			$this->_query = str_ireplace('SQL_CALC_FOUND_ROWS', '', $this->_query);
+			$this->_query    = str_ireplace('SQL_CALC_FOUND_ROWS', '', $this->_query);
 			// we make the data for next SELECE FOUND_ROWS() statement
 			$unlimited_query = preg_replace('/\\bLIMIT\\s*.*/imsx', '', $this->_query);
-// 			$unlimited_query = preg_replace('/\\bFALSE\\s*.*/imsx', '0', $unlimited_query);
       $unlimited_query = preg_replace('/\\bGROUP\\s*BY\\s*.*/imsx', '', $unlimited_query);
-			$unlimited_query = $this->__transform_to_count($unlimited_query);
+			$unlimited_query = $this->_transform_to_count($unlimited_query);
 			$_wpdb = new PDODB();
 			$result = $_wpdb->query($unlimited_query);
 			$wpdb->dbh->found_rows_result = $_wpdb->last_result;
@@ -213,7 +212,7 @@ class PDOSQLiteDriver {
 	 * @return string the transformed query
 	 * @access private
 	 */
-	private function __transform_to_count($query){
+	private function _transform_to_count($query){
 		$pattern = '/^\\s*SELECT\\s*(DISTINCT|)?.*?FROM\b/isx';
 		$_query = preg_replace($pattern, 'SELECT \\1 COUNT(*) FROM ', $query);
 		return $_query;
@@ -223,7 +222,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_insert_ignore(){
+	private function rewrite_insert_ignore(){
 		$this->_query = str_ireplace('INSERT IGNORE', 'INSERT OR IGNORE ', $this->_query); 
 	}
 	/**
@@ -231,7 +230,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_update_ignore(){
+	private function rewrite_update_ignore(){
 		$this->_query = str_ireplace('UPDATE IGNORE', 'UPDATE OR IGNORE ', $this->_query); 
 	}
 	/**
@@ -242,11 +241,11 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_date_add(){
+	private function rewrite_date_add(){
 		//(date,interval expression unit)
 		$pattern = '/\\s*date_add\\s*\(([^,]*),([^\)]*)\)/imsx';
     if (preg_match($pattern, $this->_query, $matches)) {
-      $expression = "'".trim($matches[2])."'";
+      $expression   = "'".trim($matches[2])."'";
       $this->_query = preg_replace($pattern, " date_add($matches[1], $expression) ", $this->_query);
     }
 	}
@@ -258,11 +257,11 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_date_sub(){
+	private function rewrite_date_sub(){
 		//(date,interval expression unit)
 		$pattern = '/\\s*date_sub\\s*\(([^,]*),([^\)]*)\)/imsx';
     if (preg_match($pattern, $this->_query, $matches)) {
-      $expression = "'".trim($matches[2])."'";
+      $expression   = "'".trim($matches[2])."'";
       $this->_query = preg_replace($pattern, " date_sub($matches[1], $expression) ", $this->_query);
     }
 	}
@@ -274,7 +273,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _handle_create_query(){
+	private function handle_create_query(){
 		require_once PDODIR . 'query_create.class.php';
 		$engine = new CreateQuery();
 		$this->_query = $engine->rewrite_query($this->_query);
@@ -289,7 +288,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _handle_alter_query(){
+	private function handle_alter_query(){
 	  require_once PDODIR . 'query_alter.class.php';
 	  $engine = new AlterQuery();
 	  $this->_query = $engine->rewrite_query($this->_query, 'alter');
@@ -304,7 +303,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _handle_describe_query(){
+	private function handle_describe_query(){
 		// $this->_query = "select 1=1";
 		$pattern = '/^\\s*(DESCRIBE|DESC)\\s*(.*)/i';
 		if (preg_match($pattern, $this->_query, $match)) {
@@ -323,7 +322,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_limit_usage(){
+	private function rewrite_limit_usage(){
 		$_wpdb = new PDODB();
 		$options = $_wpdb->get_results('PRAGMA compile_options');
 		foreach ($options as $opt) {
@@ -342,7 +341,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_order_by_usage() {
+	private function rewrite_order_by_usage() {
 		$_wpdb = new PDODB();
 		$options = $_wpdb->get_results('PRAGMA compile_options');
 		foreach ($options as $opt) {
@@ -357,7 +356,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _handle_truncate_query(){
+	private function handle_truncate_query(){
 		$pattern = '/TRUNCATE TABLE (.*)/im';
 		$this->_query = preg_replace($pattern, 'DELETE FROM $1', $this->_query);
 	}
@@ -369,7 +368,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_optimize(){
+	private function rewrite_optimize(){
 		$this->_query ="VACUUM";
 	}
 	/**
@@ -384,7 +383,7 @@ class PDOSQLiteDriver {
 	 * @return void
 	 * @access private
 	 */
-	private function _rewrite_badly_formed_dates(){
+	private function rewrite_badly_formed_dates(){
 		$pattern = '/([12]\d{3,}-\d{2}-)(\d )/ims';
 		$this->_query = preg_replace($pattern, '${1}0$2', $this->_query);
 	}
@@ -394,7 +393,7 @@ class PDOSQLiteDriver {
 	 * @return void
 	 * @access private
 	 */
-	private function _delete_index_hints(){
+	private function delete_index_hints(){
 		$pattern = '/\\s*(use|ignore|force)\\s+index\\s*\(.*?\)/i';
 		$this->_query = preg_replace($pattern, '', $this->_query);
 	}
@@ -412,9 +411,9 @@ class PDOSQLiteDriver {
 	 * @return void
 	 * @access private
 	 */
-	private function _fix_date_quoting() {
+	private function fix_date_quoting() {
 		$pattern = '/(month|year|second|day|minute|hour|dayofmonth)\\s*\((.*?)\)\\s*=\\s*["\']?(\d{1,4})[\'"]?\\s*/im';
-		$this->_query = preg_replace_callback($pattern, array($this, '__fix_date_quoting'), $this->_query);
+		$this->_query = preg_replace_callback($pattern, array($this, '_fix_date_quoting'), $this->_query);
 	}
 	/**
 	 * Call back method to rewrite date string.
@@ -423,7 +422,7 @@ class PDOSQLiteDriver {
 	 * @return string
 	 * @access private
 	 */
-	private function __fix_date_quoting($match) {
+	private function _fix_date_quoting($match) {
 		$fixed_val = "{$match[1]}({$match[2]})='" . intval($match[3]) . "' ";
 		return $fixed_val;
 	}
@@ -435,7 +434,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_regexp(){
+	private function rewrite_regexp(){
 		$pattern = '/\s([^\s]*)\s*regexp\s*(\'.*?\')/im';
 		$this->_query = preg_replace($pattern, ' regexpp(\1, \2)', $this->_query);
 	}
@@ -446,7 +445,7 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-	private function _rewrite_boolean() {
+	private function rewrite_boolean() {
 	  $query = str_ireplace('TRUE', "1", $this->_query);
 	  $query = str_ireplace('FALSE', "0", $query);
 	  $this->_query = $query;
@@ -456,16 +455,16 @@ class PDOSQLiteDriver {
 	 * 
 	 * @access private
 	 */
-  private function _handle_show_columns_query() {
+  private function handle_show_columns_query() {
     $pattern_like = '/^\\s*SHOW\\s*(COLUMNS|FIELDS)\\s*FROM\\s*(.*)?\\s*LIKE\\s*(.*)?/i';
-    $pattern = '/^\\s*SHOW\\s*(COLUMNS|FIELDS)\\s*FROM\\s*(.*)?/i';
+    $pattern      = '/^\\s*SHOW\\s*(COLUMNS|FIELDS)\\s*FROM\\s*(.*)?/i';
     if (preg_match($pattern_like, $this->_query, $matches)) {
-      $table_name = str_replace("'", "", trim($matches[2]));
-      $column_name = str_replace("'", "", trim($matches[3]));
+      $table_name   = str_replace("'", "", trim($matches[2]));
+      $column_name  = str_replace("'", "", trim($matches[3]));
       $query_string = "SELECT sql FROM sqlite_master WHERE tbl_name='$table_name' AND sql LIKE '%$column_name%'";
       $this->_query = $query_string;
     } elseif (preg_match($pattern, $this->_query, $matches)) {
-      $table_name = $matches[2];
+      $table_name   = $matches[2];
       $query_string = preg_replace($pattern, "PRAGMA table_info($table_name)", $this->_query);
       $this->_query = $query_string;
     }
@@ -477,11 +476,11 @@ class PDOSQLiteDriver {
    * 
    * @access private
    */
-  private function _handle_show_index() {
+  private function handle_show_index() {
     $pattern = '/^\\s*SHOW\\s*(?:INDEX|INDEXES|KEYS)\\s*FROM\\s*(\\w+)?/im';
     if (preg_match($pattern, $this->_query, $match)) {
-      $table_name = preg_replace("/[\';]/", '', $match[1]);
-      $table_name = trim($table_name);
+      $table_name   = preg_replace("/[\';]/", '', $match[1]);
+      $table_name   = trim($table_name);
       $this->_query = "SELECT * FROM sqlite_master WHERE tbl_name='$table_name'";
     }
   }
@@ -494,8 +493,8 @@ class PDOSQLiteDriver {
    * @return void
    * @access private
    */
-  private function _execute_duplicate_key_update() {
-    $update = false;
+  private function execute_duplicate_key_update() {
+    $update                = false;
     $unique_keys_for_cond  = array();
     $unique_keys_for_check = array();
     $pattern =  '/^\\s*INSERT\\s*INTO\\s*(\\w+)?\\s*(.*)\\s*ON\\s*DUPLICATE\\s*KEY\\s*UPDATE\\s*(.*)$/ims';
@@ -521,14 +520,14 @@ class PDOSQLiteDriver {
         $unique_keys_for_check = array_map('trim', $unique_keys_for_check);
       } else {
         // Without unique key or primary key, UPDATE statement will affect all the rows!
-        $query = 'INSERT INTO '.$table_name.' '.$insert_data;
+        $query        = 'INSERT INTO '.$table_name.' '.$insert_data;
         $this->_query = $query;
         $_wpdb = null;
         return;
       }
       // data check
       if (preg_match('/^\((.*)\)\\s*VALUES\\s*\((.*)\)$/ims', $insert_data, $match_1)) {
-        $col_array = explode(',', $match_1[1]);
+        $col_array      = explode(',', $match_1[1]);
         $ins_data_array = explode(',', $match_1[2]);
         foreach ($col_array as $col) {
           $val = trim(array_shift($ins_data_array));
@@ -539,7 +538,7 @@ class PDOSQLiteDriver {
         foreach ($unique_keys_for_cond as $unique_key) {
           if (strpos($unique_key, ',') !== false) {
             $unique_key_array = explode(',', $unique_key);
-            $counter = count($unique_key_array);
+            $counter          = count($unique_key_array);
             for ($i = 0; $i < $counter; ++$i) {
               $col = trim($unique_key_array[$i]);
               if (isset($ins_data_assoc[$col]) && $i == $counter - 1) {
@@ -560,9 +559,9 @@ class PDOSQLiteDriver {
             }
           }
         }
-        $condition = rtrim($condition, ' OR ');
+        $condition  = rtrim($condition, ' OR ');
         $test_query = "SELECT * FROM {$table_name} WHERE {$condition}";
-        $results = $_wpdb->query($test_query);
+        $results    = $_wpdb->query($test_query);
         $_wpdb = null;
         if ($results == 0) {
           $this->_query = 'INSERT INTO '.$table_name.' '.$insert_data;
@@ -572,7 +571,7 @@ class PDOSQLiteDriver {
           if (preg_match('/^\((.*)\)\\s*VALUES\\s*\((.*)\)$/im', $insert_data, $match_2)) {
             $col_array = explode(',', $match_2[1]);
             $ins_array = explode(',', $match_2[2]);
-            $count = count($col_array);
+            $count     = count($col_array);
             for ($i = 0; $i < $count; $i++) {
               $col = trim($col_array[$i]);
               $val = trim($ins_array[$i]);
@@ -582,17 +581,17 @@ class PDOSQLiteDriver {
           // change col = data, col = data to array(col=>data, col=>data)
           // some plugins have semi-colon at the end of the query
           $update_data = rtrim($update_data, ';');
-          $tmp_array = explode(',', $update_data);
+          $tmp_array   = explode(',', $update_data);
           foreach ($tmp_array as $pair) {
             list($col, $value) = explode('=', $pair);
-            $col = trim($col);
+            $col   = trim($col);
             $value = trim($value);
             $update_array_assoc[$col] = $value;
           }
           // change array(col=>values(col)) to array(col=>data)
           foreach ($update_array_assoc as $key => &$value) {
             if (preg_match('/^VALUES\\s*\((.*)\)$/im', $value, $match_3)) {
-              $col = trim($match_3[1]);
+              $col   = trim($match_3[1]);
               $value = $ins_array_assoc[$col];
             }
           }
@@ -610,8 +609,8 @@ class PDOSQLiteDriver {
             }
           }
           $update_strings = rtrim($update_strings, ',');
-          $unique_where = array_unique($where_array, SORT_REGULAR);
-          $where_string = ' WHERE ' . implode(' AND ', $unique_where);
+          $unique_where   = array_unique($where_array, SORT_REGULAR);
+          $where_string   = ' WHERE ' . implode(' AND ', $unique_where);
           //        $where_string = ' WHERE ' . rtrim($where_string, ',');
           $update_query = 'UPDATE ' . $table_name . ' SET ' . $update_strings . $where_string;
           $this->_query = $update_query;
@@ -633,7 +632,7 @@ class PDOSQLiteDriver {
    * 
    * @access private
    */
-  private function _rewrite_between() {
+  private function rewrite_between() {
   	$pattern = '/\\s*(\\w+)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s]*)?\\s*/ims';
   	if (preg_match($pattern, $this->_query, $match)) {
   		$column_name  = trim($match[1]);
@@ -641,7 +640,7 @@ class PDOSQLiteDriver {
   		$max_value    = trim($match[3]);
   		$max_value    = rtrim($max_value);
   		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
-  		$literal = false;
+  		$literal   = false;
   		$rewriting = false;
   		foreach ($tokens as $token) {
   			if ($token == "'") {
@@ -674,10 +673,10 @@ class PDOSQLiteDriver {
    * 
    * @access private
    */
-  private function _delete_workaround() {
+  private function delete_workaround() {
     global $wpdb;
 //     $pattern = "DELETE o1 FROM $wpdb->options AS o1 JOIN $wpdb->options AS o2 USING (option_name) WHERE o2.option_id > o1.option_id";
-		$pattern = "DELETE o1 FROM $wpdb->options AS o1 JOIN $wpdb->options AS o2";
+		$pattern   = "DELETE o1 FROM $wpdb->options AS o1 JOIN $wpdb->options AS o2";
     $rewritten = "DELETE FROM $wpdb->options WHERE option_id IN (SELECT MIN(option_id) FROM $wpdb->options GROUP BY option_name HAVING COUNT(*) > 1)";
     if (stripos($this->_query, $pattern) !== false) {
       $this->_query = $rewritten;
@@ -692,7 +691,7 @@ class PDOSQLiteDriver {
    * 
    * @access private
    */
-  private function _return_true() {
+  private function return_true() {
   	$this->_query = 'SELECT 1=1';
   }
 }

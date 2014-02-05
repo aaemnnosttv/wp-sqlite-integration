@@ -37,7 +37,7 @@ class SQLiteIntegrationDocument {
     <div class="wrap" id="sqlite-admin-wrap">
     <h2><?php _e('Documentation', $domain); ?></h2>
     <p>
-    <?php _e('This is a brief documentation about this plugin. For more details, see also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration">SQLite Integration page</a>.', $domain);?>
+    <?php _e('This is a brief documentation about this plugin. For more details, see also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration/">SQLite Integration page</a>.', $domain);?>
     </p>
     <p>
     <?php _e('Please don\'t forget: WordPress DOES NOT OFFICIALLY SUPPORT any database other than MySQL. So if you ask about this plugin in the Forum, it\'s not unlikely that you won\'t get no answers at all.', $domain);?>
@@ -76,7 +76,7 @@ class SQLiteIntegrationDocument {
     	<li><strong><?php _e('There are some plugins that you can\'t use. No way around.<br />', $domain);?></strong>
       <?php _e('Some plugins can\'t be activated or work properly. See the &quot;Plugin Compatibility/Incompatibility&quot; section.', $domain);?></li>
       <li><strong><?php _e('There are some plugins that you can\'t use without rewriting some codes in them.<br />', $domain);?></strong>
-      <?php echo sprintf(__('Some plugins do work fine if you rewrite MySQL functions. I made some patch files and <a href="%s?page=patch">Patch Utility</a>. See also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration">Plugin Page</a> for more details.', $domain), $utils->show_parent());?></li>
+      <?php echo sprintf(__('Some plugins do work fine if you rewrite MySQL functions. I made some patch files and <a href="%s?page=patch">Patch Utility</a>. See also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration/#plugin-compat">SQLite Integration Page</a> for more details.', $domain), $utils->show_parent());?></li>
     </ol>
     <p>
     <?php _e('And there may be other problems I overlooked. If you find malfunctionality, please let me know at the <a href="http://wordpress.org/support/plugin/sqlite-integration">Support Forum</a>.', $domain);?>

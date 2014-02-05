@@ -129,12 +129,11 @@ msgstr "パッチ"
 
 #: utilities/documentation.php:32
 msgid ""
-"This is a brief documentation about this plugin. For more details, see also "
-"the <a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration\">Plugin "
-"Page</a>."
+"This is a brief documentation about this plugin. For more details, see also the "
+"<a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration/\">SQLite Integration page</a>."
 msgstr ""
 "このプラグインについての短いドキュメントです。詳しくは、<a href=\"http://dogwood.skr.jp/wordpress/"
-"sqlite-integration\">プラグインのページ</a>をご覧ください。"
+"sqlite-integration/\">SQLite Integration</a> のページ</a>をご覧ください。"
 
 #: utilities/documentation.php:35
 msgid ""
@@ -266,12 +265,12 @@ msgstr ""
 msgid ""
 "Some plugins do work fine if you rewrite MySQL functions. I made some patch "
 "files and <a href=\"%s?page=patch\">Patch Utility</a>. See also the <a href="
-"\"http://dogwood.skr.jp/wordpress/sqlite-integration\">SQLite Integration page</a> for "
-"more details."
+"\"http://dogwood.skr.jp/wordpress/sqlite-integration/#plugin-compat\">SQLite Integration"
+" Page</a> for more details."
 msgstr ""
 "MySQLの関数を書き換えると動作するプラグインがあります。いくつかはパッチファイルと、<a href=\"%s?page=patch\">"
-"パッチをあてる</a>ページを作りました。<a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration\">"
-"プラグインのページ</a>もご覧ください。"
+"パッチをあてる</a>ページを作りました。<a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration-ja/#plugin-compat\">"
+"SQLite Integration のページ</a>もご覧ください。"
 
 #: utilities/documentation.php:74
 msgid ""
@@ -429,13 +428,40 @@ msgstr "エラー! ファイル%sは削除されていません。"
 msgid "Error!: patches directory is not accessible."
 msgstr "エラー! パッチ・ディレクトリにアクセスできません。"
 
+msgid "Unable to create a patch directory."
+msgstr "パッチ・ディレクトリを作成できませんでした。"
+
+msgid "Unable to create a .htaccess file."
+msgstr ".htaccess ファイルを作成できませんでした。"
+
+msgid "Invalid operation."
+msgstr "不正な操作です。"
+
+msgid "File is too large to upload."
+msgstr "ファイルサイズが制限を越えています。"
+
+msgid "File upload is not complete."
+msgstr "ファイルアップロードは完了しませんでした。"
+
+msgid "File is not uploaded."
+msgstr "ファイルはアップロードされませんでした。"
+
+msgid "Temporary directory is not writable."
+msgstr "テンポラリ・ディレクトリに書込みできません。"
+
+msgid "File cannot be written on the disk."
+msgstr "ファイルをディスクに書き込めません。"
+
+msgid "Unknown error."
+msgstr "不明なエラーです。"
+
 #: utilities/patch.php:142
-msgid "File is uploaded"
+msgid "File is successfully uploaded."
 msgstr "ファイルをアップロードしました"
 
 #: utilities/patch.php:146
-msgid "File is not uploaded"
-msgstr "ファイルはアップロードされていません"
+msgid "File upload failed. Possible file upload attack."
+msgstr "アップロードに失敗しました。不正なファイルです。"
 
 #: utilities/patch.php:150
 msgid "File is not selected"
@@ -630,9 +656,11 @@ msgstr "ファイルを選択"
 #: utilities/patch.php:286
 msgid ""
 "Select file from your computer. If the file name is the same as existent "
-"file, this operation will override it."
+"file, this operation will override it. You can't upload the file whose "
+"size is over 500kB."
 msgstr ""
 "あなたのコンピュータにあるファイルを選択します。ファイル名がすでに存在する場合は、それを上書きします。"
+"500kB を越えるサイズのファイルはアップロードできません。"
 
 #: utilities/patch.php:288
 msgid "Upload"
@@ -704,6 +732,16 @@ msgstr "たぶん可"
 #: utilities/utility.php:254
 msgid "Checked"
 msgstr "チェック済"
+
+msgid "Checked*"
+msgstr "チェック済*"
+
+msgid ""
+"\"Checked*\" with an asterisk is from the users' information. "
+"I didn't check myself yet. If you found any malfunctioning, please let me know."
+msgstr ""
+"「チェック済*」のようにアステリスクのついたものは、ユーザからの情報にもとづいたものです。"
+"私自身はチェックしていません。もし、不具合があるようでしたら、お知らせください。"
 
 #: utilities/utility.php:257 utilities/utility.php:263
 msgid "Not Checked"
@@ -968,11 +1006,17 @@ msgstr "データベースの最適化、エラーログ、初期化ファイル
 
 #: utilities/utility.php:695
 msgid "Please select backup file(s)."
-msgstr "データベースを最適化する"
+msgstr "バックアップファイルを選択してください。"
 
 #: utilities/utility.php:704
 msgid "Error! Please remove file(s) manyally."
 msgstr "エラー! 手動でファイルを削除してください。"
+
+msgid "Please select backup file."
+msgstr "バックアップファイルを選択してください。"
+
+msgid "Please select one file at a time."
+msgstr "複数ファイルは選択できません。"
 
 #: utilities/utility.php:718
 msgid "Database Optimization, Error Log, Init File"
@@ -1025,9 +1069,16 @@ msgid ""
 msgstr ""
 "バックアップファイルを削除したい場合は、ファイルをチェックして削除ボタンをクリックしてください。複数ファイルを選択できます。"
 
+msgid ""
+"If you want to download a file, check the file name and click the Download button."
+" Please check one file at a time."
+msgstr ""
+"バックアップファイルをダウンロードしたい場合は、ファイルをチェックしてダウンロードボタンをクリックしてください。"
+"1ファイルのみ選択できます。"
+
 #: utilities/utility.php:748
-msgid "Delete"
-msgstr "削除"
+msgid "Delete/Download"
+msgstr "削除/ダウンロード"
 
 #: utilities/utility.php:749
 msgid "Backup Files"
@@ -1050,6 +1101,11 @@ msgid ""
 "continue."
 msgstr ""
 "バックアップファイルを削除します。\\n\\n中止する場合は[Cancel]を、続ける場合は[OK]をクリックしてください。"
+
+msgid ""
+"Are you sure to download backup file?\\n\\nClick [Cancel] to stop, [OK] to continue."
+msgstr ""
+"バックアップファイルをダウンロードします。\\n\\n中止する場合は[Cancel]を、続ける場合は[OK]をクリックしてください。"
 
 #: utilities/utility.php:768
 msgid "SQLite Integration Error Log"

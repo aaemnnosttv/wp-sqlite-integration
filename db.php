@@ -18,8 +18,16 @@ if (!defined('ABSPATH')) { // Oh, you are not WordPress!
  * USE_MYSQL is a directive for using MySQL for database.
  * If you want to change the database from SQLite to MySQL or from MySQL to SQLite,
  * the line below in the wp-config.php will enable you to use MySQL.
+ * 
  * <code>
  * define('USE_MYSQL', true);
+ * </code>
+ * 
+ * If you want to use SQLite, the line below will do. Or simply removing the line will
+ * be enough.
+ * 
+ * <code>
+ * define('USE_MYSQL', false);
  * </code>
  */
 if (defined('USE_MYSQL') && USE_MYSQL === true) return;

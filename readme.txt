@@ -157,13 +157,17 @@ When query_posts() or WP_Query() is used, some options didn't work properly. Whe
 
 == Changelog ==
 
-= 1.5.1 (2014-01-00) =
+= 1.5.1 (2014-02-06) =
 * Fixed the bug for 'SQL_CALC_FOUND_ROW' statement. This is for the main query and WP_Query concerning paging information.
 * Fixed the bug that the back quote in the comments was removed.
+* Added the feature to download a backup file to a local machine.
 * Revised all the doc strings in the sourcse code for PHP documentor.
 * Changed the documentation.
 * Fixed minor bugs and typos.
 * Tested to install WordPress 3.8.1 and 3.9 beta.
+* Augumented the plugin compatibility list.
+* Some functions in WordPress that can't be used are made to work.
+* Some more user defined functions are added.
 
 = 1.5 (2013-12-17) =
 * Tested WordPress 3.8 installation and compatibility.
