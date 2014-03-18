@@ -278,6 +278,23 @@ class PDOEngine extends PDO {
   /**
    * Function to execute query().
    * 
+   * Divide the query types into seven different ones. That is to say:
+   * 
+   * 1. SELECT SQL_CALC_FOUND_ROWS
+   * 2. INSERT
+   * 3. CREATE TABLE(INDEX)
+   * 4. ALTER TABLE
+   * 5. SHOW VARIABLES
+   * 6. DROP INDEX
+   * 7. THE OTHERS
+   * 
+   * #1 is just a tricky play. See the private function handle_sql_count() in query.class.php.
+   * From #2 through #5 call different functions respectively.
+   * #6 call the ALTER TABLE query.
+   * #7 is a normal process: sequentially call prepare_query() and execute_query().
+   * 
+   * #1 process has been changed since version 1.5.1.
+   * 
    * @param $query full SQL statement string
    * @return mixed according to the query type
    * @see PDO::query()
@@ -287,7 +304,7 @@ class PDOEngine extends PDO {
     
     $this->queries[] = "Raw query:\n$query";
     $res = $this->determine_query_type($query);
-    if (!$res) {
+    if (!$res && defined(PDO_DEBUG) && PDO_DEBUG) {
       $bailoutString = sprintf(__("<h1>Unknown query type</h1><p>Sorry, we cannot determine the type of query that is requested.</p><p>The query is %s</p>", 'sqlite-integration'), $query);
       $this->set_error(__LINE__, __FUNCTION__, $bailoutString);
     }
@@ -296,10 +313,11 @@ class PDOEngine extends PDO {
 				$_column = array('FOUND_ROWS()' => '');
 				$column  = array();
 				if (!is_null($this->found_rows_result)) {
-					$this->num_rows = count($this->found_rows_result);
-					foreach ($this->found_rows_result[0] as $key => $value) {
-						$_column['FOUND_ROWS()'] = $value;
-					}
+					$this->num_rows = $this->found_rows_result;
+					$_column['FOUND_ROWS()'] = $this->num_rows;
+// 					foreach ($this->found_rows_result[0] as $key => $value) {
+// 						$_column['FOUND_ROWS()'] = $value;
+// 					}
 					$column[]                = new ObjectArray($_column);
 					$this->results           = $column;
 					$this->found_rows_result = null;

@@ -176,14 +176,12 @@ class PDOSQLiteDriver {
 	 *
 	 * This is a kind of tricky play.
 	 * 1. remove SQL_CALC_FOUND_ROWS option, and give it to the pdo engine
-	 * 2. make another $wpdb instance, and execute SELECT COUNT(*) query
-	 * 3. give the returned value to the original instance variable without LIMIT
+	 * 2. make another $wpdb instance, and execute the rewritten query
+	 * 3. give the returned value (integer: number of the rows) to the original instance variable without LIMIT
 	 * 
-	 * When SQL statement contains GROUP BY option, SELECT COUNT query doesn't
-	 * go well. So we remove the GROUP BY, which means the returned value may
-	 * be a approximate one.
+	 * We no longer use SELECT COUNT query, because it returns the inexact values when used with WP_Meta_Query().
 	 * 
-	 * This kind of statement is required for WordPress to calculate the paging.
+	 * This kind of statement is required for WordPress to calculate the paging information.
 	 * see also WP_Query class in wp-includes/query.php
 	 * 
 	 * @access private
@@ -196,17 +194,18 @@ class PDOSQLiteDriver {
 			// we make the data for next SELECE FOUND_ROWS() statement
 			$unlimited_query = preg_replace('/\\bLIMIT\\s*.*/imsx', '', $this->_query);
       $unlimited_query = preg_replace('/\\bGROUP\\s*BY\\s*.*/imsx', '', $unlimited_query);
-			$unlimited_query = $this->_transform_to_count($unlimited_query);
+      // we no longer use SELECT COUNT query
+// 			$unlimited_query = $this->_transform_to_count($unlimited_query);
 			$_wpdb = new PDODB();
 			$result = $_wpdb->query($unlimited_query);
-			$wpdb->dbh->found_rows_result = $_wpdb->last_result;
+			$wpdb->dbh->found_rows_result = $result;
 			$_wpdb = null;
 		}
 	}
 	/**
 	 * Call back method to change SELECT query to SELECT COUNT().
 	 * 
-	 * revised for version 1.5.1
+	 * obsolite since version 1.5.1
 	 *
 	 * @param	string $query	the query to be transformed
 	 * @return string the transformed query
@@ -488,17 +487,39 @@ class PDOSQLiteDriver {
    * Method to handle ON DUPLICATE KEY UPDATE statement.
    * 
    * First we use SELECT query and check if INSERT is allowed or not.
-   * Rewriting procedure looks like a detour, but I've got no other way.
+   * Rewriting procedure looks like a detour, but I've got no other ways.
+   * 
+   * Added the literal check since the version 1.5.1.
    * 
    * @return void
    * @access private
    */
   private function execute_duplicate_key_update() {
+    $rewrite_flag          = true;
     $update                = false;
     $unique_keys_for_cond  = array();
     $unique_keys_for_check = array();
     $pattern =  '/^\\s*INSERT\\s*INTO\\s*(\\w+)?\\s*(.*)\\s*ON\\s*DUPLICATE\\s*KEY\\s*UPDATE\\s*(.*)$/ims';
     if (preg_match($pattern, $this->_query, $match_0)) {
+      $tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
+      $literal = false;
+      foreach ($tokens as $token) {
+        if (strpos($token, "'") !== false) {
+          if ($literal) {
+            $literal = false;
+          } else {
+            $literal = true;
+          }
+        } else {
+          if ($literal === false && stripos($token, 'ON DUPLICATE KEY UPDATE') !== false) {
+            $rewrite_flag = true;
+            break;
+          } else {
+            $rewrite_flag = false;
+          }
+        }
+      }
+      if (!$rewrite_flag) return;
       $table_name  = trim($match_0[1]);
       $insert_data = trim($match_0[2]);
       $update_data = trim($match_0[3]);

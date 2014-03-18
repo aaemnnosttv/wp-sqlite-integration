@@ -506,7 +506,8 @@ class SQLiteIntegrationUtils {
   		if (count($file_names) != 1) return 2;
   		$file_name = $file_names[0];
   		$file_path = FQDBDIR . $file_name;
-			$download_file_name = get_bloginfo('name') . '_' . $file_name;
+			$blog_name = str_replace(array(' ', '　', ';'), array('_', '_', '_'), get_bloginfo('name'));
+			$download_file_name = $blog_name . '_' . $file_name;
   		header('Pragma: public');
   		header('Cache-Control: must-revalidate,post-check=0,pre-check=0');
   		header('Content-Type: application/force-download');
