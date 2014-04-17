@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) { // Oh, you are not WordPress!
  * define('USE_MYSQL', false);
  * </code>
  */
-if (defined('USE_MYSQL') && USE_MYSQL === true) return;
+if (defined('USE_MYSQL') && USE_MYSQL) return;
 
 function pdo_log_error($message, $data = null) {
   

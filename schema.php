@@ -32,8 +32,7 @@ function make_db_sqlite() {
 	  $err_data = $err->errorInfo;
 	  $message  = 'Database connection error!<br />';
 	  $message .= sprintf("Error message is: %s", $err_data[2]);
-	  echo $message;
-	  return false;
+	  wp_die($message, 'Database Error!');
 	}
 
 	try {
@@ -86,8 +85,7 @@ function make_db_sqlite() {
 	    $pdo->rollBack();
 	    $message  =  sprintf("Error occured while creating tables or indexes...<br />Query was: %s<br />", var_export($rewritten_query, true));
 	    $message .= sprintf("Error message is: %s", $err_data[2]);
-	    echo $message;
-	    return false;
+	    wp_die($message, 'Database Error!');
 	  }
 	}
 

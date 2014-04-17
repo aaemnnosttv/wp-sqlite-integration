@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 1.5
+Tested up to: 3.9
+Stable tag: 1.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,13 +151,15 @@ You may be able to use 'WordPress Related Posts' or 'Related Posts' instead of t
 
 There are some among the incompatible plugins, which work fine by rewriting some codes. I give information about them and provide the patch files on [Plugins](http://dogwood.skr.jp/wordpress/plugins/).
 
+This plugin doesn't support 'WP_PLUGIN_URL' constant.
+
 == Upgrade Notice ==
 
 When query_posts() or WP_Query() is used, some options didn't work properly. When you post comments, the back quotes in the content was removed. These bugs and some minor ones are fixed. Documentations and doc strings are revised. WordPress 3.9 beta was tested. When auto upgrading fails, please try manual upgrade via FTP.
 
 == Changelog ==
 
-= 1.5.1 (2014-02-06) =
+= 1.6 (2014-04-10) =
 * Fixed the bug of error messaging control for the unknown query.
 * Fixed the bug for 'SQL_CALC_FOUND_ROW' statement. This is for the main query, WP_Query class and WP_Meta_Query concerning paging information.
 * Fixed the bug that the back quote in the comments was removed.
@@ -165,7 +167,7 @@ When query_posts() or WP_Query() is used, some options didn't work properly. Whe
 * Revised all the doc strings in the sourcse code for PHP documentor.
 * Changed the documentation.
 * Fixed minor bugs and typos.
-* Tested to install WordPress 3.8.1 and 3.9 beta.
+* Tested to install WordPress 3.8.2 and 3.9 beta.
 * Augumented the plugin compatibility list.
 * Some functions in wp-db.php, which was disabled by the plugin, is enabled and can be used.
 * Some more user defined functions are added.

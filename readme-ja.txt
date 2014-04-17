@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 1.5
+Tested up to: 3.9
+Stable tag: 1.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,7 +151,9 @@ SQLite に戻りたいときには、この行を次のように変更するか�
 
 たぶん、もっとあるでしょう。動作しないプラグインを見つけたら、お知らせいただけると助かります。
 
-非互換のプラグインの中には、少し修正をすると、使えるようになるものがあります。[Plugins(ja)](http://dogwood.skr.jp/wordpress/plugins-ja/)で情報を公開しいますので、参照してください。
+非互換のプラグインの中には、少し修正をすると、使えるようになるものがあります。[Plugins(ja)](http://dogwood.skr.jp/wordpress/plugins-ja/)で情報を公開していますので、参照してください。
+
+このプラグインは、'WP_PLUGIN_URL' 定数をサポートしません。
 
 == Upgrade Notice ==
 
@@ -159,7 +161,7 @@ query_posts() や WP_Query() を使うときに、オプションの一部が機
 
 == Changelog ==
 
-= 1.5.1 (2014-02-06) =
+= 1.6 (2014-04-27) =
 * 未対応のクエリに対するエラーメッセージのコントロールができていないのを修正しました。
 * SQL_CALC_FOUND_ROW ステートメントのバグを修正しました。メインクエリと WP_Query、WP_Meta_Query などのページング情報に関連したものです。
 * コメント本文からバッククォートが削除されるバグを修正しました。
@@ -167,7 +169,7 @@ query_posts() や WP_Query() を使うときに、オプションの一部が機
 * PHP documentor で使えるように、ソースコードのドキュメントを書き直しました。
 * このドキュメントを変えました。
 * マイナーな変更、修正がいくつかありました。
-* WordPress 3.8.1 と 3.9 alpha でインストールテストをしました。
+* WordPress 3.8.2 と 3.9 alpha でインストールテストをしました。
 * プラグイン互換リストを増補しました。
 * これまで使えなくしていた wp-db.php の関数を使えるようにしました。
 * いくつかのユーザ定義関数を追加しました。

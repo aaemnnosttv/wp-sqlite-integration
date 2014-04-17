@@ -78,6 +78,15 @@ class PDODB extends wpdb {
   		$collate = $this->collate;
   }
   /**
+   * Method to dummy out wpdb::set_sql_mode()
+   * 
+   * @see wpdb::set_sql_mode()
+   */
+  function set_sql_mode($modes = array()) {
+    unset($modes);
+    return;
+  }
+  /**
    * Method to select the database connection.
    * 
    * This overrides wpdb::select(), only to dummy out the MySQL function.
@@ -90,7 +99,13 @@ class PDODB extends wpdb {
     $this->ready = true;
     return;
   }
-
+  /**
+   * Method to dummy out wpdb::_weak_escape()
+   * 
+   */
+  function _weak_escape($string) {
+    return addslashes($string);
+  }
   /**
    * Method to escape characters.
    * 
@@ -172,7 +187,7 @@ class PDODB extends wpdb {
    * 
    * @see wpdb::db_connect()
    */
-  function db_connect() {
+  function db_connect($allow_bail=true) {
     if (WP_DEBUG) {
       $this->dbh = new PDOEngine();
     } else {
@@ -187,7 +202,13 @@ class PDODB extends wpdb {
     }
     $this->ready = true;
   }
-  
+  /**
+   * Method to dummy out wpdb::check_connection()
+   * 
+   */
+  function check_connection($allow_bail=true) {
+    return true;
+  }
   /**
    * Method to execute the query.
    * 
@@ -242,6 +263,19 @@ class PDODB extends wpdb {
       $return_val        = $this->num_rows;
     }
     return $return_val;
+  }
+  /**
+   * 
+   */
+  private function _do_query($query) {
+    if (defined('SAVEQUERIES') && SAVEQUERIES) {
+      $this->timer_start();
+    }
+    $this->result = $this->dbh->query($query);
+    $this->num_queries++;
+    if (defined('SAVEQUERIES') && SAVEQUERIES) {
+      $this->queries[] = array($query, $this->timer_stop(), $this->get_caller());
+    }
   }
   /**
    * Method to set the class variable $col_info.
@@ -299,5 +333,7 @@ class PDODB extends wpdb {
 if (!isset($wpdb)) {
 	global $wpdb;
 	$wpdb = new PDODB();
+	$is_enabled_foreign_keys = @$wpdb->get_var('PRAGMA foreign_keys');
+	if ($is_enabled_foreign_keys == '0') @$wpdb->query('PRAGMA foreign_keys = ON');
 }
 ?>

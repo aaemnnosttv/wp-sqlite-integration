@@ -78,6 +78,7 @@ class CreateQuery{
 		$this->rewrite_unsigned();
 		$this->rewrite_autoincrement();
 		$this->rewrite_primary_key();
+		$this->rewrite_foreign_key();
 		$this->rewrite_unique_key();
 		$this->rewrite_enum();
 		$this->rewrite_set();
@@ -190,19 +191,32 @@ class CreateQuery{
 	 */	
 	private function rewrite_primary_key(){
 		if ($this->has_primary_key) {
-			$this->_query  = preg_replace('/\\bprimary key\\s*\([^\)]*\)/ims', ' ', $this->_query);
+			$this->_query  = preg_replace('/\\s*primary key\\s*.*?\([^\)]*\)\\s*(,|)/i', ' ', $this->_query);
 		} else {
 		  // If primary key has an index name, we remove that name.
 		  $this->_query = preg_replace('/\\bprimary\\s*key\\s*.*?\\s*(\(.*?\))/im', 'PRIMARY KEY \\1', $this->_query);
 		}
 	}
+  /**
+   * Method for rewriting foreign key.
+   * 
+   * @access private
+   */
+  private function rewrite_foreign_key() {
+    $pattern = '/\\s*foreign\\s*key\\s*(|.*?)\([^\)]+?\)\\s*references\\s*.*/i';
+    if (preg_match_all($pattern, $this->_query, $match)) {
+      if (isset($match[1])) {
+        $this->_query = str_ireplace($match[1], '', $this->_query);
+      }
+    }
+  }
 	/**
 	 * Method for rewriting unique key.
 	 * 
 	 * @access private
 	 */	
 	private function rewrite_unique_key(){
-		$this->_query  = preg_replace_callback('/\\bunique key\\b([^\(]*)(\([^\)]*\))/ims', array($this, '_rewrite_unique_key'), $this->_query);
+		$this->_query  = preg_replace_callback('/\\bunique key\\b([^\(]*)(\(.*\))/im', array($this, '_rewrite_unique_key'), $this->_query);
 	}
 	/**
 	 * Callback method for rewrite_unique_key.
@@ -214,6 +228,9 @@ class CreateQuery{
 	  $index_name = trim($matches[1]);
 	  $col_name   = trim($matches[2]);
     $tbl_name   = $this->table_name;
+    if (preg_match('/\(\\d+?\)/', $col_name)) {
+    	$col_name = preg_replace('/\(\\d+?\)/', '', $col_name);
+    }
 	  $_wpdb = new PDODB();
 	  $results = $_wpdb->get_results("SELECT name FROM sqlite_master WHERE type='index'");
 	  $_wpdb = null;

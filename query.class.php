@@ -24,7 +24,30 @@ class PDOSQLiteDriver {
 	 * @var string
 	 */
 	public $_query = '';
-
+	/**
+	 * Variable to check if rewriting CALC_FOUND_ROWS is needed.
+	 * 
+	 * @var boolean
+	 */
+	private $rewrite_calc_found = false;
+	/**
+	 * Variable to check if rewriting ON DUPLICATE KEY UPDATE is needed.
+	 * 
+	 * @var boolean
+	 */
+	private $rewrite_duplicate_key = false;
+	/**
+	 * Variable to check if rewriting index hints is needed.
+	 * 
+	 * @var boolean
+	 */
+	private $rewrite_index_hint = false;
+	/**
+	 * Variable to check if rewriting BETWEEN is needed.
+	 * 
+	 * @var boolean
+	 */
+	private $rewrite_between = false;
 	/**
 	 * Method to rewrite a query string for SQLite to execute.
 	 * 
@@ -35,6 +58,7 @@ class PDOSQLiteDriver {
 	public function rewrite_query($query, $query_type){
 		$this->query_type = $query_type;
  		$this->_query = $query;
+ 		$this->parse_query();
 		switch ($this->query_type) {
 		  case 'truncate':
 		    $this->handle_truncate_query();
@@ -59,24 +83,24 @@ class PDOSQLiteDriver {
 		    $this->handle_show_index();
 		    break;
 		  case 'select':
-		    $this->strip_backticks();
+		    //$this->strip_backticks();
 		    $this->handle_sql_count();
 		    $this->rewrite_date_sub();
 		    $this->delete_index_hints();
 		    $this->rewrite_regexp();
-		    $this->rewrite_boolean();
+		    //$this->rewrite_boolean();
 		    $this->fix_date_quoting();
 		    $this->rewrite_between();
 		    break;
 		  case 'insert':
-		    $this->safe_strip_backticks();
+		    //$this->safe_strip_backticks();
 		    $this->execute_duplicate_key_update();
 		    $this->rewrite_insert_ignore();
 		    $this->rewrite_regexp();
 		    $this->fix_date_quoting();
 		    break;
 		  case 'update':
-		    $this->safe_strip_backticks();
+		    //$this->safe_strip_backticks();
 		    $this->rewrite_update_ignore();
 // 		    $this->_rewrite_date_sub();
 		    $this->rewrite_limit_usage();
@@ -85,7 +109,7 @@ class PDOSQLiteDriver {
 		    $this->rewrite_between();
 		    break;
 		  case 'delete':
-		    $this->strip_backticks();
+		    //$this->strip_backticks();
 		    $this->rewrite_limit_usage();
 		    $this->rewrite_order_by_usage();
 		    $this->rewrite_date_sub();
@@ -93,7 +117,7 @@ class PDOSQLiteDriver {
 		    $this->delete_workaround();
 		    break;
 		  case 'replace':
-		    $this->safe_strip_backticks();
+		    //$this->safe_strip_backticks();
 		    $this->rewrite_date_sub();
 		    $this->rewrite_regexp();
 		    break;
@@ -112,7 +136,61 @@ class PDOSQLiteDriver {
 		}
 		return $this->_query;
 	}
-	
+
+	/**
+	 * Method to parse query string and determine which operation is needed.
+	 * 
+	 * Remove backticks and change true/false values into 1/0. And determines
+	 * if rewriting CALC_FOUND_ROWS or ON DUPLICATE KEY UPDATE etc is needed.
+	 * 
+	 * @access private
+	 */
+	private function parse_query() {
+		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$literal = false;
+		$query_string = '';
+		foreach ($tokens as $token) {
+			if ($token == "'") {
+				if ($literal) {
+					$literal = false;
+				} else {
+					$literal = true;
+				}
+			} else {
+				if ($literal === false) {
+					if (strpos($token, '`') !== false) {
+						$token = str_replace('`', '', $token);
+					}
+          if (stripos($token, 'TRUE') !== false) {
+						$token = str_ireplace('TRUE', '1', $token);
+					}
+          if (stripos($token, 'FALSE') !== false) {
+						$token = str_ireplace('FALSE', '0', $token);
+					}
+          if (stripos($token, 'SQL_CALC_FOUND_ROWS') !== false) {
+						$this->rewrite_calc_found = true;
+					}
+          if (stripos($token, 'ON DUPLICATE KEY UPDATE') !== false) {
+						$this->rewrite_duplicate_key = true;
+					}
+          if (stripos($token, 'USE INDEX') !== false) {
+						$this->rewrite_index_hint = true;
+					}
+          if (stripos($token, 'IGNORE INDEX') !== false) {
+						$this->rewrite_index_hint = true;
+					}
+          if (stripos($token, 'FORCE INDEX') !== false) {
+						$this->rewrite_index_hint = true;
+					}
+          if (stripos($token, 'BETWEEN') !== false) {
+						$this->rewrite_between = true;
+					}
+				}
+			}
+			$query_string .= $token;
+		}
+		$this->_query = $query_string;
+	}
 	/**
 	 * method to handle SHOW TABLES query.
 	 * 
@@ -137,6 +215,8 @@ class PDOSQLiteDriver {
 	 * All the back quotes in the query string are removed automatically.
 	 * So it must not be used when INSERT, UPDATE or REPLACE query is executed.
 	 * 
+	 * Obsolite since 1.5.1
+	 * 
 	 * @access private
 	 */
 	private function strip_backticks(){
@@ -147,6 +227,8 @@ class PDOSQLiteDriver {
 	 * 
 	 * All the back quotes execpt user data to be inserted are revomved automatically.
 	 * This method must be used when INSERT, UPDATE or REPLACE query is executed.
+	 * 
+	 * Obsolite since 1.5.1
 	 * 
 	 * @access private
 	 */
@@ -187,20 +269,19 @@ class PDOSQLiteDriver {
 	 * @access private
 	 */
 	private function handle_sql_count(){
-		if (stripos($this->_query, 'SELECT SQL_CALC_FOUND_ROWS') !== false){
-			global $wpdb;
-			// first strip the code. this is the end of rewriting process
-			$this->_query    = str_ireplace('SQL_CALC_FOUND_ROWS', '', $this->_query);
-			// we make the data for next SELECE FOUND_ROWS() statement
-			$unlimited_query = preg_replace('/\\bLIMIT\\s*.*/imsx', '', $this->_query);
-      $unlimited_query = preg_replace('/\\bGROUP\\s*BY\\s*.*/imsx', '', $unlimited_query);
-      // we no longer use SELECT COUNT query
-// 			$unlimited_query = $this->_transform_to_count($unlimited_query);
-			$_wpdb = new PDODB();
-			$result = $_wpdb->query($unlimited_query);
-			$wpdb->dbh->found_rows_result = $result;
-			$_wpdb = null;
-		}
+		if (!$this->rewrite_calc_found) return;
+		global $wpdb;
+		// first strip the code. this is the end of rewriting process
+		$this->_query    = str_ireplace('SQL_CALC_FOUND_ROWS', '', $this->_query);
+		// we make the data for next SELECE FOUND_ROWS() statement
+		$unlimited_query = preg_replace('/\\bLIMIT\\s*.*/imsx', '', $this->_query);
+    //$unlimited_query = preg_replace('/\\bGROUP\\s*BY\\s*.*/imsx', '', $unlimited_query);
+    // we no longer use SELECT COUNT query
+		//$unlimited_query = $this->_transform_to_count($unlimited_query);
+		$_wpdb = new PDODB();
+		$result = $_wpdb->query($unlimited_query);
+		$wpdb->dbh->found_rows_result = $result;
+		$_wpdb = null;
 	}
 	/**
 	 * Call back method to change SELECT query to SELECT COUNT().
@@ -442,6 +523,8 @@ class PDOSQLiteDriver {
 	 * 
 	 * SQLite doesn't support true/false type, so we need to convert them to 1/0.
 	 * 
+	 * Obsolite since 1.5.1
+	 * 
 	 * @access private
 	 */
 	private function rewrite_boolean() {
@@ -495,31 +578,11 @@ class PDOSQLiteDriver {
    * @access private
    */
   private function execute_duplicate_key_update() {
-    $rewrite_flag          = true;
-    $update                = false;
+  	if (!$this->rewrite_duplicate_key) return;
     $unique_keys_for_cond  = array();
     $unique_keys_for_check = array();
     $pattern =  '/^\\s*INSERT\\s*INTO\\s*(\\w+)?\\s*(.*)\\s*ON\\s*DUPLICATE\\s*KEY\\s*UPDATE\\s*(.*)$/ims';
     if (preg_match($pattern, $this->_query, $match_0)) {
-      $tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
-      $literal = false;
-      foreach ($tokens as $token) {
-        if (strpos($token, "'") !== false) {
-          if ($literal) {
-            $literal = false;
-          } else {
-            $literal = true;
-          }
-        } else {
-          if ($literal === false && stripos($token, 'ON DUPLICATE KEY UPDATE') !== false) {
-            $rewrite_flag = true;
-            break;
-          } else {
-            $rewrite_flag = false;
-          }
-        }
-      }
-      if (!$rewrite_flag) return;
       $table_name  = trim($match_0[1]);
       $insert_data = trim($match_0[2]);
       $update_data = trim($match_0[3]);
@@ -654,33 +717,15 @@ class PDOSQLiteDriver {
    * @access private
    */
   private function rewrite_between() {
+  	if (!$this->rewrite_between) return;
   	$pattern = '/\\s*(\\w+)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s]*)?\\s*/ims';
   	if (preg_match($pattern, $this->_query, $match)) {
   		$column_name  = trim($match[1]);
   		$min_value    = trim($match[2]);
   		$max_value    = trim($match[3]);
   		$max_value    = rtrim($max_value);
-  		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
-  		$literal   = false;
-  		$rewriting = false;
-  		foreach ($tokens as $token) {
-  			if ($token == "'") {
-  				if ($literal) {
-  					$literal = false;
-  				} else {
-  					$literal = true;
-  				}
-  			} else {
-  				if ($literal === false && stripos($token, 'between') !== false) {
-  					$rewriting = true;
-  					break;
-  				}
-  			}
-  		}
-  		if ($rewriting) {
-	  		$replacement  = " $column_name >= '$min_value' AND $column_name <= '$max_value'";
-	  		$this->_query = str_ireplace($match[0], $replacement, $this->_query);
-  		}
+	  	$replacement  = " $column_name >= '$min_value' AND $column_name <= '$max_value'";
+	  	$this->_query = str_ireplace($match[0], $replacement, $this->_query);
   	}
   }
   /**

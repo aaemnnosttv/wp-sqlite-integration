@@ -400,7 +400,7 @@ class SQLiteIntegrationUtils {
    */
   private function get_backup_files() {
   	$db_name = basename(FQDB);
-  	$names_to_exclude = array('.', '..', '.htaccess', 'debug.txt', '.ht.sqlite', $db_name);
+  	$names_to_exclude = array('.', '..', '.htaccess', 'debug.txt', '.ht.sqlite', 'index.php', $db_name);
   	$backup_files = array();
   	if (is_dir(FQDBDIR)) {
   		if ($dir_handle = opendir(FQDBDIR)) {
@@ -952,21 +952,22 @@ class SQLiteIntegrationUtils {
       </p>
       </form>
 
-      <h3><?php _e('Edit Initial File (wp-content/db.php)', $domain)?></h3>
-      <p>
-        <?php _e('When you go &quot;Plugins &raquo; Edit Plugin&quot; page, you can edit plugin source file. But you can\'t see this file there because it is not in the plugin directory. If you need to edit this file, you can edit here. This settings may cause problems. <span class="alert">If you don\'t understand well, please don\'t edit this file</span>.', $domain)?>
-      </p>
-      <form action="" method="post">
+      <?php if (!(defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT) || !(defined('DISALLOW_FILE_DODS') && DISALLOW_FILE_MODS)) : ?>
+      <?php echo '<h3>';?>
+      <?php _e('Edit Initial File (wp-content/db.php)', $domain)?>
+      <?php echo '</h3><p>'; ?>
+      <?php _e('When you go &quot;Plugins &raquo; Edit Plugin&quot; page, you can edit plugin source file. But you can\'t see this file there because it is not in the plugin directory. If you need to edit this file, you can edit here. This settings may cause problems. <span class="alert">If you don\'t understand well, please don\'t edit this file</span>.', $domain)?>
+      <?php echo '</p>'; ?>
+      <?php echo '<form action="" method="post">'; ?>
       <?php if (function_exists('wp_nonce_field')) {
         wp_nonce_field('sqlitewordpress-db-save-stats');
-      }
-      ?>
-      <textarea name="dbfile" id="dbfile" cols="70" rows="10">
-<?php $this->show_db_php();?></textarea>
-      <p>
-      <input type="submit" name="sqlitewordpress_db_save" value="<?php _e('Save')?>" onclick="return confirm('<?php _e('Are you sure to save this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" class="button-primary">
-      </p>
-      </form>
+      }?>
+      <?php echo '<textarea name="dbfile" id="dbfile" cols="70" rows="10">'; ?>
+      <?php $this->show_db_php();?>
+      <?php echo '</textarea><p>'; ?>
+      <?php sprintf('<input type="submit" name="sqlitewordpress_db_save" value="%s" onclick="return confirm(\'%s\')" class="button-primary">', __('Save', $domain), __('Are you sure to save this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain)); ?>
+      <?php echo '</p></form>'; ?>
+      <?php endif;?>
       
       </div>
     <?php endif;
