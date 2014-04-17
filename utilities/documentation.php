@@ -1,16 +1,22 @@
 <?php
 /**
+ * This file defines SQLiteIntegrationDocument class.
+ * 
  * @package SQLite Integration
- * @version 1.1
- * @author Toshiyasu Kojima
- *
+ * @author Kojima Toshiyasu
  */
 /**
- * dispaly documentation page
+ * This class defines the methods to display the documentation page on the admin panel.
+ * 
  * TODO: separate database access methods and display methods for maintenance
  */
 class SQLiteIntegrationDocument {
+	/**
+	 * Method to display the document page.
+	 * 
+	 */
   function show_doc() {
+  	// textdomain is defined in the utils class
     global $utils;
     $domain = $utils->text_domain;
     if (is_multisite() && !current_user_can('manage_network_options')) {
@@ -25,12 +31,13 @@ class SQLiteIntegrationDocument {
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=sys-info"><?php _e('System Info', $domain); ?></a></li>
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=setting-file"><?php _e('Miscellaneous', $domain);?></a></li>
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=patch"><?php _e('Patch Utility', $domain);?></a></li>
+        <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
       </ul>
     </div>
     <div class="wrap" id="sqlite-admin-wrap">
     <h2><?php _e('Documentation', $domain); ?></h2>
     <p>
-    <?php _e('This is a brief documentation about this plugin. For more details, see also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration">Plugin Page</a>.', $domain);?>
+    <?php _e('This is a brief documentation about this plugin. For more details, see also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration/">SQLite Integration page</a>.', $domain);?>
     </p>
     <p>
     <?php _e('Please don\'t forget: WordPress DOES NOT OFFICIALLY SUPPORT any database other than MySQL. So if you ask about this plugin in the Forum, it\'s not unlikely that you won\'t get no answers at all.', $domain);?>
@@ -38,7 +45,7 @@ class SQLiteIntegrationDocument {
     
     <h3><?php _e('Features', $domain);?></h3>
     <p>
-    <?php _e('This plugin is a successor to <a href="http://wordpress.org/extend/plugins/pdo-for-wordpress/">PDO for WordPress</a>, which enabled WordPress to use SQLite for its database. But PDO for WordPress doesn\'t seem to be maintained any more only to be outdated. SQLite Integration makes use of the basic ideas and framework of PDO for WordPress, adds some new features and updates it to be able to work with the newest version of WordPress(3.5.1 and 3.6 beta).', $domain); ?>
+    <?php _e('This plugin is a successor to <a href="http://wordpress.org/extend/plugins/pdo-for-wordpress/">PDO for WordPress</a>, which enabled WordPress to use SQLite for its database. But PDO for WordPress doesn\'t seem to be maintained any more only to be outdated. SQLite Integration makes use of the basic ideas and framework of PDO for WordPress, adds some new features and updates it to be able to work with the newest version of WordPress(3.8.1).', $domain); ?>
     </p>
     <p>
     <?php _e('<a href="http://www.sqlite.org/">SQLite Web Page</a> says &mdash; SQLite is a &quot;software library that implements selfcontained, serverless, zero-configuration, transactional SQL database engine&quot;. It is &quot;a good choice for small to medium size websites&quot;. It\'s small and portable, and you don\'t need any database server system.', $domain); ?>
@@ -66,10 +73,10 @@ class SQLiteIntegrationDocument {
     <?php _e('SQLite Integration uses SQLite, so the limitations of SQLite is, as it is, those of SQLite Integration. MySQL is far from a simple SQL engine and has many extended features and functionalities. WordPress uses some of them. Among those are some SQLite doesn\'t implement. For those features that WordPress uses, I made them work with SQLite Integration. But for others that some plugins are using, SQLite Integration can\'t manipulate. So...', $domain); ?>
     </p>
     <ol>
-    	<li><strong><?php _e('There are some plugins that you can\'t use in any way.<br />', $domain);?></strong>
+    	<li><strong><?php _e('There are some plugins that you can\'t use. No way around.<br />', $domain);?></strong>
       <?php _e('Some plugins can\'t be activated or work properly. See the &quot;Plugin Compatibility/Incompatibility&quot; section.', $domain);?></li>
       <li><strong><?php _e('There are some plugins that you can\'t use without rewriting some codes in them.<br />', $domain);?></strong>
-      <?php echo sprintf(__('Some plugins do work fine if you rewrite MySQL functions. I made some patch files and <a href="%s?page=patch">Patch Utility</a>. See also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration">Plugin Page</a> for more details.', $domain), $utils->show_parent());?></li>
+      <?php echo sprintf(__('Some plugins do work fine if you rewrite MySQL functions. I made some patch files and <a href="%s?page=patch">Patch Utility</a>. See also the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration/#plugin-compat">SQLite Integration Page</a> for more details.', $domain), $utils->show_parent());?></li>
     </ol>
     <p>
     <?php _e('And there may be other problems I overlooked. If you find malfunctionality, please let me know at the <a href="http://wordpress.org/support/plugin/sqlite-integration">Support Forum</a>.', $domain);?>
@@ -86,7 +93,7 @@ class SQLiteIntegrationDocument {
   	  <p>
   	  <?php _e('SQLite Integration doesn\'t contain database maintenace functionality, because there are some other free or proprietary softwares that give you such functionalities. For example, these are among free softwares:', $domain);?>
   	  </p>
-  	  <ul>
+  	  <ul class="in-body-list">
   	    <li><a href="https://addons.mozilla.org/en-US/firefox/addon/sqlite-manager/">SQLite Manager Mozilla Addon</a>(<?php _e('my recommendation', $domain);?>)</li>
   	    <li><a href="http://www.sqlitemanager.org/">SQLiteManager</a>(<?php _e('unfortunately seems not to maintained...', $domain); ?>)</li>
   	  </ul>
@@ -102,15 +109,15 @@ class SQLiteIntegrationDocument {
       <?php _e('WordPress without its plugins is a king without people. Of course, you need plugins, I know.', $domain);?>
       </p>
   	  <p>
-  	  <?php echo sprintf(__('Most of the plugins will work fine with this plugin. But there are some that you need to rewrite some codes in them, and there are others that you can\'t use with this plugin. This is the list of the problematic plugins (far from complete). You can see informations about your installed plugins in the <a href="%s?page=sys-info">System Info</a> page. To see more details, please visit the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration">Plugin Page</a>.', $domain), $utils->show_parent());?>
+  	  <?php echo sprintf(__('This is the list of the problematic plugins (far from complete). You can see informations about your installed plugins in the <a href="%s?page=sys-info">System Info</a> page. To see more details, please visit the <a href="http://dogwood.skr.jp/wordpress/sqlite-integration">Plugin Page</a>.', $domain), $utils->show_parent());?>
   	  </p>
   	  
   	  <table class="widefat page fixed" id="plugins-table">
   	    <thead>
   	    <tr>
   	      <th data-sort='{"key":"name"}' class="item"><?php _e('Plugins Name', $domain); ?></th>
-  	      <th data-sort='{"key":"compat"}'><?php _e('Compatibility', $domain); ?></th>
-  	      <th data-sort='{"key":"reason"}'><?php _e('Reasons', $domain);?></th>
+  	      <th data-sort='{"key":"compat"}' class="compat"><?php _e('Compatibility', $domain); ?></th>
+  	      <th data-sort='{"key":"reason"}' class="reason"><?php _e('Reasons', $domain);?></th>
   	    </tr>
   	    </thead>
   	    <tbody>
@@ -131,62 +138,13 @@ class SQLiteIntegrationDocument {
               <td><?php _e('No', $domain);?></td>
               <?php endif;?>
               <td><?php echo $plugin_info->reason;?></td>
-            <?php endif;?>
             </tr>
+            <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
   	    </tbody>
   	  </table>
-  	  
-  	  <h3><?php _e('Caching Plugins', $domain); ?></h3>
-  	  <p>
-  	    <?php _e('Some plugins that give you cache functinality might cause problems. It is because they try to create the db.php file in wp-content directory, which file SQLite Integration is using.', $domain);?>
-  	  </p>
-  	  <p>
-  	  <?php _e('If those plugins overwrite the db.php file, SQLite Integration doesn\'t work. <span class="em">My recommendation is not to use caching plugins</span>. Even so, if you want a caching plugin, you could try <a href="http://wordpress.org/extend/plugins/wp-super-cache/">WP Super Cache</a>, which doesn\'t use db.php file. But no warranty, try at your own risk.', $domain);?>
-  	  </p>
-  	  <p>
-  	  <?php _e('I have not tested none of those caching plugins.', $domain);?>
-  	  </p>
-  	  <h3><?php _e('MySQL specific functions', $domain);?></h3>
-      <p>
-        <?php _e('Some plugins don\'t use WordPress database functions such as dbDelta(), and use PHP native MySQL functions when they create and manage tables in the database. But PHP doesn\'t permit redefining of the native functions (at least, under ordinary server setting). So SQLite Integration can\'t intercept and rewrite those functions.', $domain);?>
-      </p>
-      <p>
-      <?php _e('For example, you can see these codes in Google XML Sitemaps.', $domain);?>
-      </p>
-<pre class="code">
-$postRes = mysql_query($sql,$wpdb->dbh);
-</pre>
-      <p>
-      <?php _e('or in Camera Slideshow', $domain); ?>
-      </p>
-<pre class="code">
-if ( version_compare(mysql_get_server_info(), '4.1.0', '>=') ) {
-</pre>
-      <p>
-      <?php _e('Such functions as mysql_get_server_info() or mysql_query() are from the MySQL driver of PHP. Not only some plugins but WordPress uses them, but SQLite Integration has no way to rewrite or redefine them. If the plugin you want to use has those functions in it, it won\'t work or give the error messages.', $domain); ?>
-      </p>
-      <p>
-      <?php _e('So, you have to rewrite them for SQLite Integration can execute. The two example above can be rewritten like this:', $domain);?>
-      </p>
-<pre class="code">
-$postRes = $wpdb->query($sql);
-</pre>
-<pre class="code">
-if ( version_compare($wpdb->db_version(), '4.1.0', '>=') ) {
-</pre>
-      <p>
-      <?php _e('As for those functions in WordPress, I overrode the WordPress functions themselves that contains such MySQL functions as mysql_query() or mysql_real_escape_string().', $domain); ?>
-      </p>
-      <h3><?php _e('FULLTEXT index');?></h3>
-  	  <p>
-  	  <?php _e('Some plugins use FULLTEXT index of MySQL. Of course SQLite does have the functionality named &quot;full-text search&quot;. But it is not correlated with that of MySQL. In fact it is not an &quot;index&quot; and requires another new table for that. And it has a different syntax. So you can\'t use the plugins which uses FULLTEXT index', $domain);?>
-  	  </p>
-  	  <p>
-  	  <?php _e('If your language is not written by separating words with spaces, e.g. Japanese, Chinese or Thai, neither FULLTEXT index nor full-text search work effectively. Even if your language is space-separating-words one, you don\'t have to be disappointed. Whatever languages you use, you can use <a href="http://wordpress.org/extend/plugins/wordpress-23-related-posts-plugin/">WordPress Related Posts</a> or <a href="http://wordpress.org/extend/plugins/related-posts/">Related Posts</a> or others. They are working fine with SQLite Integration!', $domain);?>
-  	  </p>
-    </div>
+   </div>
     <?php endif;
   }
 }
