@@ -718,7 +718,7 @@ class PDOSQLiteDriver {
    */
   private function rewrite_between() {
   	if (!$this->rewrite_between) return;
-  	$pattern = '/\\s*(\\w+)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s]*)?\\s*/ims';
+  	$pattern = '/\\s*([^\\s\(]*)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s\)]*)?\\s*/ims';
   	if (preg_match($pattern, $this->_query, $match)) {
   		$column_name  = trim($match[1]);
   		$min_value    = trim($match[2]);

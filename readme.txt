@@ -159,7 +159,7 @@ When query_posts() or WP_Query() is used, some options didn't work properly. Whe
 
 == Changelog ==
 
-= 1.6 (2014-04-10) =
+= 1.6 (2014-04-17) =
 * Fixed the bug of error messaging control for the unknown query.
 * Fixed the bug for 'SQL_CALC_FOUND_ROW' statement. This is for the main query, WP_Query class and WP_Meta_Query concerning paging information.
 * Fixed the bug that the back quote in the comments was removed.
