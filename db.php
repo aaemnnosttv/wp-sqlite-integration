@@ -5,6 +5,7 @@
  * This file must be placed in the directory wordpress/wp-content/db.php.
  * WordPress loads this file automatically.
  * 
+ * @version 1.6.1
  * @package SQLite Integration
  * @author Kojima Toshiyasu
  *

@@ -26,6 +26,37 @@ class SQLiteIntegrationUtils {
   }
 
   /**
+   * Method to display update notice on the admin dashboard.
+   * 
+   * Check if db.php file is replaced with the apropriate version,
+   * and if not, display notice.
+   * 
+   * 
+   */
+  public static function show_admin_notice() {
+  	$notice_string = __('Upgrading Notice: To finish upgrading, please activate SQLite Integration and go Setting >> SQLite Integration >> Miscellaneous, and click the button &quot;update&quot; at the bottom of the page. Or else replace wp-content/db.php with the one in sqlite-integration directory manually.', 'sqlite-integration');
+  	$current_version = defined('SQLITE_INTEGRATION_VERSION') ? SQLITE_INTEGRATION_VERSION : '';
+    if (version_compare($current_version, '1.6.1', '=')) return;
+  	$version = '';
+  	if (defined('WP_CONTENT_DIR')) {
+  		$path = WP_CONTENT_DIR . '/db.php';
+  	} else {
+  		$path = ABSPATH . 'wp-content/db.php';
+  	}
+  	if (!$file_handle = @fopen($path, 'r')) return;
+  	while (($buffer = fgets($file_handle)) !== false) {
+  		if (stripos($buffer, '@version') !== false) {
+  			$version = str_ireplace('*@version ', '', $buffer);
+  			$version = trim($version);
+  			break;
+  		}
+  	}
+  	fclose($file_handle);
+  	if (empty($version) || version_compare($version, $current_version, '<')) {
+  		echo '<div class="updated sqlite-notice" style="padding:10px;line-height:150%;font-size:12px"><span>'.$notice_string.'</span></div>';
+  	}
+  }
+  /**
    * Method to read a error log file and returns its contents.
    * 
    * 'FQDBDIR/debug.txt' is the log file name.
@@ -176,7 +207,7 @@ class SQLiteIntegrationUtils {
    * 
    * If this file is not existent, shows message and returns false.
    * 
-   * @return string|boolean
+   * @return string
    * @access private
    */
   private function show_db_php() {
@@ -188,14 +219,14 @@ class SQLiteIntegrationUtils {
     if (file_exists($file)) {
       if (is_readable($file)) {
         $contents = file_get_contents($file);
-        echo $contents;
+        return $contents;
       } else {
-        echo 'file is not readable';
+        $contents = 'file is not readable';
       }
     } else {
-      echo 'file doesn\'t exist';
-      return false;
+      $contents = 'file doesn\'t exist';
     }
+    return $contents;
   }
   /**
    * Method to get the textarea content and write it to db.php file.
@@ -223,6 +254,37 @@ class SQLiteIntegrationUtils {
     }
     fclose($fh);
     return true;
+  }
+  /**
+   * Method to replace the old db.php with the new one.
+   * 
+   * @return boolean
+   * @access private
+   */
+  private function update_db_file() {
+  	$new_file = PDODIR . 'db.php';
+  	if (file_exists($new_file) && is_readable($new_file)) {
+  		$contents = file_get_contents($new_file);
+  	} else {
+  		return false;
+  	}
+  	if (defined('WP_CONTENT_DIR')) {
+  		$path = WP_CONTENT_DIR . '/db.php';
+  	} else {
+  		$path = ABSPATH . 'wp-content/db.php';
+  	}
+  	if (($handle = @fopen($path, 'w+')) && flock($handle, LOCK_EX)) {
+  		if (fwrite($handle, $contents) == false) {
+  			flock($handle, LOCK_UN);
+  			fclose($handle);
+  			return false;
+  		}
+  		flock($handle, LOCK_UN);
+  		fclose($handle);
+  	} else {
+  		return false;
+  	}
+  	return true;
   }
   /**
    * Method to optimize SQLite database.
@@ -863,6 +925,19 @@ class SQLiteIntegrationUtils {
 				echo '<div id="message" class="updated fade">' . $message . '</div>';
 			}
 		}
+		if (isset($_POST['sqliteintegration_update_db_file'])) {
+      check_admin_referer('sqliteintegration-db-update-stats');
+      $result = $this->update_db_file();
+      if ($result === false) {
+        $message = __('Couldn&quot;t update db.php file. Please replace it manually.', $domain);
+        echo '<div id="message" class="updated fade">'.$message.'</div>';
+      } else {
+        echo
+'<script type="text/javascript">(function() {jQuery(".sqlite-notice").addClass("hidden");})(jQuery);</script>';
+        $message = __('Your db.php is updated.', $domain);
+        echo '<div id="message" class="updated fade">'.$message.'</div>';
+      }
+    }
     if (isset($_GET['page']) && $_GET['page'] == 'setting-file') :?>
       <div class="navigation">
         <ul class="navi-menu">
@@ -937,22 +1012,18 @@ class SQLiteIntegrationUtils {
         wp_nonce_field('sqlitewordpress-log-reset-stats');
       }
       ?>
-      <textarea name="errorlog" id="errorlog" cols="70" rows="10">
-<?php $ret_val = $this->show_error_log();
+      <?php $ret_val = $this->show_error_log();
       if ($ret_val === false || empty($ret_val)) {
-        $message = __('No error messages are found', $domain);
-        echo $message;
-      } else {
-        echo $ret_val;
+        $ret_val = __('No error messages are found', $domain);
       }
       ?>
-      </textarea>
+      <textarea name="errorlog" id="errorlog" cols="70" rows="10"><?php echo $ret_val;?></textarea>
       <p>
       <input type="submit" name="sqlitewordpress_log_reset" value="<?php _e('Clear Log', $domain)?>" onclick="return confirm('<?php _e('Are you sure to clear Log?\n\nClick [Cancel] to stop, [OK] to continue.', $domain);?>')" class="button-primary">
       </p>
       </form>
 
-      <?php if (!(defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT) || !(defined('DISALLOW_FILE_DODS') && DISALLOW_FILE_MODS)) : ?>
+      <?php if (!(defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT) || !(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)) : ?>
       <?php echo '<h3>';?>
       <?php _e('Edit Initial File (wp-content/db.php)', $domain)?>
       <?php echo '</h3><p>'; ?>
@@ -962,13 +1033,20 @@ class SQLiteIntegrationUtils {
       <?php if (function_exists('wp_nonce_field')) {
         wp_nonce_field('sqlitewordpress-db-save-stats');
       }?>
-      <?php echo '<textarea name="dbfile" id="dbfile" cols="70" rows="10">'; ?>
-      <?php $this->show_db_php();?>
-      <?php echo '</textarea><p>'; ?>
-      <?php sprintf('<input type="submit" name="sqlitewordpress_db_save" value="%s" onclick="return confirm(\'%s\')" class="button-primary">', __('Save', $domain), __('Are you sure to save this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain)); ?>
+      <?php $db_contents = $this->show_db_php();?>
+      <?php echo '<textarea name="dbfile" id="dbfile" cols="70" rows="10">'.$db_contents.'</textarea><p>'; ?>
+      <?php printf('<input type="submit" name="sqlitewordpress_db_save" value="%s" onclick="return confirm(\'%s\')" class="button-primary">', __('Save', $domain), __('Are you sure to save this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain)); ?>
       <?php echo '</p></form>'; ?>
       <?php endif;?>
-      
+      <h3><?php __('Update db.php', $domain);?></h3>
+      <p><?php __('Replace the old db.php with the new one.', $domain);?></p>
+      <form action="" method="post">
+      <?php if (function_exists('wp_nonce_field')) {
+        wp_nonce_field('sqliteintegration-db-update-stats');
+      }
+      ?>
+      <p><?php printf('<input type="submit" name="sqliteintegration_update_db_file" value="%s" onclick="return confirm(\'%s\')" class="button-primary">', __('Update', $domain), __('Are you sure to update this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain));?></p>
+      </form>
       </div>
     <?php endif;
   }

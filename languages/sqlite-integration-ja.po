@@ -1313,3 +1313,31 @@ msgstr "ヌル"
 
 msgid "Default"
 msgstr "デフォルト"
+
+msgid ""
+"Upgrading Notice: To finish upgrading, please activate SQLite Integration "
+"and go Setting >> SQLite Integration >> Miscellaneous, and click the button &quot;update&quot; at"
+" the bottom of the page. Or else replace wp-content/db.php with the one in sqlite-integration "
+"directory manually."
+msgstr ""
+"注意: アップグレードを完了するには、SQLite Integration を有効化して、設定 >> SQLite Integration >> いろいろ "
+"ページに移り、ページの最下段にある「更新」ボタンをクリックしてください。あるいは、wp-content/db.php を sqlite-integration "
+"ディレクトリにある db.php で上書きしてください。"
+
+msgid "Update db.php"
+msgstr "db.php のアップデート"
+
+msgid "Replace the old db.php with the new one."
+msgstr "古い db.php を新しいファイルと入れ替えます。"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Are you sure to update this file?\n\nClick [Cancel] to stop, [OK] to continue."
+msgstr "このファイルを更新してもいいですか。\n\nやめるなら [Cancel] を、続けるなら [OK] をクリックしてください。"
+
+msgid "Your db.php is updated."
+msgstr "db.php がアップデートされました。"
+
+msgid "Couldn&quot;t update db.php file. Please replace it manually."
+msgstr "db.php ファイルをアップデートできませんでした。手動で置き換えてください。"

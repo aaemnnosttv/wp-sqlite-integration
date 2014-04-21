@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.6
+Stable tag: 1.6.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,9 +155,15 @@ This plugin doesn't support 'WP_PLUGIN_URL' constant.
 
 == Upgrade Notice ==
 
-When query_posts() or WP_Query() is used, some options didn't work properly. When you post comments, the back quotes in the content was removed. These bugs and some minor ones are fixed. Documentations and doc strings are revised. WordPress 3.9 beta was tested. When auto upgrading fails, please try manual upgrade via FTP.
+When query_posts() or WP_Query() is used, some options didn't work properly. When you post comments, the back quotes in the content was removed. These bugs and some minor ones are fixed. Documentations and doc strings are revised. WordPress 3.9 was tested. When auto upgrading fails, please try manual upgrade via FTP.
 
 == Changelog ==
+
+= 1.6.1 (2014-04-22) =
+* Fixed some bugs for using with WP Slimstat plugin.
+* Display admin notice when not replacing the old db.php with the new one (when necessary).
+* Add the feature for replacing the old db.php file with the button click.
+* Fixed the Japanese translation catalog file.
 
 = 1.6 (2014-04-17) =
 * Fixed the bug of error messaging control for the unknown query.
