@@ -1,24 +1,48 @@
 <?php
 /**
+ * This file contains the class that defines user defined functions for PDO library.
+ * 
+ * This file is for PHP 5.2.x or lesser. For PHP 5.3.x or later, functions.php is
+ * loaded. PHP version is checked in the db.php and that will load the apropriate
+ * one.
+ * 
  * @package SQLite Integration
- * @version 1.1
- * @author Kojima Toshiyasu, Justin Adie
+ * @author Kojima Toshiyasu
  *
  */
 
 /**
- * This class defines user defined functions(UDFs) for PDO
- * This replaces the functions used in the SQL statement with the PHP functions.
- * If you want another, add the name in the array and define the function with
- * PHP script.
+ * This class defines user defined functions(UDFs) for PDO library.
+ * 
+ * These functions replace those used in the SQL statement with the PHP functions.
+ * 
+ * Usage:
+ * 
+ * <code>
+ * new PDOSQLiteUDFS(ref_to_pdo_obj);
+ * </code>
+ * 
+ * This automatically enables ref_to_pdo_obj to replace the function in the SQL statement
+ * to the ones defined here.
  */
 class PDOSQLiteUDFS {
+	/**
+	 * Constructor
+	 * 
+	 * Initialize the user defined functions to the PDO object with PDO::sqliteCreateFunction().
+	 * 
+	 * @param reference to PDO object $pdo
+	 */
   public function __construct(&$pdo){
     foreach ($this->functions as $f=>$t) {
       $pdo->sqliteCreateFunction($f, array($this, $t));
     }
   }
-
+	/**
+	 * Array to associate MySQL function to the substituted one.
+	 * 
+	 * @var associative array
+	 */
   private $functions = array(
       'month'          => 'month',
       'year'           => 'year',
@@ -42,7 +66,6 @@ class PDOSQLiteUDFS {
       'subdate'        => 'date_sub',
       'localtime'      => 'now',
       'localtimestamp' => 'now',
-      //'date'=>'date',
       'isnull'         => 'isnull',
       'if'             => '_if',
       'regexpp'        => 'regexp',
@@ -50,6 +73,7 @@ class PDOSQLiteUDFS {
       'field'          => 'field',
       'log'            => 'log',
       'least'          => 'least',
+  		'greatest'       => 'greatest',
       'get_lock'       => 'get_lock',
       'release_lock'   => 'release_lock',
       'ucase'          => 'ucase',
@@ -57,36 +81,92 @@ class PDOSQLiteUDFS {
       'inet_ntoa'      => 'inet_ntoa',
       'inet_aton'      => 'inet_aton',
       'datediff'       => 'datediff',
-  		'locate'         => 'locate'
+  		'locate'         => 'locate',
+			'utc_date'       => 'utc_date',
+			'utc_time'       => 'utc_time',
+			'utc_timestamp'  => 'utc_timestamp',
+			'version'        => 'version'
   );
-
+  /**
+   * Method to extract the month value from the date.
+   *
+   * @param string representing the date formated as 0000-00-00.
+   * @return string representing the number of the month between 1 and 12.
+   */
   public function month($field){
     $t = strtotime($field);
     return date('n', $t);
   }
+  /**
+   * Method to extract the year value from the date.
+   * 
+   * @param string representing the date formated as 0000-00-00.
+   * @return string representing the number of the year.
+   */
   public function year($field){
     $t = strtotime($field);
     return date('Y', $t);
   }
+  /**
+   * Method to extract the day value from the date.
+   * 
+   * @param string representing the date formated as 0000-00-00.
+   * @return string representing the number of the day of the month from 1 and 31.
+   */
   public function day($field){
     $t = strtotime($field);
     return date('j', $t);
   }
+  /**
+   * Method to return the unix timestamp.
+   * 
+   * Used without an argument, it returns PHP time() function (total seconds passed
+   * from '1970-01-01 00:00:00' GMT). Used with the argument, it changes the value
+   * to the timestamp.
+   * 
+   * @param string representing the date formated as '0000-00-00 00:00:00'.
+   * @return number of unsigned integer
+   */
   public function unix_timestamp($field = null){
     return is_null($field) ? time() : strtotime($field);
   }
+  /**
+   * Method to emulate MySQL SECOND() function.
+   * 
+   * @param string representing the time formated as '00:00:00'.
+   * @return number of unsigned integer
+   */
   public function second($field){
     $t = strtotime($field);
     return intval( date("s", $t) );
   }
+  /**
+   * Method to emulate MySQL MINUTE() function.
+   * 
+   * @param string representing the time formated as '00:00:00'.
+   * @return number of unsigned integer
+   */
   public function minute($field){
     $t = strtotime($field);
     return  intval(date("i", $t));
   }
+  /**
+   * Method to emulate MySQL HOUR() function.
+   * 
+   * @param string representing the time formated as '00:00:00'.
+   * @return number
+   */
   public function hour($time){
     list($hours, $minutes, $seconds) = explode(":", $time);
     return intval($hours);
   }
+  /**
+   * Method to emulate MySQL FROM_UNIXTIME() function.
+   * 
+   * @param integer of unix timestamp
+   * @param string to indicate the way of formatting(optional)
+   * @return string formatted as '0000-00-00 00:00:00'.
+   */
   public function from_unixtime($field, $format=null){
     // $field is a timestamp
     //convert to ISO time
@@ -95,25 +175,76 @@ class PDOSQLiteUDFS {
 
     return is_null($format) ? $date : $self->dateformat($date, $format);
   }
+  /**
+   * Method to emulate MySQL NOW() function.
+   * 
+   * @return string representing current time formatted as '0000-00-00 00:00:00'.
+   */
   public function now(){
     return date("Y-m-d H:i:s");
   }
+  /**
+   * Method to emulate MySQL CURDATE() function.
+   * 
+   * @return string representing current time formatted as '0000-00-00'.
+   */
   public function curdate() {
     return date("Y-m-d");
   }
+  /**
+   * Method to emulate MySQL CHAR_LENGTH() function.
+   * 
+   * @param string
+   * @return unsigned integer for the length of the argument.
+   */
   public function char_length($field){
     return strlen($field);
   }
+  /**
+   * Method to emulate MySQL MD5() function.
+   * 
+   * @param string
+   * @return string of the md5 hash value of the argument.
+   */
   public function md5($field){
     return md5($field);
   }
+  /**
+   * Method to emulate MySQL RAND() function.
+   * 
+   * SQLite does have a random generator, but it is called RANDOM() and returns random
+   * number between -9223372036854775808 and +9223372036854775807. So we substitute it
+   * with PHP random generator.
+   * 
+   * This function uses mt_rand() which is four times faster than rand() and returns
+   * the random number between 0 and 1.
+   * 
+   * @return unsigned integer
+   */
   public function rand(){
-    return rand(0,1);
+    return mt_rand(0,1);
   }
+  /**
+   * Method to emulate MySQL SUBSTRING() function.
+   * 
+   * This function rewrites the function name to SQLite compatible substr(),
+   * which can manipulate UTF-8 characters.
+   * 
+   * @param string $text
+   * @param integer $pos representing the start point.
+   * @param integer $len representing the length of the substring(optional).
+   * @return string
+   */
   public function substring($text, $pos, $len=null){
-    if (is_null($len)) return substr($text, $pos-1);
-    else return substr($text, $pos-1, $len);
+  	return "substr($text, $pos, $len)";
   }
+  /**
+   * Method to emulate MySQL DATEFORMAT() function.
+   * 
+   * @param string date formatted as '0000-00-00' or datetime as '0000-00-00 00:00:00'.
+   * @param string $format
+   * @return string formatted according to $format
+   */
   public function dateformat($date, $format){
     $mysql_php_dateformats = array ( '%a' => 'D', '%b' => 'M', '%c' => 'n', '%D' => 'jS', '%d' => 'd', '%e' => 'j', '%H' => 'H', '%h' => 'h', '%I' => 'h', '%i' => 'i', '%j' => 'z', '%k' => 'G', '%l' => 'g', '%M' => 'F', '%m' => 'm', '%p' => 'A', '%r' => 'h:i:s A', '%S' => 's', '%s' => 's', '%T' => 'H:i:s', '%U' => 'W', '%u' => 'W', '%V' => 'W', '%v' => 'W', '%W' => 'l', '%w' => 'w', '%X' => 'Y', '%x' => 'o', '%Y' => 'Y', '%y' => 'y', );
     $t = strtotime($date);
@@ -121,6 +252,17 @@ class PDOSQLiteUDFS {
     $output =  date($format, $t);
     return $output;
   }
+  /**
+   * Method to emulate MySQL DATE_ADD() function.
+   * 
+   * This function adds the time value of $interval expression to $date.
+   * $interval is a single quoted strings rewritten by SQLiteQueryDriver::rewrite_query().
+   * It is calculated in the private function deriveInterval().
+   * 
+   * @param string $date representing the start date.
+   * @param string $interval representing the expression of the time to add.
+   * @return string date formated as '0000-00-00 00:00:00'.
+   */
   public function date_add($date, $interval) {
     $interval = $this->deriveInterval($interval);
     switch (strtolower($date)) {
@@ -141,6 +283,17 @@ class PDOSQLiteUDFS {
     }
     return $returnval;
   }
+  /**
+   * Method to emulate MySQL DATE_SUB() function.
+   * 
+   * This function substracts the time value of $interval expression from $date.
+   * $interval is a single quoted strings rewritten by SQLiteQueryDriver::rewrite_query().
+   * It is calculated in the private function deriveInterval().
+   * 
+   * @param string $date representing the start date.
+   * @param string $interval representing the expression of the time to substract.
+   * @return string date formated as '0000-00-00 00:00:00'.
+   */
   public function date_sub($date, $interval) {
     $interval = $this->deriveInterval($interval);
     switch (strtolower($date)) {
@@ -161,7 +314,13 @@ class PDOSQLiteUDFS {
     }
     return $returnval;
   }
-
+  /**
+   * Method to calculate the interval time between two dates value.
+   *
+   * @access private
+   * @param string $interval white space separated expression.
+   * @return string representing the time to add or substract.
+   */
 	private function deriveInterval($interval){
 		$interval = trim(substr(trim($interval), 8));
 		$parts = explode(' ', $interval);
@@ -252,25 +411,60 @@ class PDOSQLiteUDFS {
         return false;
 		}
 	}
-
+	/**
+	 * Method to emulate MySQL DATE() function.
+	 *
+	 * @param string $date formatted as unix time.
+	 * @return string formatted as '0000-00-00'.
+	 */
   public function date($date){
     return date("Y-m-d", strtotime($date));
   }
-
+  /**
+   * Method to emulate MySQL ISNULL() function.
+   *
+   * This function returns true if the argument is null, and true if not.
+   *
+   * @param various types $field
+   * @return boolean
+   */
   public function isnull($field){
     return is_null($field);
   }
-
+  /**
+   * Method to emulate MySQL IF() function.
+   *
+   * As 'IF' is a reserved word for PHP, function name must be changed.
+   *
+   * @param unknonw $expression the statement to be evaluated as true or false.
+   * @param unknown $true statement or value returned if $expression is true.
+   * @param unknown $false statement or value returned if $expression is false.
+   * @return unknown
+   */
   public function _if($expression, $true, $false){
     return ($expression == true) ? $true : $false;
   }
-
+  /**
+   * Method to emulate MySQL REGEXP() function.
+   *
+   * @param string $field haystack
+   * @param string $pattern: regular expression to match.
+   * @return integer 1 if matched, 0 if not matched.
+   */
   public function regexp($field, $pattern){
     $pattern = str_replace('/', '\/', $pattern);
     $pattern = "/" . $pattern ."/i";
     return preg_match ($pattern, $field);
   }
-
+  /**
+   * Method to emulate MySQL CONCAT() function.
+   *
+   * SQLite does have CONCAT() function, but it has a different syntax from MySQL.
+   * So this function must be manipulated here.
+   *
+   * @param string
+   * @return NULL if the argument is null | string conatenated if the argument is given.
+   */
   public function concat() {
     $returnValue = "";
     $argsNum = func_num_args();
@@ -283,20 +477,48 @@ class PDOSQLiteUDFS {
     }
     return $returnValue;
   }
-
+  /**
+   * Method to emulate MySQL FIELD() function.
+   *
+   * This function gets the list argument and compares the first item to all the others.
+   * If the same value is found, it returns the position of that value. If not, it
+   * returns 0.
+   *
+   * @param variable number of string, integer or double
+   * @return unsigned integer
+   */
   public function field() {
     $numArgs = func_num_args();
     if ($numArgs < 2 or is_null(func_get_arg(0))) {
-      return null;
+      return 0;
     }
     $arr = func_get_args();
     $searchString = strtolower(array_shift($arr));
     for ($i = 0; $i < $numArgs-1; $i++) {
       if ($searchString === strtolower($arr[$i])) return $i + 1;
     }
-    return null;
+    return 0;
   }
-
+  /**
+   * Method to emulate MySQL LOG() function.
+   *
+   * Used with one argument, it returns the natural logarithm of X.
+   * <code>
+   * LOG(X)
+   * </code>
+   * Used with two arguments, it returns the natural logarithm of X base B.
+   * <code>
+   * LOG(B, X)
+   * </code>
+   * In this case, it returns the value of log(X) / log(B).
+   *
+   * Used without an argument, it returns false. This returned value will be
+   * rewritten to 0, because SQLite doesn't understand true/false value.
+   *
+   * @param integer representing the base of the logarithm, which is optional.
+   * @param double value to turn into logarithm.
+   * @return double | NULL
+   */
   public function log() {
     $numArgs = func_num_args();
     if ($numArgs == 1) {
@@ -307,18 +529,36 @@ class PDOSQLiteUDFS {
       $arg2 = func_get_arg(1);
       return log($arg1)/log($arg2);
     } else {
-      return false;
+      return null;
     }
   }
-
-  public function least() {
-    $arr = func_get_args();
-    return min($arr);
-  }
-  
   /**
-   * These two functions are meaningless in SQLite
-   * So we return meaningless statement and do nothing
+   * Method to emulate MySQL LEAST() function.
+   *
+   * This function rewrites the function name to SQLite compatible function name.
+   *
+   * @return mixed
+   */
+  public function least() {
+    $arg_list = func_get_args();
+    return "min($arg_list)";
+  }
+  /**
+   * Method to emulate MySQL GREATEST() function.
+   *
+   * This function rewrites the function name to SQLite compatible function name.
+   *
+   * @return mixed
+   */
+  public function greatest() {
+  	$arg_list = func_get_args();
+  	return "max($arg_list)";
+  }
+  /**
+   * Method to dummy out MySQL GET_LOCK() function.
+   * 
+   * This function is meaningless in SQLite, so we do nothing.
+   * 
    * @param string $name
    * @param integer $timeout
    * @return string
@@ -326,39 +566,75 @@ class PDOSQLiteUDFS {
   public function get_lock($name, $timeout) {
     return '1=1';
   }
+  /**
+   * Method to dummy out MySQL RELEASE_LOCK() function.
+   * 
+   * This function is meaningless in SQLite, so we do nothing.
+   * 
+   * @param string $name
+   * @return string
+   */
   public function release_lock($name) {
     return '1=1';
   }
-  
   /**
-   * MySQL aliases for upper and lower functions
-   * @param unknown $string
-   * @return string
+   * Method to emulate MySQL UCASE() function.
+   *
+   * This is MySQL alias for upper() function. This function rewrites it
+   * to SQLite compatible name upper().
+   *
+   * @param string
+   * @return string SQLite compatible function name.
    */
   public function ucase($string) {
     return "upper($string)";
   }
+  /**
+   * Method to emulate MySQL LCASE() function.
+   * 
+   * This is MySQL alias for lower() function. This function rewrites it
+   * to SQLite compatible name lower().
+   * 
+   * @param string
+   * @return string SQLite compatible function name.
+   */
   public function lcase($string) {
     return "lower($string)";
   }
-  
   /**
-   * MySQL aliases for INET_NTOA and INET_ATON functions
-   * @param unsigned integer, string respectively
-   * @return string, unsigned integer respectively
+   * Method to emulate MySQL INET_NTOA() function.
+   *
+   * This function gets 4 or 8 bytes integer and turn it into the network address.
+   *
+   * @param unsigned long integer
+   * @return string
    */
   public function inet_ntoa($num) {
     return long2ip($num);
   }
+  /**
+   * Method to emulate MySQL INET_ATON() function.
+   * 
+   * This function gets the network address and turns it into integer.
+   * 
+   * @param string
+   * @return unsigned long integer
+   */
   public function inet_aton($addr) {
     $int_data = ip2long($addr);
     $unsigned_int_data = sprintf('%u', $address);
     return $unsigned_int_data;
   }
-  
   /**
-   * MySQL aliase for DATEDIFF function
-   * @param string, string
+   * Method to emulate MySQL DATEDIFF() function.
+   * 
+   * This function compares two dates value and returns the difference.
+   * 
+   * PHP 5.3.2 has a serious bug in DateTime::diff(). So if users' PHP is that version,
+   * we don't use that function. See https://bugs.php.net/bug.php?id=51184.
+   * 
+   * @param string start
+   * @param string end
    * @return string
    */
   public function datediff($start, $end) {
@@ -368,7 +644,16 @@ class PDOSQLiteUDFS {
     return $interval;
   }
   /**
-   * emulates MySQL LOCATE() function
+   * Method to emulate MySQL LOCATE() function.
+   * 
+   * This function returns the position if $substr is found in $str. If not,
+   * it returns 0. If mbstring extension is loaded, mb_strpos() function is
+   * used.
+   * 
+   * @param string needle
+   * @param string haystack
+   * @param integer position
+   * @return integer
    */
   public function locate($substr, $str, $pos = 0) {
   	if (!extension_loaded('mbstring')) {
@@ -385,5 +670,46 @@ class PDOSQLiteUDFS {
 	  	}
   	}
   }
+	/**
+	 * Method to return GMT date in the string format.
+	 * 
+	 * @param none
+	 * @return string formatted GMT date 'dddd-mm-dd'
+	 */
+	public function utc_date() {
+		return gmdate('Y-m-d', time());
+	}
+	/**
+	 * Method to return GMT time in the string format.
+	 * 
+	 * @param none
+	 * @return string formatted GMT time '00:00:00'
+	 */
+	public function utc_time() {
+		return gmdate('H:i:s', time());
+	}
+	/**
+	 * Method to return GMT time stamp in the string format.
+	 * 
+	 * @param none
+	 * @return string formatted GMT timestamp 'yyyy-mm-dd 00:00:00'
+	 */
+	public function utc_timestamp() {
+		return gmdate('Y-m-d H:i:s', time());
+	}
+	/**
+	 * Method to return MySQL version.
+	 * 
+	 * This function only returns the current newest version number of MySQL,
+	 * because it is meaningless for SQLite database.
+	 * 
+	 * @param none
+	 * @return string representing the version number: major_version.minor_version
+	 */
+	public function version() {
+//     global $required_mysql_version;
+//     return $required_mysql_version;
+		return '5.5';
+	}
 }
 ?>

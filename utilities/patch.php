@@ -1,16 +1,23 @@
 <?php
 /**
- * This file contains PatchUtils class
+ * This file defines PatchUtils class.
  * 
  * @package SQLite Integration
- * @since 1.1
- *
+ * @author Kojima Toshiyasu
+ */
+/**
+ * This class provides the methods for patching utilities.
+ * 
  */
 class PatchUtils {
   /**
-   * Reads wp-content/uploads/patches directory and returns file names in it.
+   * Method to read the patch directory and returns the list of the files in it.
+   * 
+   * It reads wp-content/uploads/patches directory and returns file names in it.
    * If directory contains none, returns empty array.
+   * 
    * @return array
+   * @access private
    */
   private function get_patch_files() {
     $patch_files = array();
@@ -19,7 +26,7 @@ class PatchUtils {
     } else {
       if ($dir_handle = opendir(SQLitePatchDir)) {
         while (($file_name = readdir($dir_handle)) !== false) {
-          if ($file_name == '.' || $file_name == '..')
+          if ($file_name == '.' || $file_name == '..' || $file_name == '.htaccess')
             continue;
           $patch_files[] = $file_name;
         }
@@ -28,17 +35,24 @@ class PatchUtils {
     }
   }
   /**
-   * Execute patch command and apply it to the target plugins.
+   * Method to apply patch to the plugins.
+   * 
+   * It executes patch command and apply it to the target plugins.
    * If patch file(s) is not selected, returns false.
    * Or else returns array contains messages.
+   * 
    * @return boolean|array
+   * @access private
    */
   private function apply_patches() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     $installed_plugins = array();
     $file_names = array();
     $output = array();
     $retval = 0;
     $patch_results = array();
+    $message = '';
     if (isset($_POST['plugin_checked'])) {
       $file_names = $_POST['plugin_checked'];
     } else {
@@ -97,12 +111,18 @@ class PatchUtils {
     return $patch_results;
   }
   /**
-   * Delete uploaded patch file(s).
+   * Method to remove patch file(s) from the server.
+   * 
+   * It deletes uploaded patch file(s).
    * If patch file(s) is not selected, returns false.
    * Or else returns array contains messages.
+   * 
    * @return boolean|array
+   * @access private
    */
   private function delete_patch_files() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     $file_names = array();
     $rm_results = array();
     if (isset($_POST['plugin_checked'])) {
@@ -110,45 +130,104 @@ class PatchUtils {
     } else {
       return false;
     }
-    $command = 'rm -f';
-    foreach ($file_names as $file) {
-      if (chdir(SQLitePatchDir)) {
-        exec("$command $file", $output, $retval);
-      } else {
-        $rm_results[$file] = __('Error!: patches directory is not accessible.', $domain);
-      }
-      if ($retval > 0) {
-        $rm_results[$file] = sprintf(__('Error! Messages: %s', $domain), $output);
-      } else {
-        $rm_results[$file] = sprintf(__('File %s is deleted.', $domain), $file);
-      }
+    if (chdir(SQLitePatchDir)) {
+    	foreach ($file_names as $file) {
+    		if (unlink($file)) {
+    			$rm_results[$file] = sprintf(__('File %s is deleted.', $domain), $file);
+    		} else {
+    			$rm_results[$file] = sprintf(__('Error! File %s is not deleted.', $domain), $file);
+    		}
+    	}
+    } else {
+    	$rm_results[$file] = __('Error!: patches directory is not accessible.', $domain);
     }
     return $rm_results;
   }
   /**
-   * Uploads a patch file.
+   * Method to upload patch file(s) to the server.
+   * 
+   * It uploads a patch file to the server. You must have the permission to write to the
+   * temporary directory. If there isn't SQLitePatchDir, this method will create it and
+   * set the permission to 0707.
+   * 
    * No return values.
+   * 
+   * @return boolean
+   * @access private
    */
   private function upload_file() {
+  	global $utils;
+  	$domain = $utils->text_domain;
     if (!file_exists(SQLitePatchDir) || !is_dir(SQLitePatchDir)) {
-      mkdir(SQLitePatchDir, 0705, true);
+      if (!mkdir(SQLitePatchDir, 0707, true)) {
+      	$message = __('Unable to create a patch directory.', $domain);
+      	echo '<div id="message" class="updated fade">'.$message.'</div>';
+      	return false;
+      }
+    }
+    if (!is_file(SQLitePatchDir . '/.htaccess')) {
+    	$fp = fopen(SQLitePatchDir . '/.htaccess', 'w');
+    	if (!$fp) {
+    		$message = __('Unable to create a .htaccess file.', $domain);
+    		echo '<div id="message" class="updated fade">'.$message.'</div>';
+    		return false;
+    	}
+    	fwrite($fp, 'DENY FROM ALL');
+    	fclose($fp);
+    }
+    if (!isset($_FILES['upfile']['error']) || !is_int($_FILES['upfile']['error'])) {
+    	$message = __('Invalid operation.', $domain);
+    	echo '<div id="message" class="updated fade">'.$message.'</div>';
+    	return false;
+    } elseif ($_FILES['upfile']['error'] != UPLOAD_ERR_OK) {
+    	switch ($_FILES['upfile']['error']) {
+    		case UPLOAD_ERR_FORM_SIZE:
+    			$message = __('File is too large to upload.', $domain);
+    			echo '<div id="message" class="updated fade">'.$message.'</div>';
+    			break;
+    		case UPLOAD_ERR_PARTIAL:
+    			$message = __('File upload is not complete.', $domain);
+    			echo '<div id="message" class="updated fade">'.$message.'</div>';
+    			break;
+    		case UPLOAD_ERR_NO_FILE:
+    			$message = __('File is not uploaded.', $domain);
+    			echo '<div id="message" class="updated fade">'.$message.'</div>';
+    			break;
+    		case UPLOAD_ERR_NO_TMP_DIR:
+    			$message = __('Temporary directory is not writable.', $domain);
+    			echo '<div id="message" class="updated fade">'.$message.'</div>';
+    			break;
+    		case UPLOAD_ERR_CANT_WRITE:
+    			$message = __('File cannot be written on the disk.', $domain);
+    			echo '<div id="message" class="updated fade">'.$message.'</div>';
+    			break;
+    		default:
+    			$message = __('Unknown error.', $domain);
+    			break;
+    	}
+    	return false;
     }
     if (is_uploaded_file($_FILES['upfile']['tmp_name'])) {
-      if (move_uploaded_file($_FILES['upfile']['tmp_name'], SQLitePatchDir.'/'.$_FILES['upfile']['name'])) {
-        $message = __('File is uploaded', $domain);
+    	$file_full_path = SQLitePatchDir . '/' . $_FILES['upfile']['name'];
+      if (move_uploaded_file($_FILES['upfile']['tmp_name'], $file_full_path)) {
+        $message = __('File is successfully uploaded.', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
-        chmod(SQLitePatchDir.'/'.$_FILES['upfile']['name'], 0644);
+        chmod(SQLitePatchDir.'/'.$_FILES['upfile']['name'], 0606);
       } else {
-        $message = __('File is not uploaded', $domain);
+        $message = __('File upload failed. Possible file upload attack.', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
+        return false;
       }
     } else {
       $message = __('File is not selected', $domain);
       echo '<div id="message" class="updated fade">'.$message.'</div>';
+      return false;
     }
+    return true;
   }
   /**
-   * Displays patch util page
+   * Method to display the patch utility page on the admin panel.
+   * 
    */
   function show_patch_page() {
     global $utils;
@@ -198,7 +277,7 @@ class PatchUtils {
         }
         echo '</div>';
       } else {
-        $message = __('Error! Please remove files manually');
+        $message = __('Error! Please remove files manually', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
       }
     }
@@ -218,6 +297,7 @@ class PatchUtils {
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=sys-info"><?php _e('System Info', $domain);?></a></li>
         <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=setting-file"><?php _e('Miscellaneous', $domain);?></a></li>
         <li class="menu-selected"><?php _e('Patch Utility', $domain);?></li>
+        <li class="menu-item"><a href="<?php echo $utils->show_parent();?>?page=maintenance"><?php _e('Maintenance', $domain);?></a></li>
       </ul>
     </div>
     <div class="wrap" id="sqlite-admin-wrap">
@@ -279,7 +359,8 @@ class PatchUtils {
             wp_nonce_field('sqlitewordpress-plugin-patch-file-stats');
           }
           ?>
-          <label for="upload"><?php _e('Select file from your computer. If the file name is the same as existent file, this operation will override it.', $domain);?></label><br />
+          <input type="hidden" name="MAX_FILE_SIZE" value="500000" />
+          <label for="upload"><?php _e('Select file from your computer. If the file name is the same as existent file, this operation will override it. You can\'t upload the file whose size is over 500kB.', $domain);?></label><br />
           <input type="file" id="upload" name="upfile" size="60"/>
           <input type="submit" name="upload" id="submit-upload" class="button" value="<?php _e('Upload', $domain)?>" />
           </form>

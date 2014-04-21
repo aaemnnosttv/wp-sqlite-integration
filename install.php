@@ -1,13 +1,19 @@
 <?php
 /**
+ * This file contains the only one function wp_install().
+ * 
  * @package SQLite Integration
- * @version 1.1
  * @author Kojima Toshiyasu, Justin Adie
  *
  */
 
+if (!defined('ABSPATH')) {
+	echo 'Thank you, but you are not allowed to access this file.';
+	die();
+}
+
 /**
- * This function overrides wp_install() in wp-admin/upgrade.php
+ * This function overrides wp_install() in wp-admin/includes/upgrade.php
  */
 function wp_install($blog_title, $user_name, $user_email, $public, $deprecated = '', $user_password = '') {
   if (!empty($deprecated))
@@ -57,7 +63,16 @@ function wp_install($blog_title, $user_name, $user_email, $public, $deprecated =
   wp_new_blog_notification($blog_title, $guessurl, $user_id, ($email_password ? $user_password : __('The password you chose during the install.')));
   
   wp_cache_flush();
-  
+
+  if (isset($_SERVER['SERVER_SOFTWARE']) && stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false || isset($_SERVER['SERVER_SIGNATURE']) && stripos($_SERVER['SERVER_SIGNATURE'], 'apache') !== false) {
+  	;// Your server is Apache. Nothing to do more.
+  } else {
+    $server_message = sprintf('Your webserver doesn\'t seem to be Apache. So the database directory access restriction by the .htaccess file may not function. We strongly recommend that you should restrict the access to the directory %s in some other way.', FQDBDIR);
+    echo '<div style="position: absolute; margin-top: 250px; width: 700px; border: .5px dashed rgb(0, 0, 0);"><p style="margin: 10px;">';
+    echo $server_message;
+    echo '</p></div>';
+  }
+
   return array('url' => $guessurl, 'user_id' => $user_id, 'password' => $user_password, 'password_message' => $message);
 }
 ?>

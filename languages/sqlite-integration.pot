@@ -8,789 +8,130 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-21 13:11+0900\n"
+"POT-Creation-Date: 2014-02-06 01:39+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: db.php:46
-msgid "PHP version on this server is too old."
+#: sqlite-integration.php:205 sqlite-integration.php:235
+msgid "SQLite Integration"
 msgstr ""
 
-#: db.php:46
-#, php-format
-msgid ""
-"Your server is running PHP version %d but this version of WordPress requires "
-"at least 5.2.4"
-msgstr ""
-
-#: db.php:50
-msgid "PHP PDO Extension is not loaded."
-msgstr ""
-
-#: db.php:50
-msgid ""
-"Your PHP installation appears to be missing the PDO extension which is "
-"required for this version of WordPress."
-msgstr ""
-
-#: db.php:54
-msgid "PDO Driver for SQLite is missing."
-msgstr ""
-
-#: db.php:54
-msgid ""
-"Your PHP installtion appears not to have the right PDO drivers loaded. These "
-"are required for this version of WordPress and the type of database you have "
-"specified."
-msgstr ""
-
-#: install.php:42
+#: install.php:47
 msgid ""
 "<strong><em>Note that password</em></strong> carefully! It is a <em>random</"
 "em> password that was generated just for you."
 msgstr ""
 
-#: install.php:47
+#: install.php:52
 msgid "Your chosen password."
 msgstr ""
 
-#: install.php:58
+#: install.php:63
 msgid "The password you chose during the install."
 msgstr ""
 
-#: pdodb.class.php:96
+#: pdodb.class.php:127
 #, php-format
 msgid "WordPress database error %1$s for query %2$s made by %3$s"
 msgstr ""
 
-#: pdodb.class.php:98
+#: pdodb.class.php:129
 #, php-format
 msgid "WordPress database error %1$s for query %2$s"
 msgstr ""
 
-#: pdodb.class.php:134
+#: pdodb.class.php:185
 #, php-format
 msgid ""
 "<h1>Error establlishing a database connection</h1><p>We have been unable to "
 "connect to the specified database. <br />The error message received was %s"
 msgstr ""
 
-#: pdoengine.class.php:80 pdoengine.class.php:96 schema.php:26
-msgid "Database connection error!<br />"
-msgstr ""
-
-#: pdoengine.class.php:81 pdoengine.class.php:97 schema.php:27 schema.php:81
-msgid "Error message is: %s"
-msgstr ""
-
-#: pdoengine.class.php:115
-msgid ""
-"Unable to create the required directory! Please check your server settings."
-msgstr ""
-
-#: pdoengine.class.php:120 pdoengine.class.php:126
-msgid ""
-"Unable to create a file in the directory! Please check your server settings."
-msgstr ""
-
-#: pdoengine.class.php:148
+#: pdoengine.class.php:291
 #, php-format
 msgid ""
 "<h1>Unknown query type</h1><p>Sorry, we cannot determine the type of query "
 "that is requested.</p><p>The query is %s</p>"
 msgstr ""
 
-#: pdoengine.class.php:294
-#, php-format
-msgid "Problem preparing the PDO SQL Statement.  Error was: %s"
-msgstr ""
-
-#: pdoengine.class.php:327
-#, php-format
-msgid "Error while executing query! Error message was: %s"
-msgstr ""
-
-#: pdoengine.class.php:381
-msgid "The query is too big to parse properly"
-msgstr ""
-
-#: pdoengine.class.php:583
-#, php-format
-msgid "Problem in creating table or index. Error was: %s"
-msgstr ""
-
-#: pdoengine.class.php:626
-#, php-format
-msgid "Problem in executing alter query. Error was: %s"
-msgstr ""
-
-#: schema.php:80
-#, php-format
-msgid ""
-"Error occured while creating tables or indexes...<br />Query was: %s<br />"
-msgstr ""
-
-#: sqlite-integration.php:158 sqlite-integration.php:181
-msgid "SQLite DB"
-msgstr ""
-
-#: utilities/documentation.php:17 utilities/documentation.php:19
-#: utilities/patch.php:157 utilities/patch.php:159 utilities/utility.php:382
-#: utilities/utility.php:384 utilities/utility.php:555
-#: utilities/utility.php:557
-msgid "You are not allowed to access this page!"
-msgstr ""
-
-#: utilities/documentation.php:24 utilities/documentation.php:31
-#: utilities/patch.php:217 utilities/utility.php:354 utilities/utility.php:389
-#: utilities/utility.php:601
-msgid "Documentation"
-msgstr ""
-
-#: utilities/documentation.php:25 utilities/patch.php:218
-#: utilities/utility.php:358 utilities/utility.php:390
-#: utilities/utility.php:602
-msgid "System Info"
-msgstr ""
-
-#: utilities/documentation.php:26 utilities/patch.php:219
-#: utilities/utility.php:362 utilities/utility.php:391
-#: utilities/utility.php:603
-msgid "Miscellaneous"
-msgstr ""
-
-#: utilities/documentation.php:27 utilities/patch.php:220
-#: utilities/utility.php:366 utilities/utility.php:392
-#: utilities/utility.php:604
-msgid "Patch Utility"
-msgstr ""
-
-#: utilities/documentation.php:33
-msgid ""
-"This is a brief documentation about this plugin. For more details, see also "
-"the <a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration\">Plugin "
-"Page</a>."
-msgstr ""
-
-#: utilities/documentation.php:36
-msgid ""
-"Please don't forget: WordPress DOES NOT OFFICIALLY SUPPORT any database "
-"other than MySQL. So if you ask about this plugin in the Codex, it's not "
-"unlikely that you won't get no answers at all."
-msgstr ""
-
-#: utilities/documentation.php:39
-msgid "Features"
-msgstr ""
-
-#: utilities/documentation.php:41
-msgid ""
-"This plugin is a successor to <a href=\"http://wordpress.org/extend/plugins/"
-"pdo-for-wordpress/\">PDO for WordPress</a>, which enabled WordPress to use "
-"SQLite for its database. But PDO for WordPress doesn't seem to be maintained "
-"any more only to be outdated. SQLite Integration makes use of the basic ideas "
-"and framework of PDO for WordPress, adds some new features and updates it to "
-"be able to work with the newest version of WordPress(3.5.1 and 3.6 beta)."
-msgstr ""
-
-#: utilities/documentation.php:44
-msgid ""
-"<a href=\"http://www.sqlite.org/\">SQLite Web Page</a> says &mdash; SQLite "
-"is a &quot;software library that implements selfcontained, serverless, zero-"
-"configuration, transactional SQL database engine&quot;. It is &quot;a good "
-"choice for small to medium size websites&quot;. It's small and portable, and "
-"you don't need any database server system."
-msgstr ""
-
-#: utilities/documentation.php:47
-msgid ""
-"Unfortunately enough, WordPress only supports MySQL. Consequently it doesn't "
-"provide any APIs for SQLite. So if you want to create a website using "
-"WordPress without a database server, you've got to write a kind of wrapper "
-"program yourself to use SQLite. This is the way SQLite Integration goes."
-msgstr ""
-
-#: utilities/documentation.php:50
-msgid "SQLite Integration does the work as follows:"
-msgstr ""
-
-#: utilities/documentation.php:53
-msgid "Intercepts SQL statement for MySQL from WordPress"
-msgstr ""
-
-#: utilities/documentation.php:54
-msgid "Rewrites it as SQLite can execute"
-msgstr ""
-
-#: utilities/documentation.php:55
-msgid "Gives it to SQLite"
-msgstr ""
-
-#: utilities/documentation.php:56
-msgid "Gets the results from SQLite"
-msgstr ""
-
-#: utilities/documentation.php:57
-msgid "Format the results as MySQL returns, if necessary"
-msgstr ""
-
-#: utilities/documentation.php:58
-msgid "Gives back the results to WordPress"
-msgstr ""
-
-#: utilities/documentation.php:61
-msgid ""
-"WordPress doesn't know what has happened in the background and will be happy "
-"with it."
-msgstr ""
-
-#: utilities/documentation.php:64
-msgid "Limitations"
-msgstr ""
-
-#: utilities/documentation.php:66
-msgid ""
-"SQLite Integration uses SQLite, so the limitations of SQLite is, as it is, "
-"those of SQLite Integration. MySQL is far from a simple SQL engine and has "
-"many extended features and functionalities. WordPress uses some of them. "
-"Among those are some SQLite doesn't implement. For those features that "
-"WordPress uses, I made them work with SQLite Integration. But for others that "
-"some plugins are using, SQLite Integration can't manipulate. So..."
-msgstr ""
-
-#: utilities/documentation.php:69
-msgid "There are some plugins that you can't use in any way.<br />"
-msgstr ""
-
-#: utilities/documentation.php:70
-msgid ""
-"Some plugins can't be activated or work properly. See the &quot;Plugin "
-"Compatibility/Incompatibility&quot; section."
-msgstr ""
-
-#: utilities/documentation.php:71
-msgid ""
-"There are some plugins that you can't use without rewriting some codes in "
-"them.<br />"
-msgstr ""
-
-#: utilities/documentation.php:72
-#, php-format
-msgid ""
-"Some plugins do work fine if you rewrite MySQL functions. I made some patch "
-"files and <a href=\"%s?page=patch\">Patch Utility</a>. See also the <a href="
-"\"http://dogwood.skr.jp/wordpress/sqlite-integration\">Plugin Page</a> for "
-"more details."
-msgstr ""
-
-#: utilities/documentation.php:75
-msgid ""
-"And there may be other problems I overlooked. If you find malfunctionality, "
-"please let me know at the <a href=\"http://wordpress.org/support/plugin/"
-"sqlite-integration\">Support Forum</a>."
-msgstr ""
-
-#: utilities/documentation.php:77
-msgid "User Defined Functions"
-msgstr ""
-
-#: utilities/documentation.php:79
-msgid ""
-"SQLite Integration replaces some functions of MySQL with the user defined "
-"functions built in PHP PDO library. But some of the functions are "
-"meaningless in SQLite database: e.g. get_lock() or release_lock(). When "
-"SQLite Integration meets those functions, it does nothing but prevent the "
-"error."
-msgstr ""
-
-#: utilities/documentation.php:82
-msgid ""
-"If you want SQLite Integration to execute more functions, you can add the "
-"definition in the file sqlite-integration/functions.php (functions-5-2.php is "
-"for PHP 5.2 or lesser)."
-msgstr ""
-
-#: utilities/documentation.php:85
-msgid "Database Administration and Maintenance"
-msgstr ""
-
-#: utilities/documentation.php:87
-msgid ""
-"SQLite Integration doesn't contain database maintenace functionality, because "
-"there are some other free or proprietary softwares that give you such "
-"functionalities. For example, these are among free softwares:"
-msgstr ""
-
-#: utilities/documentation.php:90
-msgid "my recommendation"
-msgstr ""
-
-#: utilities/documentation.php:91
-msgid "unfortunately seems not to maintained..."
-msgstr ""
-
-#: utilities/documentation.php:94
-msgid ""
-"I'm not sure if future release may have some of the database maintenance "
-"functionality."
-msgstr ""
-
-#: utilities/documentation.php:100
-msgid "Plugin Compatibility/Incompatibility"
-msgstr ""
-
-#: utilities/documentation.php:102
-msgid ""
-"WordPress without its plugins is a king without people. Of course, you need "
-"plugins, I know."
-msgstr ""
-
-#: utilities/documentation.php:105
-#, php-format
-msgid ""
-"Most of the plugins will work fine with this plugin. But there are some that "
-"you need to rewrite some codes in them, and there are others that you can't "
-"use with this plugin. This is the list of the problematic plugins (far from "
-"complete). You can see informations about your installed plugins in the <a "
-"href=\"%s?page=sys-info\">System Info</a> page. To see more details, please "
-"visit the <a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration"
-"\">Plugin Page</a>."
-msgstr ""
-
-#: utilities/documentation.php:111
-msgid "Plugins Name"
-msgstr ""
-
-#: utilities/documentation.php:112
-msgid "Compatibility"
-msgstr ""
-
-#: utilities/documentation.php:113
-msgid "Reasons"
-msgstr ""
-
-#: utilities/documentation.php:127 utilities/utility.php:239
-#: utilities/utility.php:241
+#: utility.php:294 utility.php:296 documentation.php:134
 msgid "Needs Patch"
 msgstr ""
 
-#: utilities/documentation.php:129 utilities/utility.php:245
+#: utility.php:300 documentation.php:136
 msgid "Probably No"
 msgstr ""
 
-#: utilities/documentation.php:131 utilities/utility.php:251
-msgid "No"
-msgstr ""
-
-#: utilities/documentation.php:141
-msgid "Caching Plugins"
-msgstr ""
-
-#: utilities/documentation.php:143
-msgid ""
-"Some plugins that give you cache functinality might cause problems. It is "
-"because they try to create the db.php file in wp-content directory, which "
-"file SQLite Integration is using."
-msgstr ""
-
-#: utilities/documentation.php:146
-msgid ""
-"If those plugins overwrite the db.php file, SQLite Integration doesn't work. "
-"<span class=\"em\">My recommendation is not to use caching plugins</span>. "
-"Even so, if you want a caching plugin, you could try <a href=\"http://"
-"wordpress.org/extend/plugins/wp-super-cache/\">WP Super Cache</a>, which "
-"doesn't use db.php file. But no warranty, try at your own risk."
-msgstr ""
-
-#: utilities/documentation.php:149
-msgid "I have not tested none of those caching plugins."
-msgstr ""
-
-#: utilities/documentation.php:151
-msgid "MySQL specific functions"
-msgstr ""
-
-#: utilities/documentation.php:153
-msgid ""
-"Some plugins don't use WordPress database functions such as dbDelta(), and "
-"use PHP native MySQL functions when they create and manage tables in the "
-"database. But PHP doesn't permit redefining of the native functions (at "
-"least, under ordinary server setting). So SQLite Integration can't intercept "
-"and rewrite those functions."
-msgstr ""
-
-#: utilities/documentation.php:156
-msgid "For example, you can see these codes in Google XML Sitemaps."
-msgstr ""
-
-#: utilities/documentation.php:162
-msgid "or in Camera Slideshow"
-msgstr ""
-
-#: utilities/documentation.php:168
-msgid ""
-"Such functions as mysql_get_server_info() or mysql_query() are from the "
-"MySQL driver of PHP. Not only some plugins but WordPress uses them, but "
-"SQLite Integration has no way to rewrite or redefine them. If the plugin you "
-"want to use has those functions in it, it won't work or give the error "
-"messages."
-msgstr ""
-
-#: utilities/documentation.php:171
-msgid ""
-"So, you have to rewrite them for SQLite Integration can execute. The two "
-"example above can be rewritten like this:"
-msgstr ""
-
-#: utilities/documentation.php:180
-msgid ""
-"As for those functions in WordPress, I overrode the WordPress functions "
-"themselves that contains such MySQL functions as mysql_query() or "
-"mysql_real_escape_string()."
-msgstr ""
-
-#: utilities/documentation.php:182
-msgid "FULLTEXT index"
-msgstr ""
-
-#: utilities/documentation.php:184
-msgid ""
-"Some plugins use FULLTEXT index of MySQL. Of course SQLite does have the "
-"functionality named &quot;full-text search&quot;. But it is not correlated "
-"with that of MySQL. In fact it is not an &quot;index&quot; and requires "
-"another new table for that. And it has a different syntax. So you can't use "
-"the plugins which uses FULLTEXT index"
-msgstr ""
-
-#: utilities/documentation.php:187
-msgid ""
-"If your language is not written by separating words with spaces, e.g. "
-"Japanese, Chinese or Thai, neither FULLTEXT index nor full-text search work "
-"effectively. Even if your language is space-separating-words one, you don't "
-"have to be disappointed. Whatever languages you use, you can use <a href="
-"\"http://wordpress.org/extend/plugins/wordpress-23-related-posts-plugin/"
-"\">WordPress Related Posts</a> or <a href=\"http://wordpress.org/extend/"
-"plugins/related-posts/\">Related Posts</a> or others. They are working fine "
-"with SQLite Integration!"
-msgstr ""
-
-#: utilities/patch.php:53
-msgid "Patch command is not found"
-msgstr ""
-
-#: utilities/patch.php:56
-msgid "Patch command is not executable"
-msgstr ""
-
-#: utilities/patch.php:73
-msgid "Patch file name is invalid"
-msgstr ""
-
-#: utilities/patch.php:77
-msgid "Patch file version does not match with that of your plugin."
-msgstr ""
-
-#: utilities/patch.php:86
-msgid "Error! Plugin directory is not accessible."
-msgstr ""
-
-#: utilities/patch.php:89
-msgid "is patched successfully."
-msgstr ""
-
-#: utilities/patch.php:94 utilities/patch.php:121
-#, php-format
-msgid "Error! Messages: %s"
-msgstr ""
-
-#: utilities/patch.php:118
-msgid "Error!: patches directory is not accessible."
-msgstr ""
-
-#: utilities/patch.php:123
-#, php-format
-msgid "File %s is deleted."
-msgstr ""
-
-#: utilities/patch.php:138
-msgid "File is uploaded"
-msgstr ""
-
-#: utilities/patch.php:142
-msgid "File is not uploaded"
-msgstr ""
-
-#: utilities/patch.php:146
-msgid "File is not selected"
-msgstr ""
-
-#: utilities/patch.php:164 utilities/patch.php:166 utilities/patch.php:186
-#: utilities/patch.php:188 utilities/patch.php:208 utilities/patch.php:210
-msgid "You are not allowed to do this operation!"
-msgstr ""
-
-#: utilities/patch.php:170 utilities/patch.php:192
-msgid "Please select patch file(s)"
-msgstr ""
-
-#: utilities/patch.php:179
-msgid "None of the patches is applied!"
-msgstr ""
-
-#: utilities/patch.php:201
-msgid "Error! Please remove files manually"
-msgstr ""
-
-#: utilities/patch.php:224
-msgid "Patch Files Upload and Apply"
-msgstr ""
-
-#: utilities/patch.php:225
-msgid "What you can do in this page"
-msgstr ""
-
-#: utilities/patch.php:227
-msgid ""
-"I made patch files for some plugins that are incompatible with SQLite "
-"Integration and need rewriting. And I wrote in the <a href=\"http://dogwood."
-"skr.jp/wordpress/sqlite-integration\">Plugin Page</a> about how to apply a "
-"patch file to the plugin. But the command line interface sometimes "
-"embarrasses some people, especially newbies."
-msgstr ""
-
-#: utilities/patch.php:230
-msgid ""
-"In this page, you can upload patch files and apply them automatically. But "
-"there are some requirements."
-msgstr ""
-
-#: utilities/patch.php:233
-msgid ""
-"Think before you leap. Is the plugin to which you are going to apply patch "
-"really necessary for your site? Did you search in the <a href=\"http://"
-"wordpress.org/extend/plugins/\">Plugin Directory</a> for the substitutes?"
-msgstr ""
-
-#: utilities/patch.php:234
-msgid ""
-"Your PHP script has the permission to create a directory and write a file in "
-"it."
-msgstr ""
-
-#: utilities/patch.php:235
-msgid "Your PHP scripts can execute exec() function on the server."
-msgstr ""
-
-#: utilities/patch.php:236
-msgid ""
-"Your PHP script can execute &quot;patch&quot; shell command.(Script will "
-"check if it is executable or not.)"
-msgstr ""
-
-#: utilities/patch.php:239
-msgid ""
-"If uploading fails, it' very likely that application will fail. When you try "
-"uploading with FTP client, the patch files must be put into the directory wp-"
-"content/uploads/patches/."
-msgstr ""
-
-#: utilities/patch.php:242
-msgid ""
-"You can create your patch file yourself. When you create one, please test it "
-"on your local server first and check if it works fine without PHP error or "
-"notice ( set error_reporting(E_ALL) ). If you use this utility, name your "
-"patch file as follows:"
-msgstr ""
-
-#: utilities/patch.php:245
-msgid "Use the file name beginning with the plugin directory name."
-msgstr ""
-
-#: utilities/patch.php:246
-msgid "Use the plugin version number after the directory name with underscore."
-msgstr ""
-
-#: utilities/patch.php:247
-msgid "Use the suffix .patch."
-msgstr ""
-
-#: utilities/patch.php:248
-msgid "Use diff command options &quot;-Naur&quot;."
-msgstr ""
-
-#: utilities/patch.php:251
-msgid ""
-"For example, the patch file for the plugin &quot;Debug Bar&quot; is &quot;"
-"debug-bar_0.8.patch&quot;. Script interprets &quot;debug-bar&quot; as the "
-"target directory and &quot;0.8&quot; as the target version. If the version "
-"number doesn't match with the target, script shows the error message and "
-"skip applying the patch file. And script will reject any other file name."
-msgstr ""
-
-#: utilities/patch.php:254
-msgid "How to install, patch and activate plugins"
-msgstr ""
-
-#: utilities/patch.php:256
-msgid "Install the plugin (not yet activate it)"
-msgstr ""
-
-#: utilities/patch.php:257
-msgid "Upload the patch file (if any) to the server and ppply it in this page"
-msgstr ""
-
-#: utilities/patch.php:258
-msgid "Back to the installed plugin page and activate it"
-msgstr ""
-
-#: utilities/patch.php:260
-msgid "How to upgrade plugins"
-msgstr ""
-
-#: utilities/patch.php:262
-msgid "When upgrading the plugin, it will be safer to follow next steps."
-msgstr ""
-
-#: utilities/patch.php:265
-msgid "Deactivate the plugin"
-msgstr ""
-
-#: utilities/patch.php:266
-msgid "Upgrade the plugin"
-msgstr ""
-
-#: utilities/patch.php:267
-msgid "Upload the patch file (if any) and apply it"
-msgstr ""
-
-#: utilities/patch.php:268
-msgid "Reactivate the plugin"
-msgstr ""
-
-#: utilities/patch.php:270
-msgid ""
-"If there isn't a patch file to match with the newest version of the plugin, "
-"it won't work properly. Please wait for somebody to make one or rewrite the "
-"codes checking the patch file for the previous version (it's not so "
-"difficult a matter, I guess, for almost all the cases, you'll have only to "
-"replace the MySQL functions with the WordPress built-in functions)."
-msgstr ""
-
-#: utilities/patch.php:271
-msgid "Upload and Apply"
-msgstr ""
-
-#: utilities/patch.php:275
-msgid "File Select"
-msgstr ""
-
-#: utilities/patch.php:282
-msgid ""
-"Select file from your computer. If the file name is the same as existent "
-"file, this operation will override it."
-msgstr ""
-
-#: utilities/patch.php:284
-msgid "Upload"
-msgstr ""
-
-#: utilities/patch.php:289
-msgid "Patch files uploaded"
-msgstr ""
-
-#: utilities/patch.php:296
-msgid ""
-"Select the file(s) you want to apply to the plugin(s) or you want to delete. "
-"You can select multiple files."
-msgstr ""
-
-#: utilities/patch.php:300
-msgid "Apply/Hold"
-msgstr ""
-
-#: utilities/patch.php:301
-msgid "Patch files to apply"
-msgstr ""
-
-#: utilities/patch.php:317
-msgid "Apply patch"
-msgstr ""
-
-#: utilities/patch.php:317
-msgid ""
-"Are you sure to apply patch files?\\n\\nClick [Cancel] to stop,[OK] to "
-"continue."
-msgstr ""
-
-#: utilities/patch.php:318
-msgid "Delete file"
-msgstr ""
-
-#: utilities/patch.php:318
-msgid ""
-"Are you sure to delete patch files?\\n\\nClick [Cancel] to stop,[OK] to "
-"continue."
-msgstr ""
-
-#: utilities/patch.php:329
-msgid "Caution about your patch file(s)"
-msgstr ""
-
-#: utilities/patch.php:333
-msgid ""
-"If you don't know where it comes from or who created it, I strongly "
-"recommend that you should see and check the contents of the file. If a "
-"person who created it secretly inserted a malicious codes, it will be "
-"executed by the plugin and may damage your site or your server, for which "
-"damage I incur any liability. If you don't understand well, you'd better use "
-"the substitute plugins. Take your own risk, please."
-msgstr ""
-
-#: utilities/utility.php:248
+#: utility.php:303
 msgid "Probably Yes"
 msgstr ""
 
-#: utilities/utility.php:254
+#: utility.php:306 documentation.php:138
+msgid "No"
+msgstr ""
+
+#: utility.php:310
+msgid "Checked*"
+msgstr ""
+
+#: utility.php:312
 msgid "Checked"
 msgstr ""
 
-#: utilities/utility.php:257 utilities/utility.php:263
+#: utility.php:316 utility.php:322
 msgid "Not Checked"
 msgstr ""
 
-#: utilities/utility.php:268
+#: utility.php:327
 msgid "Sitewide Active"
 msgstr ""
 
-#: utilities/utility.php:271
+#: utility.php:330
 msgid "Active"
 msgstr ""
 
-#: utilities/utility.php:274
+#: utility.php:333
 msgid "Inactive"
 msgstr ""
 
-#: utilities/utility.php:336
+#: utility.php:434 utility.php:444
+msgid " was created."
+msgstr ""
+
+#: utility.php:436 utility.php:446
+msgid " was not created."
+msgstr ""
+
+#: utility.php:472
+#, php-format
+msgid "File %s was deleted."
+msgstr ""
+
+#: utility.php:474
+msgid "Error! File was not deleted."
+msgstr ""
+
+#: utility.php:534
 msgid "Welcome to SQLite Integration"
 msgstr ""
 
-#: utilities/utility.php:338
+#: utility.php:536
 msgid "Thank you for using SQLite Integration plugin!"
 msgstr ""
 
-#: utilities/utility.php:341
+#: utility.php:539
 msgid ""
 "You read this message, which means you have succeeded in installing "
-"WordPress with this plugin SQLite Integration. Congratulations and enjoy your "
-"Blogging!"
+"WordPress with this plugin SQLite Integration. Congratulations and enjoy "
+"your Blogging!"
 msgstr ""
 
-#: utilities/utility.php:344
+#: utility.php:542
 msgid ""
 "You don't have to set any special settings. In fact there are no other "
 "settings. You can write articles or pages and customize you WordPress in an "
@@ -799,125 +140,161 @@ msgid ""
 "about this plugin and your SQLite database below."
 msgstr ""
 
-#: utilities/utility.php:346
+#: utility.php:544
 msgid ""
 "Deactivation makes this documents and utilities disappear from the "
-"dashboard, but it doesn't affect the functionality of the SQLite Integration. "
-"when uninstalled, it will remove wp-content/uploads/patches directory (if "
-"exists) and wp-content/db.php file altogether."
+"dashboard, but it doesn't affect the functionality of the SQLite "
+"Integration. when uninstalled, it will remove wp-content/uploads/patches "
+"directory (if exists) and wp-content/db.php file altogether."
 msgstr ""
 
-#: utilities/utility.php:349
+#: utility.php:547
 msgid "Title"
 msgstr ""
 
-#: utilities/utility.php:350
+#: utility.php:548
 msgid "Contents"
 msgstr ""
 
-#: utilities/utility.php:355
+#: utility.php:552 utility.php:590 utility.php:867
+#: database_maintenance.php:453 documentation.php:30 documentation.php:38
+#: patch.php:296
+msgid "Documentation"
+msgstr ""
+
+#: utility.php:553
 msgid "You can read documentation about this plugin and plugin compatibility."
 msgstr ""
 
-#: utilities/utility.php:359
+#: utility.php:556 utility.php:591 utility.php:868
+#: database_maintenance.php:454 documentation.php:31 patch.php:297
+msgid "System Info"
+msgstr ""
+
+#: utility.php:557
 msgid "You can see database and system information."
 msgstr ""
 
-#: utilities/utility.php:363
+#: utility.php:560 utility.php:592 utility.php:869
+#: database_maintenance.php:455 documentation.php:32 patch.php:298
+msgid "Miscellaneous"
+msgstr ""
+
+#: utility.php:561
 msgid ""
 "You can see the error log and edit db.php file (if necessary) and optimize "
 "your database."
 msgstr ""
 
-#: utilities/utility.php:367
+#: utility.php:564 utility.php:593 utility.php:870
+#: database_maintenance.php:456 documentation.php:33 patch.php:299
+msgid "Patch Utility"
+msgstr ""
+
+#: utility.php:565
 msgid "You can upload patch files and apply them to the incompatible plugins."
 msgstr ""
 
-#: utilities/utility.php:396
+#: utility.php:568 utility.php:594 utility.php:871
+#: database_maintenance.php:457 documentation.php:34 patch.php:300
+msgid "Maintenance"
+msgstr ""
+
+#: utility.php:569
+msgid "You can check your database and fix it if needed."
+msgstr ""
+
+#: utility.php:583 utility.php:585 utility.php:774 utility.php:776
+#: database_maintenance.php:446 database_maintenance.php:448
+#: documentation.php:23 documentation.php:25 patch.php:236 patch.php:238
+msgid "You are not allowed to access this page!"
+msgstr ""
+
+#: utility.php:598
 msgid "System Information"
 msgstr ""
 
-#: utilities/utility.php:397
+#: utility.php:599
 msgid "PHP Informations"
 msgstr ""
 
-#: utilities/utility.php:402 utilities/utility.php:438
+#: utility.php:604 utility.php:640
 msgid "Items"
 msgstr ""
 
-#: utilities/utility.php:403
+#: utility.php:605
 msgid "Description"
 msgstr ""
 
-#: utilities/utility.php:408
+#: utility.php:610
 msgid "WordPress Version"
 msgstr ""
 
-#: utilities/utility.php:412
+#: utility.php:614
 msgid "PHP Version"
 msgstr ""
 
-#: utilities/utility.php:416
+#: utility.php:618
 msgid "PDO Support"
 msgstr ""
 
-#: utilities/utility.php:420
+#: utility.php:622
 msgid "PDO Drivers"
 msgstr ""
 
-#: utilities/utility.php:424
+#: utility.php:626
 msgid "PDO Driver for SQLite 3.x"
 msgstr ""
 
-#: utilities/utility.php:428
+#: utility.php:630
 msgid "SQLite Library Version"
 msgstr ""
 
-#: utilities/utility.php:434
+#: utility.php:636
 msgid "Your Database Status"
 msgstr ""
 
-#: utilities/utility.php:439
+#: utility.php:641
 msgid "Status"
 msgstr ""
 
-#: utilities/utility.php:445
+#: utility.php:647
 msgid "Database Size"
 msgstr ""
 
-#: utilities/utility.php:449
+#: utility.php:651
 msgid "Page Size"
 msgstr ""
 
-#: utilities/utility.php:453
+#: utility.php:655
 msgid "Total Number of Pages"
 msgstr ""
 
-#: utilities/utility.php:457
+#: utility.php:659
 msgid "Unused Page"
 msgstr ""
 
-#: utilities/utility.php:461
+#: utility.php:663
 msgid "Integrity Check"
 msgstr ""
 
-#: utilities/utility.php:465
+#: utility.php:667
 msgid "Encoding"
 msgstr ""
 
-#: utilities/utility.php:469
+#: utility.php:671
 msgid "Collations"
 msgstr ""
 
-#: utilities/utility.php:481
+#: utility.php:683
 msgid "Compile Options"
 msgstr ""
 
-#: utilities/utility.php:495
+#: utility.php:697
 msgid "Database Tables and Indexes"
 msgstr ""
 
-#: utilities/utility.php:497
+#: utility.php:699
 msgid ""
 "Table names in brown are required by WordPress, and those in blue are "
 "created by some plugins. The table sqlite_sequence is not a WordPress table "
@@ -927,117 +304,206 @@ msgid ""
 "g. SQLiteManager)."
 msgstr ""
 
-#: utilities/utility.php:502
+#: utility.php:704
 msgid "Table Name"
 msgstr ""
 
-#: utilities/utility.php:503
+#: utility.php:705
 msgid "System/User"
 msgstr ""
 
-#: utilities/utility.php:504
+#: utility.php:706
 msgid "Index ( Column )"
 msgstr ""
 
-#: utilities/utility.php:529
+#: utility.php:744
 msgid "Plugin Info"
 msgstr ""
 
-#: utilities/utility.php:531
+#: utility.php:746
 msgid "This table shows plugins you have installed and their compatibility."
 msgstr ""
 
-#: utilities/utility.php:536
+#: utility.php:751
 msgid "Installed Plugins"
 msgstr ""
 
-#: utilities/utility.php:537
+#: utility.php:752
 msgid "Active/Inactive"
 msgstr ""
 
-#: utilities/utility.php:538
+#: utility.php:753
 msgid "Compatible"
 msgstr ""
 
-#: utilities/utility.php:562
+#: utility.php:761
+msgid ""
+"\"Checked*\" with an asterisk is from the users' information. I didn't check "
+"myself yet. If you found any malfunctioning, please let me know."
+msgstr ""
+
+#: utility.php:781
 msgid "Log cleared"
 msgstr ""
 
-#: utilities/utility.php:565
+#: utility.php:784
 msgid "Log not cleared"
 msgstr ""
 
-#: utilities/utility.php:577
+#: utility.php:796
 msgid "db.php was saved"
 msgstr ""
 
-#: utilities/utility.php:580
+#: utility.php:799
 msgid "Error! db.php couldn't be saved"
 msgstr ""
 
-#: utilities/utility.php:591
+#: utility.php:810
 #, php-format
 msgid ""
 "Optimization finished. Before optimization: %1$s, After optimization: %2$s."
 msgstr ""
 
-#: utilities/utility.php:594
+#: utility.php:813
 msgid "Optimization failed"
 msgstr ""
 
-#: utilities/utility.php:608
+#: utility.php:821
+msgid "Couldn't find your database file."
+msgstr ""
+
+#: utility.php:833
+msgid "Please select backup file(s)."
+msgstr ""
+
+#: utility.php:842
+msgid "Error! Please remove file(s) manyally."
+msgstr ""
+
+#: utility.php:853
+msgid "Please select backup file."
+msgstr ""
+
+#: utility.php:856
+msgid "Please select one file at a time."
+msgstr ""
+
+#: utility.php:875
 msgid "Database Optimization, Error Log, Init File"
 msgstr ""
 
-#: utilities/utility.php:609
+#: utility.php:876
 msgid "Optimize You Database"
 msgstr ""
 
-#: utilities/utility.php:611
+#: utility.php:878
 msgid ""
 "This button sends &quot;vacuum&quot; command to your SQLite database. That "
 "command reclaims space after data has been deleted."
 msgstr ""
 
-#: utilities/utility.php:619
+#: utility.php:886
 msgid "Optimize"
 msgstr ""
 
-#: utilities/utility.php:619
+#: utility.php:886
 msgid ""
 "Are you sure to optimize your database?\\n\\nClick [Cancel] to stop, [OK] to "
 "continue."
 msgstr ""
 
-#: utilities/utility.php:622
+#: utility.php:889
+msgid "Create or Delete backup file(s)"
+msgstr ""
+
+#: utility.php:891
+msgid ""
+"Click the backup button below if you want to create a current snapshot of "
+"your database file. The backup file is named &lsquo;DB_FILE_NAME.yyyymmdd."
+"zip&rsquo; if PHP zip extension is loaded or &lsquo;DB_FILE_NAME.yyyymmdd."
+"back&rsquo; if not loaded, and is put in the same directory that the "
+"database is in."
+msgstr ""
+
+#: utility.php:894
+msgid ""
+"If you want to delete the file(s), check the file name and click the Delete "
+"button. You can check multiple files."
+msgstr ""
+
+#: utility.php:897
+msgid ""
+"If you want to download a file, check the file name and click the Download "
+"button. Please check one file at a time."
+msgstr ""
+
+#: utility.php:908
+msgid "Delete/Download"
+msgstr ""
+
+#: utility.php:909
+msgid "Backup Files"
+msgstr ""
+
+#: utility.php:924
+msgid "Backup"
+msgstr ""
+
+#: utility.php:924
+msgid ""
+"Are you sure to make a backup file?\\n\\nClick [Cancel] to stop, [OK] to "
+"continue."
+msgstr ""
+
+#: utility.php:925 patch.php:399
+msgid "Delete file"
+msgstr ""
+
+#: utility.php:925
+msgid ""
+"Are you sure to delete backup file(s)?\\n\\nClick [Cancel] to stop, [OK] to "
+"continue."
+msgstr ""
+
+#: utility.php:926
+msgid "Download"
+msgstr ""
+
+#: utility.php:926
+msgid ""
+"Are you sure to download backup file?\\n\\nClick [Cancel] to stop, [OK] to "
+"continue."
+msgstr ""
+
+#: utility.php:929
 msgid "SQLite Integration Error Log"
 msgstr ""
 
-#: utilities/utility.php:624
+#: utility.php:931
 msgid ""
-"This is the contents of SQLite Integration error log file(default: wp-content/"
-"database/debug.txt). If you want to clear this file, click the Clear Log "
-"button."
+"This is the contents of SQLite Integration error log file(default: wp-"
+"content/database/debug.txt). If you want to clear this file, click the Clear "
+"Log button."
 msgstr ""
 
-#: utilities/utility.php:634
+#: utility.php:941
 msgid "No error messages are found"
 msgstr ""
 
-#: utilities/utility.php:642
+#: utility.php:949
 msgid "Clear Log"
 msgstr ""
 
-#: utilities/utility.php:642
+#: utility.php:949
 msgid ""
 "Are you sure to clear Log?\\n\\nClick [Cancel] to stop, [OK] to continue."
 msgstr ""
 
-#: utilities/utility.php:646
+#: utility.php:953
 msgid "Edit Initial File (wp-content/db.php)"
 msgstr ""
 
-#: utilities/utility.php:648
+#: utility.php:955
 msgid ""
 "When you go &quot;Plugins &raquo; Edit Plugin&quot; page, you can edit "
 "plugin source file. But you can't see this file there because it is not in "
@@ -1046,12 +512,672 @@ msgid ""
 "well, please don't edit this file</span>."
 msgstr ""
 
-#: utilities/utility.php:658
+#: utility.php:965
 msgid "Save"
 msgstr ""
 
-#: utilities/utility.php:658
+#: utility.php:965
 msgid ""
 "Are you sure to save this file?\\n\\nClick [Cancel] to stop, [OK] to "
 "continue."
+msgstr ""
+
+#: database_maintenance.php:344
+msgid "Can't create backup file."
+msgstr ""
+
+#: database_maintenance.php:363
+msgid "Failed: "
+msgstr ""
+
+#: database_maintenance.php:368 database_maintenance.php:561
+msgid "Your database is OK. You don't have to restore it."
+msgstr ""
+
+#: database_maintenance.php:372
+msgid "Your database restoration is successfully finished!"
+msgstr ""
+
+#: database_maintenance.php:391
+msgid "Table name is not selected."
+msgstr ""
+
+#: database_maintenance.php:394
+msgid "There's no such table."
+msgstr ""
+
+#: database_maintenance.php:461
+msgid "Database Maintenace"
+msgstr ""
+
+#: database_maintenance.php:462
+msgid "Important Notice"
+msgstr ""
+
+#: database_maintenance.php:464
+msgid ""
+"When you installed WordPress 3.5.x with SQLite Integration and upgraded to "
+"3.6, your database might not function as expected."
+msgstr ""
+
+#: database_maintenance.php:465
+msgid ""
+"This page provide you the database sanity check utility and the restore "
+"utility."
+msgstr ""
+
+#: database_maintenance.php:468
+msgid ""
+"Click \"Sanity Check\" button first, and see if you need to fix database or "
+"not. If needed, click \"Fix Database\" button. Afterward you may go to "
+"Miscellaneous page and optimize database (this is not required)."
+msgstr ""
+
+#: database_maintenance.php:471
+msgid ""
+"Fix Database procedure will create a database backup file each time the "
+"button clicked. The backup file is named with \"maintenance-backup\", so you "
+"can remove it if you don't need it. Please go to Miscellaneous page and "
+"check if there is one."
+msgstr ""
+
+#: database_maintenance.php:474
+msgid ""
+"If you installed WordPress 3.6 (not upgraded), you don't have to restore the "
+"database."
+msgstr ""
+
+#: database_maintenance.php:483
+msgid "Sanity Check"
+msgstr ""
+
+#: database_maintenance.php:483
+msgid ""
+"Are you sure to check the database? This will take some time.\\n\\nClick "
+"[Cancel] to stop, [OK] to continue."
+msgstr ""
+
+#: database_maintenance.php:484
+msgid "Fix database"
+msgstr ""
+
+#: database_maintenance.php:484
+msgid ""
+"Are you sure to do fix the database? This will take some time.\\n\\nClick "
+"[Cancel] to stop, [OK] to continue."
+msgstr ""
+
+#: database_maintenance.php:488
+msgid "Columns Information"
+msgstr ""
+
+#: database_maintenance.php:490
+msgid ""
+"Select a table name and click \"Display Columns\" button, and you'll see the "
+"column property of that table. This information is for debug use."
+msgstr ""
+
+#: database_maintenance.php:501
+msgid "Table Name: "
+msgstr ""
+
+#: database_maintenance.php:507
+msgid "Display Columns"
+msgstr ""
+
+#: database_maintenance.php:507
+msgid ""
+"Display columns in the selected table.\\n\\nClick [Cancel] to stop, [OK] to "
+"continue."
+msgstr ""
+
+#: database_maintenance.php:517 database_maintenance.php:519
+#: database_maintenance.php:543 database_maintenance.php:545
+#: database_maintenance.php:571 database_maintenance.php:573 patch.php:243
+#: patch.php:245 patch.php:265 patch.php:267 patch.php:287 patch.php:289
+msgid "You are not allowed to do this operation!"
+msgstr ""
+
+#: database_maintenance.php:523 database_maintenance.php:533
+msgid "Results"
+msgstr ""
+
+#: database_maintenance.php:549 database_maintenance.php:560
+msgid "Checked Results"
+msgstr ""
+
+#: database_maintenance.php:554
+msgid " needs restoring."
+msgstr ""
+
+#: database_maintenance.php:577
+#, php-format
+msgid "Columns In %s"
+msgstr ""
+
+#: database_maintenance.php:578
+msgid "Column"
+msgstr ""
+
+#: database_maintenance.php:579
+msgid "Type"
+msgstr ""
+
+#: database_maintenance.php:580
+msgid "Null"
+msgstr ""
+
+#: database_maintenance.php:581
+msgid "Default"
+msgstr ""
+
+#: database_maintenance.php:598
+msgid "Columns Info"
+msgstr ""
+
+#: documentation.php:40
+msgid ""
+"This is a brief documentation about this plugin. For more details, see also "
+"the <a href=\"http://dogwood.skr.jp/wordpress/sqlite-integration/\">SQLite "
+"Integration page</a>."
+msgstr ""
+
+#: documentation.php:43
+msgid ""
+"Please don't forget: WordPress DOES NOT OFFICIALLY SUPPORT any database "
+"other than MySQL. So if you ask about this plugin in the Forum, it's not "
+"unlikely that you won't get no answers at all."
+msgstr ""
+
+#: documentation.php:46
+msgid "Features"
+msgstr ""
+
+#: documentation.php:48
+msgid ""
+"This plugin is a successor to <a href=\"http://wordpress.org/extend/plugins/"
+"pdo-for-wordpress/\">PDO for WordPress</a>, which enabled WordPress to use "
+"SQLite for its database. But PDO for WordPress doesn't seem to be maintained "
+"any more only to be outdated. SQLite Integration makes use of the basic "
+"ideas and framework of PDO for WordPress, adds some new features and updates "
+"it to be able to work with the newest version of WordPress(3.8.1)."
+msgstr ""
+
+#: documentation.php:51
+msgid ""
+"<a href=\"http://www.sqlite.org/\">SQLite Web Page</a> says &mdash; SQLite "
+"is a &quot;software library that implements selfcontained, serverless, zero-"
+"configuration, transactional SQL database engine&quot;. It is &quot;a good "
+"choice for small to medium size websites&quot;. It's small and portable, and "
+"you don't need any database server system."
+msgstr ""
+
+#: documentation.php:54
+msgid ""
+"Unfortunately enough, WordPress only supports MySQL. Consequently it doesn't "
+"provide any APIs for SQLite. So if you want to create a website using "
+"WordPress without a database server, you've got to write a kind of wrapper "
+"program yourself to use SQLite. This is the way SQLite Integration goes."
+msgstr ""
+
+#: documentation.php:57
+msgid "SQLite Integration does the work as follows:"
+msgstr ""
+
+#: documentation.php:60
+msgid "Intercepts SQL statement for MySQL from WordPress"
+msgstr ""
+
+#: documentation.php:61
+msgid "Rewrites it as SQLite can execute"
+msgstr ""
+
+#: documentation.php:62
+msgid "Gives it to SQLite"
+msgstr ""
+
+#: documentation.php:63
+msgid "Gets the results from SQLite"
+msgstr ""
+
+#: documentation.php:64
+msgid "Format the results as MySQL returns, if necessary"
+msgstr ""
+
+#: documentation.php:65
+msgid "Gives back the results to WordPress"
+msgstr ""
+
+#: documentation.php:68
+msgid ""
+"WordPress doesn't know what has happened in the background and will be happy "
+"with it."
+msgstr ""
+
+#: documentation.php:71
+msgid "Limitations"
+msgstr ""
+
+#: documentation.php:73
+msgid ""
+"SQLite Integration uses SQLite, so the limitations of SQLite is, as it is, "
+"those of SQLite Integration. MySQL is far from a simple SQL engine and has "
+"many extended features and functionalities. WordPress uses some of them. "
+"Among those are some SQLite doesn't implement. For those features that "
+"WordPress uses, I made them work with SQLite Integration. But for others "
+"that some plugins are using, SQLite Integration can't manipulate. So..."
+msgstr ""
+
+#: documentation.php:76
+msgid "There are some plugins that you can't use. No way around.<br />"
+msgstr ""
+
+#: documentation.php:77
+msgid ""
+"Some plugins can't be activated or work properly. See the &quot;Plugin "
+"Compatibility/Incompatibility&quot; section."
+msgstr ""
+
+#: documentation.php:78
+msgid ""
+"There are some plugins that you can't use without rewriting some codes in "
+"them.<br />"
+msgstr ""
+
+#: documentation.php:79
+#, php-format
+msgid ""
+"Some plugins do work fine if you rewrite MySQL functions. I made some patch "
+"files and <a href=\"%s?page=patch\">Patch Utility</a>. See also the <a href="
+"\"http://dogwood.skr.jp/wordpress/sqlite-integration/#plugin-compat\">SQLite "
+"Integration Page</a> for more details."
+msgstr ""
+
+#: documentation.php:82
+msgid ""
+"And there may be other problems I overlooked. If you find malfunctionality, "
+"please let me know at the <a href=\"http://wordpress.org/support/plugin/"
+"sqlite-integration\">Support Forum</a>."
+msgstr ""
+
+#: documentation.php:84
+msgid "User Defined Functions"
+msgstr ""
+
+#: documentation.php:86
+msgid ""
+"SQLite Integration replaces some functions of MySQL with the user defined "
+"functions built in PHP PDO library. But some of the functions are "
+"meaningless in SQLite database: e.g. get_lock() or release_lock(). When "
+"SQLite Integration meets those functions, it does nothing but prevent the "
+"error."
+msgstr ""
+
+#: documentation.php:89
+msgid ""
+"If you want SQLite Integration to execute more functions, you can add the "
+"definition in the file sqlite-integration/functions.php (functions-5-2.php "
+"is for PHP 5.2 or lesser)."
+msgstr ""
+
+#: documentation.php:92
+msgid "Database Administration and Maintenance"
+msgstr ""
+
+#: documentation.php:94
+msgid ""
+"SQLite Integration doesn't contain database maintenace functionality, "
+"because there are some other free or proprietary softwares that give you "
+"such functionalities. For example, these are among free softwares:"
+msgstr ""
+
+#: documentation.php:97
+msgid "my recommendation"
+msgstr ""
+
+#: documentation.php:98
+msgid "unfortunately seems not to maintained..."
+msgstr ""
+
+#: documentation.php:101
+msgid ""
+"I'm not sure if future release may have some of the database maintenance "
+"functionality."
+msgstr ""
+
+#: documentation.php:107
+msgid "Plugin Compatibility/Incompatibility"
+msgstr ""
+
+#: documentation.php:109
+msgid ""
+"WordPress without its plugins is a king without people. Of course, you need "
+"plugins, I know."
+msgstr ""
+
+#: documentation.php:112
+#, php-format
+msgid ""
+"This is the list of the problematic plugins (far from complete). You can see "
+"informations about your installed plugins in the <a href=\"%s?page=sys-info"
+"\">System Info</a> page. To see more details, please visit the <a href="
+"\"http://dogwood.skr.jp/wordpress/sqlite-integration\">Plugin Page</a>."
+msgstr ""
+
+#: documentation.php:118
+msgid "Plugins Name"
+msgstr ""
+
+#: documentation.php:119
+msgid "Compatibility"
+msgstr ""
+
+#: documentation.php:120
+msgid "Reasons"
+msgstr ""
+
+#: patch.php:67
+msgid "Patch command is not found"
+msgstr ""
+
+#: patch.php:70
+msgid "Patch command is not executable"
+msgstr ""
+
+#: patch.php:87
+msgid "Patch file name is invalid"
+msgstr ""
+
+#: patch.php:91
+msgid "Patch file version does not match with that of your plugin."
+msgstr ""
+
+#: patch.php:100
+msgid "Error! Plugin directory is not accessible."
+msgstr ""
+
+#: patch.php:103
+msgid "is patched successfully."
+msgstr ""
+
+#: patch.php:108
+#, php-format
+msgid "Error! Messages: %s"
+msgstr ""
+
+#: patch.php:136
+#, php-format
+msgid "File %s is deleted."
+msgstr ""
+
+#: patch.php:138
+#, php-format
+msgid "Error! File %s is not deleted."
+msgstr ""
+
+#: patch.php:142
+msgid "Error!: patches directory is not accessible."
+msgstr ""
+
+#: patch.php:163
+msgid "Unable to create a patch directory."
+msgstr ""
+
+#: patch.php:171
+msgid "Unable to create a .htaccess file."
+msgstr ""
+
+#: patch.php:179
+msgid "Invalid operation."
+msgstr ""
+
+#: patch.php:185
+msgid "File is too large to upload."
+msgstr ""
+
+#: patch.php:189
+msgid "File upload is not complete."
+msgstr ""
+
+#: patch.php:193
+msgid "File is not uploaded."
+msgstr ""
+
+#: patch.php:197
+msgid "Temporary directory is not writable."
+msgstr ""
+
+#: patch.php:201
+msgid "File cannot be written on the disk."
+msgstr ""
+
+#: patch.php:205
+msgid "Unknown error."
+msgstr ""
+
+#: patch.php:213
+msgid "File is successfully uploaded."
+msgstr ""
+
+#: patch.php:217
+msgid "File upload failed. Possible file upload attack."
+msgstr ""
+
+#: patch.php:222
+msgid "File is not selected"
+msgstr ""
+
+#: patch.php:249 patch.php:271
+msgid "Please select patch file(s)"
+msgstr ""
+
+#: patch.php:258
+msgid "None of the patches is applied!"
+msgstr ""
+
+#: patch.php:280
+msgid "Error! Please remove files manually"
+msgstr ""
+
+#: patch.php:304
+msgid "Patch Files Upload and Apply"
+msgstr ""
+
+#: patch.php:305
+msgid "What you can do in this page"
+msgstr ""
+
+#: patch.php:307
+msgid ""
+"I made patch files for some plugins that are incompatible with SQLite "
+"Integration and need rewriting. And I wrote in the <a href=\"http://dogwood."
+"skr.jp/wordpress/sqlite-integration\">Plugin Page</a> about how to apply a "
+"patch file to the plugin. But the command line interface sometimes "
+"embarrasses some people, especially newbies."
+msgstr ""
+
+#: patch.php:310
+msgid ""
+"In this page, you can upload patch files and apply them automatically. But "
+"there are some requirements."
+msgstr ""
+
+#: patch.php:313
+msgid ""
+"Think before you leap. Is the plugin to which you are going to apply patch "
+"really necessary for your site? Did you search in the <a href=\"http://"
+"wordpress.org/extend/plugins/\">Plugin Directory</a> for the substitutes?"
+msgstr ""
+
+#: patch.php:314
+msgid ""
+"Your PHP script has the permission to create a directory and write a file in "
+"it."
+msgstr ""
+
+#: patch.php:315
+msgid "Your PHP scripts can execute exec() function on the server."
+msgstr ""
+
+#: patch.php:316
+msgid ""
+"Your PHP script can execute &quot;patch&quot; shell command.(Script will "
+"check if it is executable or not.)"
+msgstr ""
+
+#: patch.php:319
+msgid ""
+"If uploading fails, it' very likely that application will fail. When you try "
+"uploading with FTP client, the patch files must be put into the directory wp-"
+"content/uploads/patches/. When constant UPLOADS is defined, script follows "
+"it."
+msgstr ""
+
+#: patch.php:322
+msgid ""
+"You can create your patch file yourself. When you create one, please test it "
+"on your local server first and check if it works fine without PHP error or "
+"notice ( set error_reporting(E_ALL) ). If you use this utility, name your "
+"patch file as follows:"
+msgstr ""
+
+#: patch.php:325
+msgid "Use the file name beginning with the plugin directory name."
+msgstr ""
+
+#: patch.php:326
+msgid "Use the plugin version number after the directory name with underscore."
+msgstr ""
+
+#: patch.php:327
+msgid "Use the suffix .patch."
+msgstr ""
+
+#: patch.php:328
+msgid "Use diff command options &quot;-Naur&quot;."
+msgstr ""
+
+#: patch.php:331
+msgid ""
+"For example, the patch file for the plugin &quot;Debug Bar&quot; is &quot;"
+"debug-bar_0.8.patch&quot;. Script interprets &quot;debug-bar&quot; as the "
+"target directory and &quot;0.8&quot; as the target version. If the version "
+"number doesn't match with the target, script shows the error message and "
+"skip applying the patch file. And script will reject any other file name."
+msgstr ""
+
+#: patch.php:334
+msgid "How to install, patch and activate plugins"
+msgstr ""
+
+#: patch.php:336
+msgid "Install the plugin (not yet activate it)"
+msgstr ""
+
+#: patch.php:337
+msgid "Upload the patch file (if any) to the server and ppply it in this page"
+msgstr ""
+
+#: patch.php:338
+msgid "Back to the installed plugin page and activate it"
+msgstr ""
+
+#: patch.php:340
+msgid "How to upgrade plugins"
+msgstr ""
+
+#: patch.php:342
+msgid "When upgrading the plugin, it will be safer to follow next steps."
+msgstr ""
+
+#: patch.php:345
+msgid "Deactivate the plugin"
+msgstr ""
+
+#: patch.php:346
+msgid "Upgrade the plugin"
+msgstr ""
+
+#: patch.php:347
+msgid "Upload the patch file (if any) and apply it"
+msgstr ""
+
+#: patch.php:348
+msgid "Reactivate the plugin"
+msgstr ""
+
+#: patch.php:350
+msgid ""
+"If there isn't a patch file to match with the newest version of the plugin, "
+"it won't work properly. Please wait for somebody to make one or rewrite the "
+"codes checking the patch file for the previous version (it's not so "
+"difficult a matter, I guess, for almost all the cases, you'll have only to "
+"replace the MySQL functions with the WordPress built-in functions)."
+msgstr ""
+
+#: patch.php:351
+msgid "Upload and Apply"
+msgstr ""
+
+#: patch.php:355
+msgid "File Select"
+msgstr ""
+
+#: patch.php:363
+msgid ""
+"Select file from your computer. If the file name is the same as existent "
+"file, this operation will override it. You can't upload the file whose size "
+"is over 500kB."
+msgstr ""
+
+#: patch.php:365
+msgid "Upload"
+msgstr ""
+
+#: patch.php:370
+msgid "Patch files uploaded"
+msgstr ""
+
+#: patch.php:377
+msgid ""
+"Select the file(s) you want to apply to the plugin(s) or you want to delete. "
+"You can select multiple files."
+msgstr ""
+
+#: patch.php:381
+msgid "Apply/Hold"
+msgstr ""
+
+#: patch.php:382
+msgid "Patch files to apply"
+msgstr ""
+
+#: patch.php:398
+msgid "Apply patch"
+msgstr ""
+
+#: patch.php:398
+msgid ""
+"Are you sure to apply patch files?\\n\\nClick [Cancel] to stop,[OK] to "
+"continue."
+msgstr ""
+
+#: patch.php:399
+msgid ""
+"Are you sure to delete patch files?\\n\\nClick [Cancel] to stop,[OK] to "
+"continue."
+msgstr ""
+
+#: patch.php:410
+msgid "Caution about your patch file(s)"
+msgstr ""
+
+#: patch.php:414
+msgid ""
+"If you don't know where it comes from or who created it, I strongly "
+"recommend that you should see and check the contents of the file. If a "
+"person who created it secretly inserted a malicious codes, it will be "
+"executed by the plugin and may damage your site or your server, for which "
+"damage I don't incur any liability. If you don't understand well, you'd "
+"better use the substitute plugins. Take your own risk, please."
 msgstr ""
