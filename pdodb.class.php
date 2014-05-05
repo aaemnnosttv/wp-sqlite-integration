@@ -1,11 +1,16 @@
 <?php
 /**
+ * This file defines PDODB class, which inherits wpdb class and replaces it
+ * global $wpdb variable.
+ * 
  * @package SQLite Integration
- * @version 1.1
- * @author Kojima Toshiyasu, Justin Adie
+ * @author Kojima Toshiyasu
  *
  */
-
+if (!defined('ABSPATH')) {
+	echo 'Thank you, but you are not allowed to accesss this file.';
+	die();
+}
 require_once PDODIR . 'pdoengine.class.php';
 require_once PDODIR . 'install.php';
 
@@ -18,18 +23,25 @@ if(!defined('PDO_DEBUG')){
 
 /**
  * This class extends wpdb and replaces it.
- * It also rewrites some functions that use mysql specific functions.
+ * 
+ * It also rewrites some methods that use mysql specific functions.
  * 
  */
 class PDODB extends wpdb {
-
+	/**
+	 * 
+	 * @var reference to the object of PDOEngine class.
+	 * @access protected
+	 */
   protected $dbh = null;
   
   /**
-   * Constructor: emulates wpdb but this gets another parameter $db_type,
-   * which is given by the constant 'DB_TYPE' defined in wp-config.php.
-   * SQLite uses only $db_type and all the others are simply ignored.
+   * Constructor
    * 
+   * This overrides wpdb::__construct() which has database server, username and
+   * password as arguments. This class doesn't use them.
+   * 
+   * @see wpdb::__construct()
    */
   function __construct() {
     register_shutdown_function(array($this, '__destruct'));
@@ -41,13 +53,44 @@ class PDODB extends wpdb {
 
     $this->db_connect();
   }
-  
+  /**
+   * Desctructor
+   * 
+   * This overrides wpdb::__destruct(), but does nothing but return true.
+   * 
+   * @see wpdb::__destruct()
+   */
   function __destruct() {
     return true;
   }
   
   /**
-   * dummy out the MySQL function
+   * Method to set character set for the database.
+   * 
+   * This overrides wpdb::set_charset(), only to dummy out the MySQL function.
+   * 
+   * @see wpdb::set_charset()
+   */
+  function set_charset($dbh, $charset = null, $collate = null) {
+  	if ( ! isset( $charset ) )
+  		$charset = $this->charset;
+  	if ( ! isset( $collate ) )
+  		$collate = $this->collate;
+  }
+  /**
+   * Method to dummy out wpdb::set_sql_mode()
+   * 
+   * @see wpdb::set_sql_mode()
+   */
+  function set_sql_mode($modes = array()) {
+    unset($modes);
+    return;
+  }
+  /**
+   * Method to select the database connection.
+   * 
+   * This overrides wpdb::select(), only to dummy out the MySQL function.
+   * 
    * @see wpdb::select()
    */
   function select($db, $dbh = null) {
@@ -56,20 +99,29 @@ class PDODB extends wpdb {
     $this->ready = true;
     return;
   }
-
   /**
-   * overrides wpdb::_real_escape(), which uses mysql_real_escape_string().
+   * Method to dummy out wpdb::_weak_escape()
+   * 
+   */
+  function _weak_escape($string) {
+    return addslashes($string);
+  }
+  /**
+   * Method to escape characters.
+   * 
+   * This overrides wpdb::_real_escape() to avoid using mysql_real_escape_string().
+   * 
    * @see wpdb::_real_escape()
    */
   function _real_escape($string) {
-    if ($this->dbh && $this->real_escape)
-      return $this->dbh->quote($string);
-    else
-      return addslashes($string);
+    return addslashes($string);
   }
   
   /**
-   * overrides wpdb::print_error()
+   * Method to put out the error message.
+   * 
+   * This overrides wpdb::print_error(), for we can't use the parent class method.
+   * 
    * @see wpdb::print_error()
    */
   function print_error($str = '') {
@@ -77,7 +129,7 @@ class PDODB extends wpdb {
     
     if (!$str) {
       $err = $this->dbh->get_error_message() ? $this->dbh->get_error_message() : '';
-      $str = $err[2];
+      if (!empty($err)) $str = $err[2]; else $str = '';
     }
     $EZSQL_ERROR[] = array('query' => $this->last_query, 'error_str' => $str);
     
@@ -103,7 +155,7 @@ class PDODB extends wpdb {
       if (defined('DIEONDBERROR'))
         wp_die($msg);
     } else {
-      $str = htmlspecialchars($str, ENT_QUOTES);
+      $str   = htmlspecialchars($str, ENT_QUOTES);
       $query = htmlspecialchars($this->last_query, ENT_QUOTES);
       
 			print "<div id='error'>
@@ -112,12 +164,30 @@ class PDODB extends wpdb {
 			</div>";
     }
   }
-
+	/**
+	 * Method to flush cached data.
+	 * 
+	 * This overrides wpdb::flush(). This is not necessarily overridden, because
+	 * $result will never be resource.
+	 * 
+	 * @see wpdb::flush
+	 */
+  function flush() {
+  	$this->last_result = array();
+  	$this->col_info    = null;
+  	$this->last_query  = null;
+  	$this->rows_affected = $this->num_rows = 0;
+  	$this->last_error  = '';
+		$this->result      = null;
+  }
   /**
-   * overrides wpdb::db_connect()
+   * Method to do the database connection.
+   * 
+   * This overrides wpdb::db_connect() to avoid using MySQL function.
+   * 
    * @see wpdb::db_connect()
    */
-  function db_connect() {
+  function db_connect($allow_bail=true) {
     if (WP_DEBUG) {
       $this->dbh = new PDOEngine();
     } else {
@@ -130,11 +200,23 @@ class PDODB extends wpdb {
       $this->bail(sprintf(__("<h1>Error establlishing a database connection</h1><p>We have been unable to connect to the specified database. <br />The error message received was %s"), $this->dbh->errorInfo()));
       return;
     }
+    $is_enabled_foreign_keys = @$this->get_var('PRAGMA foreign_keys');
+    if ($is_enabled_foreign_keys == '0') @$this->query('PRAGMA foreign_keys = ON');
     $this->ready = true;
   }
-  
   /**
-   * overrides wpdb::query()
+   * Method to dummy out wpdb::check_connection()
+   * 
+   */
+  function check_connection($allow_bail=true) {
+    return true;
+  }
+  /**
+   * Method to execute the query.
+   * 
+   * This overrides wpdb::query(). In fact, this method does all the database
+   * access jobs.
+   * 
    * @see wpdb::query()
    */
   function query($query) {
@@ -179,25 +261,44 @@ class PDODB extends wpdb {
       $return_val = $this->rows_affected;
     } else {
       $this->last_result = $this->dbh->get_query_results();
-      $this->num_rows = $this->dbh->get_num_rows();
-      $return_val = $this->num_rows;
+      $this->num_rows    = $this->dbh->get_num_rows();
+      $return_val        = $this->num_rows;
     }
     return $return_val;
   }
-  
   /**
-   * overrides wpdb::load_col_info(), which uses a mysql function.
-   * @see wpdb::load_col_info()
+   * 
    */
-  function load_col_info() {
+  private function _do_query($query) {
+    if (defined('SAVEQUERIES') && SAVEQUERIES) {
+      $this->timer_start();
+    }
+    $this->result = $this->dbh->query($query);
+    $this->num_queries++;
+    if (defined('SAVEQUERIES') && SAVEQUERIES) {
+      $this->queries[] = array($query, $this->timer_stop(), $this->get_caller());
+    }
+  }
+  /**
+   * Method to set the class variable $col_info.
+   * 
+   * This overrides wpdb::load_col_info(), which uses a mysql function.
+   * 
+   * @see wpdb::load_col_info()
+   * @access protected
+   */
+  protected function load_col_info() {
     if ($this->col_info)
       return;
     $this->col_info = $this->dbh->get_columns();
   }
   
   /**
-   * overrides wpdb::has_cap()
-   * We don't support collation, group_concat, set_charset
+   * Method to return what the database can do.
+   * 
+   * This overrides wpdb::has_cap() to avoid using MySQL functions.
+   * SQLite supports subqueries, but not support collation, group_concat and set_charset.
+   * 
    * @see wpdb::has_cap()
    */
   function has_cap($db_cap) {
@@ -213,17 +314,22 @@ class PDODB extends wpdb {
     }
   }
   /**
-   * overrides wpdb::db_version()
-   * Returns mysql version number but it means nothing for SQLite.
+   * Method to return database version number.
+   * 
+   * This overrides wpdb::db_version() to avoid using MySQL function.
+   * It returns mysql version number, but it means nothing for SQLite.
+   * So it return the newest mysql version.
+   * 
    * @see wpdb::db_version()
    */
   function db_version() {
-    global $required_mysql_version;
-    return $required_mysql_version;
+//     global $required_mysql_version;
+//     return $required_mysql_version;
+		return '5.5';
   }
 }
 
-/**
+/*
  * Initialize $wpdb with PDODB class
  */
 if (!isset($wpdb)) {
