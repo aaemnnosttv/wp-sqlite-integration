@@ -146,7 +146,7 @@ class PDOSQLiteDriver {
 	 * @access private
 	 */
 	private function parse_query() {
-		$tokens = preg_split("/(''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$tokens = preg_split("/(\\\'|''|')/s", $this->_query, -1, PREG_SPLIT_DELIM_CAPTURE);
 		$literal = false;
 		$query_string = '';
 		foreach ($tokens as $token) {
@@ -161,12 +161,12 @@ class PDOSQLiteDriver {
 					if (strpos($token, '`') !== false) {
 						$token = str_replace('`', '', $token);
 					}
-          if (stripos($token, 'TRUE') !== false) {
-						$token = str_ireplace('TRUE', '1', $token);
-					}
-          if (stripos($token, 'FALSE') !== false) {
-						$token = str_ireplace('FALSE', '0', $token);
-					}
+          if (preg_match('/\\bTRUE\\b/i', $token)) {
+            $token = str_ireplace('TRUE', '1', $token);
+          }
+          if (preg_match('/\\bFALSE\\b/i', $token)) {
+            $token = str_ireplace('FALSE', '0', $token);
+          }
           if (stripos($token, 'SQL_CALC_FOUND_ROWS') !== false) {
 						$this->rewrite_calc_found = true;
 					}
@@ -197,6 +197,7 @@ class PDOSQLiteDriver {
 	 * @access private
 	 */
 	private function handle_show_query(){
+    $this->_query = str_ireplace(' FULL', '', $this->_query);
 	  $table_name = '';
 		$pattern    = '/^\\s*SHOW\\s*TABLES\\s*.*?(LIKE\\s*(.*))$/im';
 		if (preg_match($pattern, $this->_query, $matches)) {
@@ -538,6 +539,7 @@ class PDOSQLiteDriver {
 	 * @access private
 	 */
   private function handle_show_columns_query() {
+    $this->_query = str_ireplace(' FULL', '', $this->_query);
     $pattern_like = '/^\\s*SHOW\\s*(COLUMNS|FIELDS)\\s*FROM\\s*(.*)?\\s*LIKE\\s*(.*)?/i';
     $pattern      = '/^\\s*SHOW\\s*(COLUMNS|FIELDS)\\s*FROM\\s*(.*)?/i';
     if (preg_match($pattern_like, $this->_query, $matches)) {

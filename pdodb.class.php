@@ -200,6 +200,8 @@ class PDODB extends wpdb {
       $this->bail(sprintf(__("<h1>Error establlishing a database connection</h1><p>We have been unable to connect to the specified database. <br />The error message received was %s"), $this->dbh->errorInfo()));
       return;
     }
+    $is_enabled_foreign_keys = @$this->get_var('PRAGMA foreign_keys');
+    if ($is_enabled_foreign_keys == '0') @$this->query('PRAGMA foreign_keys = ON');
     $this->ready = true;
   }
   /**
@@ -333,7 +335,5 @@ class PDODB extends wpdb {
 if (!isset($wpdb)) {
 	global $wpdb;
 	$wpdb = new PDODB();
-	$is_enabled_foreign_keys = @$wpdb->get_var('PRAGMA foreign_keys');
-	if ($is_enabled_foreign_keys == '0') @$wpdb->query('PRAGMA foreign_keys = ON');
 }
 ?>

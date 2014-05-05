@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,10 @@ This plugin doesn't support 'WP_PLUGIN_URL' constant.
 When query_posts() or WP_Query() is used, some options didn't work properly. When you post comments, the back quotes in the content was removed. These bugs and some minor ones are fixed. Documentations and doc strings are revised. WordPress 3.9 was tested. When auto upgrading fails, please try manual upgrade via FTP.
 
 == Changelog ==
+
+= 1.6.2 (2014-05-05) =
+* Fixed some bugs for the regular expression.
+* Fixed the documents on the admin dashboard.
 
 = 1.6.1 (2014-04-22) =
 * Fixed some bugs for using with WP Slimstat plugin.

@@ -70,6 +70,7 @@ class CreateQuery{
 			// we don't use it for now.
 			return $this->_query;
 		}
+		$this->strip_backticks();
 		$this->get_table_name();
 		$this->rewrite_comments();
 		$this->rewrite_field_types();
@@ -84,7 +85,6 @@ class CreateQuery{
 		$this->rewrite_set();
 		$this->rewrite_key();
 		$this->add_if_not_exists();
-		$this->strip_backticks();
 		
 		return $this->post_process();
 	}

@@ -31,12 +31,15 @@ class SQLiteIntegrationUtils {
    * Check if db.php file is replaced with the apropriate version,
    * and if not, display notice.
    * 
+   * This is not required for now. So this method only returns and
+   * do nothing.
    * 
    */
   public static function show_admin_notice() {
+    return;
   	$notice_string = __('Upgrading Notice: To finish upgrading, please activate SQLite Integration and go Setting >> SQLite Integration >> Miscellaneous, and click the button &quot;update&quot; at the bottom of the page. Or else replace wp-content/db.php with the one in sqlite-integration directory manually.', 'sqlite-integration');
   	$current_version = defined('SQLITE_INTEGRATION_VERSION') ? SQLITE_INTEGRATION_VERSION : '';
-    if (version_compare($current_version, '1.6.1', '=')) return;
+    if (version_compare($current_version, '1.6.2', '=')) return;
   	$version = '';
   	if (defined('WP_CONTENT_DIR')) {
   		$path = WP_CONTENT_DIR . '/db.php';
@@ -932,8 +935,13 @@ class SQLiteIntegrationUtils {
         $message = __('Couldn&quot;t update db.php file. Please replace it manually.', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
       } else {
-        echo
-'<script type="text/javascript">(function() {jQuery(".sqlite-notice").addClass("hidden");})(jQuery);</script>';
+        echo <<<JS
+<script type="text/javascript">
+//<![CDATA[
+(function() {jQuery(".sqlite-notice").addClass("hidden");})(jQuery);
+//]]>
+</script>
+JS;
         $message = __('Your db.php is updated.', $domain);
         echo '<div id="message" class="updated fade">'.$message.'</div>';
       }
@@ -1038,8 +1046,8 @@ class SQLiteIntegrationUtils {
       <?php printf('<input type="submit" name="sqlitewordpress_db_save" value="%s" onclick="return confirm(\'%s\')" class="button-primary">', __('Save', $domain), __('Are you sure to save this file?\n\nClick [Cancel] to stop, [OK] to continue.', $domain)); ?>
       <?php echo '</p></form>'; ?>
       <?php endif;?>
-      <h3><?php __('Update db.php', $domain);?></h3>
-      <p><?php __('Replace the old db.php with the new one.', $domain);?></p>
+      <h3><?php _e('Update db.php', $domain);?></h3>
+      <p><?php _e('Replace the old db.php with the new one.', $domain);?></p>
       <form action="" method="post">
       <?php if (function_exists('wp_nonce_field')) {
         wp_nonce_field('sqliteintegration-db-update-stats');

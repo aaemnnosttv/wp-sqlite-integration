@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.6
+Stable tag: 1.6.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,10 @@ SQLite に戻りたいときには、この行を次のように変更するか�
 query_posts() や WP_Query() を使うときに、オプションの一部が機能していませんでした。コメントを投稿するときに、本文に含まれるバッククォートが削除されてしまっていました。これらのバグとその他小さなバグを修正してあります。ドキュメントとソースのコメントを書き直しました。WordPress 3.9 alpha でインストールテストをしました。自動アップグレードで失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
 
 == Changelog ==
+
+= 1.6.2 (2014-05-05) =
+* 正規表現に関するバグを修正しました。
+* 管理画面のドキュメント（表示されていなかった）を修正しました。
 
 = 1.6.1 (2014-04-22) =
 * WP Slimstat を使うために、いくつかのバグを修正しました。

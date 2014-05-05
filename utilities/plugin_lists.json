@@ -101,8 +101,10 @@
   
   {
     "name":"Broken Link Checker",
-    "compat":"Checked",
-    "class":"compatible"
+    "compat":"Needs Patch",
+    "patch_url":"http://dogwood.skr.jp/wordpress/plugins/",
+    "reason":"MySQL function",
+    "class":"workaround"
   },
   
   {

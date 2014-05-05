@@ -781,9 +781,9 @@ class PDOEngine extends PDO {
     if (stripos($this->query_type, 'show') !== false) {
     	if (stripos($this->query_type, 'show table status') !== false) {
     		$this->query_type = 'showstatus';
-    	} elseif (stripos($this->query_type, 'show tables') !== false) {
+    	} elseif (stripos($this->query_type, 'show tables') !== false || stripos($this->query_type, 'show full tables') !== false) {
         $this->query_type = 'show';
-      } elseif (stripos($this->query_type, 'show columns') !== false || stripos($this->query_type, 'show fields') !== false) {
+      } elseif (stripos($this->query_type, 'show columns') !== false || stripos($this->query_type, 'show fields') !== false || stripos($this->query_type, 'show full columns') !== false) {
         $this->query_type = 'showcolumns';
       } elseif (stripos($this->query_type, 'show index') !== false || stripos($this->query_type, 'show indexes') !== false || stripos($this->query_type, 'show keys') !== false) {
         $this->query_type = 'showindex';
