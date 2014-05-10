@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,7 +49,10 @@ WordPress.org doesn't officially support using any other database than MySQL. So
 
 = Translation =
 
-Documentation is written in English. Japanese catalog file and .pot file are included in the archive. If you translate it into your language, please let me know.
+Documentation is written in English. If you translate it into your language, please let me know.
+
+* Japanese (kjmtsh)
+* Spanish (Pablo Laguna)
 
 == Installation ==
 
@@ -155,9 +158,14 @@ This plugin doesn't support 'WP_PLUGIN_URL' constant.
 
 == Upgrade Notice ==
 
-When query_posts() or WP_Query() is used, some options didn't work properly. When you post comments, the back quotes in the content was removed. These bugs and some minor ones are fixed. Documentations and doc strings are revised. WordPress 3.9 was tested. When auto upgrading fails, please try manual upgrade via FTP.
+Fixed the bug about meta query with BETWEEN comparison which may cause some plugins to work correctly. Upgrade is recommended. When auto upgrading fails, please try manual upgrade via FTP.
 
 == Changelog ==
+
+= 1.6.3 (2014-05-10) =
+* Fixed the bug about manipulating meta query with BETWEEN comparison.
+* Added the Spanish langugae support.
+* WordPress 3.9.1 compatibility checked.
 
 = 1.6.2 (2014-05-05) =
 * Fixed some bugs for the regular expression.

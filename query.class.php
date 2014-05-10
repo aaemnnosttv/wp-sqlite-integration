@@ -720,13 +720,13 @@ class PDOSQLiteDriver {
    */
   private function rewrite_between() {
   	if (!$this->rewrite_between) return;
-  	$pattern = '/\\s*([^\\s\(]*)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s\)]*)?\\s*/ims';
+  	$pattern = '/\\s*(CAST\(.+?\)|[^\\s\(]*)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s\)]*)?\\s*/ims';
   	if (preg_match($pattern, $this->_query, $match)) {
   		$column_name  = trim($match[1]);
   		$min_value    = trim($match[2]);
   		$max_value    = trim($match[3]);
   		$max_value    = rtrim($max_value);
-	  	$replacement  = " $column_name >= '$min_value' AND $column_name <= '$max_value'";
+	  	$replacement  = " $column_name >= $min_value AND $column_name <= $max_value";
 	  	$this->_query = str_ireplace($match[0], $replacement, $this->_query);
   	}
   }
