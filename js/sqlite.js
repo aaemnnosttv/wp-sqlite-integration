@@ -1,6 +1,10 @@
-/*
- * script for SQLite Integration
- * this file is only included on the documentation page and the utilities page
+/**
+ * This is a part of SQLite Integration.
+ * 
+ * This script is only included on the documentation and utility page.
+ * 
+ * @package SQLite Integration
+ * @author Kojima Toshiyasu
  */
 jQuery(document).ready(function($) {
 	var $table = null;
@@ -13,6 +17,9 @@ jQuery(document).ready(function($) {
 		$headers = $table.find('thead th').slice(0);
 	} else if (document.getElementById("patch-files") != null) {
 		$table = $('#patch-files');
+		$headers = $table.find('thead th').slice(1);
+	} else if (document.getElementById("backup-files") != null) {
+		$table = $('#backup-files');
 		$headers = $table.find('thead th').slice(1);
 	}
 	$headers

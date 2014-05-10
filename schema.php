@@ -1,32 +1,38 @@
 <?php
 /**
+ * This file defines the make_db_sqlite() function.
+ * 
  * @package SQLite Integration
- * @version 1.1
- * @author Kojima Toshiyasu, Justin Adie
+ * @author Kojima Toshiyasu
  */
 
+if (!defined('ABSPATH')) {
+	echo 'Thank you, but you are not allowed to access this file.';
+	die();
+}
 /**
- * Function to create tables according to the schemas of WordPress 
- * This is run only once while installation.
+ * Function to create tables according to the schemas of WordPress.
+ * 
+ * This is executed only once while installation.
+ * 
  * @return boolean
  */
 function make_db_sqlite() {
   include_once PDODIR . 'query_create.class.php';
   include_once ABSPATH . 'wp-admin/includes/schema.php';
-  $index_array = array();
+  $index_array   = array();
   
-  ob_end_clean();
+//   ob_end_clean();
   $table_schemas = wp_get_db_schema();
-	$queries = explode (";", $table_schemas);
-	$query_parser = new CreateQuery();
+	$queries       = explode (";", $table_schemas);
+	$query_parser  = new CreateQuery();
 	try {
   	$pdo = new PDO('sqlite:'.FQDB, null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 	} catch (PDOException $err) {
 	  $err_data = $err->errorInfo;
-	  $message = __("Database connection error!<br />", 'sqlite-integration');
-	  $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err_data[2]);
-	  echo $message;
-	  return false;
+	  $message  = 'Database connection error!<br />';
+	  $message .= sprintf("Error message is: %s", $err_data[2]);
+	  wp_die($message, 'Database Error!');
 	}
 
 	try {
@@ -37,9 +43,9 @@ function make_db_sqlite() {
 	      continue;
 	    $rewritten_query = $query_parser->rewrite_query($query);
 	    if (is_array($rewritten_query)) {
-	      $table_query = array_shift($rewritten_query);
+	      $table_query   = array_shift($rewritten_query);
 	      $index_queries = $rewritten_query;
-	      $table_query = trim($table_query);
+	      $table_query   = trim($table_query);
 	      $pdo->exec($table_query);
 // 	      foreach($rewritten_query as $single_query) {
 // 	        $single_query = trim($single_query);
@@ -77,10 +83,9 @@ function make_db_sqlite() {
 	    $pdo->commit();
 	  } else {
 	    $pdo->rollBack();
-	    $message =  sprintf(__("Error occured while creating tables or indexes...<br />Query was: %s<br />", 'sqlite-integration'), var_export($rewritten_query, true));
-	    $message .= sprintf(__("Error message is: %s", 'sqlite-integration'), $err_data[2]);
-	    echo $message;
-	    return false;
+	    $message  =  sprintf("Error occured while creating tables or indexes...<br />Query was: %s<br />", var_export($rewritten_query, true));
+	    $message .= sprintf("Error message is: %s", $err_data[2]);
+	    wp_die($message, 'Database Error!');
 	  }
 	}
 
