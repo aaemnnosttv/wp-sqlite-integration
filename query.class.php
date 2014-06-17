@@ -721,14 +721,17 @@ class PDOSQLiteDriver {
   private function rewrite_between() {
   	if (!$this->rewrite_between) return;
   	$pattern = '/\\s*(CAST\([^\)]+?\)|[^\\s\(]*)?\\s*BETWEEN\\s*([^\\s]*)?\\s*AND\\s*([^\\s\)]*)?\\s*/ims';
-  	while (preg_match($pattern, $this->_query, $match)) {
+  	if (preg_match($pattern, $this->_query, $match)) {
   		$column_name  = trim($match[1]);
   		$min_value    = trim($match[2]);
   		$max_value    = trim($match[3]);
   		$max_value    = rtrim($max_value);
 	  	$replacement  = " $column_name >= $min_value AND $column_name <= $max_value";
 	  	$this->_query = str_ireplace($match[0], $replacement, $this->_query);
+        $this->rewrite_between = false;
   	}
+    $this->parse_query();
+    $this->rewrite_between();
   }
   /**
    * Method to avoid DELETE with JOIN statement.
