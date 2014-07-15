@@ -625,7 +625,6 @@ class PDOSQLiteDriver {
 					$val = trim(array_shift($ins_data_array));
 					$ins_data_assoc[trim($col)] = $val;
 				}
-				$ins_data_assoc = array_combine($col_array, $ins_array);
 				$condition = '';
 				foreach ($unique_keys_for_cond as $unique_key) {
 					if (strpos($unique_key, ',') !== false) {
@@ -641,7 +640,6 @@ class PDOSQLiteDriver {
 								continue;
 							}
 						}
-						$condition = rtrim($condition, ' AND ');
 					} else {
 						$col = trim($unique_key);
 						if (isset($ins_data_assoc[$col])) {
