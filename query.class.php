@@ -55,6 +55,12 @@ class PDOSQLiteDriver {
 	 */
 	private $num_of_rewrite_between = 0;
 	/**
+	 * Variable to check order by field() with column data.
+	 *
+	 * @var boolean
+	 */
+	private $orderby_field = false;
+	/**
 	 * Method to rewrite a query string for SQLite to execute.
 	 *
 	 * @param strin $query
@@ -97,6 +103,7 @@ class PDOSQLiteDriver {
 				//$this->rewrite_boolean();
 				$this->fix_date_quoting();
 				$this->rewrite_between();
+				$this->handle_orderby_field();
 				break;
 			case 'insert':
 				//$this->safe_strip_backticks();
@@ -191,6 +198,9 @@ class PDOSQLiteDriver {
 					if (stripos($token, 'BETWEEN') !== false) {
 						$this->rewrite_between = true;
 						$this->num_of_rewrite_between++;
+					}
+					if (stripos($token, 'ORDER BY FIELD') !== false) {
+						$this->orderby_field = true;
 					}
 				}
 			}
@@ -725,6 +735,45 @@ class PDOSQLiteDriver {
 			}
 			$this->num_of_rewrite_between--;
 		} while ($this->num_of_rewrite_between > 0);
+	}
+	/**
+	 * Method to handle ORDER BY FIELD() clause.
+	 *
+	 * When FIELD() function has column name to compare, we can't rewrite it with
+	 * use defined functions. When this function detect column name in the argument,
+	 * it creates another instance, does the query withuot ORDER BY clause and gives
+	 * the result array sorted to the main instance.
+	 *
+	 * If FIELD() function doesn't have column name, it will use the user defined
+	 * function. usort() function closure function to compare the items.
+	 *
+	 * @access private
+	 */
+	private function handle_orderby_field() {
+		if (!$this->orderby_field) return;
+		global $wpdb;
+		$pattern = '/\\s+ORDER\\s+BY\\s+FIELD\\s*\(\\s*([^\)]+?)\\s*\)/i';
+		if (preg_match($pattern, $this->_query, $match)) {
+			global $flipped;
+			$params   = explode(',', $match[1]);
+			$params   = array_map('trim', $params);
+			$tbl_col  = array_shift($params);
+			$flipped  = array_flip($params);
+			$tbl_name = substr($tbl_col, 0, strpos($tbl_col, '.'));
+			$tbl_name = str_replace($wpdb->prefix, '', $tbl_name);
+			if ($tbl_name && in_array($tbl_name, $wpdb->tables)) {
+				$query = str_replace($match[0], '', $this->_query);
+				$_wpdb = new PDODB();
+				$results = $_wpdb->get_results($query);
+				$_wpdb = null;
+				$compare = function($a, $b) {
+					global $flipped;
+					return $flipped[$a->ID] - $flipped[$b->ID];
+				};
+				usort($results, $compare);
+			}
+			$wpdb->dbh->pre_ordered_results = $results;
+		}
 	}
 	/**
 	 * Method to avoid DELETE with JOIN statement.

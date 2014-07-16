@@ -442,6 +442,7 @@ class PDOSQLiteUDFS {
 	 * @return unsigned integer
 	 */
 	public function field() {
+		global $wpdb;
 		$numArgs = func_num_args();
 		if ($numArgs < 2 or is_null(func_get_arg(0))) {
 			return 0;
@@ -449,6 +450,9 @@ class PDOSQLiteUDFS {
 			$arg_list = func_get_args();
 		}
 		$searchString = array_shift($arg_list);
+		$str_to_check = substr($searchString, 0, strpos($searchString, '.'));
+		$str_to_check = str_replace($wpdb->prefix, '', $str_to_check);
+		if ($str_to_check && in_array(trim($str_to_check), $wpdb->tables)) return;
 		for ($i = 0; $i < $numArgs-1; $i++) {
 			if ($searchString === strtolower($arg_list[$i])) {
 				return $i + 1;

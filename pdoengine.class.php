@@ -27,6 +27,12 @@ class PDOEngine extends PDO {
 	 */
 	public  $found_rows_result = null;
 	/**
+	 * Class variable used for query with ORDER BY FIELD()
+	 *
+	 * @var array of the object
+	 */
+	public $pre_ordered_results = null;
+	/**
 	 * Class variable to store the rewritten queries.
 	 *
 	 * @var array
@@ -370,6 +376,12 @@ class PDOEngine extends PDO {
 			default:
 				$engine = $this->prepare_engine($this->query_type);
 				$this->rewritten_query = $engine->rewrite_query($query, $this->query_type);
+				if (!is_null($this->pre_ordered_results)) {
+					$this->results = $this->pre_ordered_results;
+					$this->num_rows = $this->return_value = count($this->results);
+					$this->pre_ordered_results = null;
+					break;
+				}
 				$this->queries[]       = "Rewritten:\n$this->rewritten_query";
 				$this->extract_variables();
 				$statement = $this->prepare_query();
