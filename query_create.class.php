@@ -130,7 +130,7 @@ class CreateQuery{
 			'longblob'   => 'blob',    'longtext'   => 'text'
 		);
 		foreach ($array_types as $o=>$r){
-			$pattern = "/\\b(?<!`)$o\\b\\s*(\([^\)]*\)*)?\\s*/ims";
+			$pattern = "/\\b(?<!')$o\\b\\s*(\([^\)]*\)*)?\\s*/ims";
 			if (preg_match("/^\\s*.*?\\s*\(.*?$o.*?\)/im", $this->_query)) {
 				;
 			} else {

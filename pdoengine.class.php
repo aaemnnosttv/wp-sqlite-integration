@@ -163,15 +163,36 @@ class PDOEngine extends PDO {
 	 * @param none
 	 */
 	function __construct() {
+		register_shutdown_function(array($this, '__destruct'));
 		$this->init();
 	}
 	/**
 	 * Destructor
 	 *
+	 * If SQLITE_MEM_DEBUG constant is defined, append information about
+	 * memory usage into database/mem_debug.txt.
+	 *
 	 * @return boolean
 	 */
 	function __destruct() {
-		$this->pdo = null;
+		if (defined('SQLITE_MEM_DEBUG') && SQLITE_MEM_DEBUG) {
+			$max = ini_get('memory_limit');
+			if (is_null($max)) {
+				$message = sprintf("[%s] Memory_limit is not set in php.ini file.", date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
+				file_put_contents(FQDBDIR . 'mem_debug.txt', $message, FILE_APPEND);
+				return true;
+			}
+			if (stripos($max, 'M') !== false) {
+				$max = (int) $max * 1024 * 1024;
+			}
+			$peak = memory_get_peak_usage(true);
+			$used = round((int) $peak / (int) $max * 100, 2);
+			if ($used > 90) {
+				$message = sprintf("[%s] Memory peak usage warning: %s %% used. (max: %sM, now: %sM)\n", date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']), $used, $max, $peak);
+				file_put_contents(FQDBDIR . 'mem_debug.txt', $message, FILE_APPEND);
+			}
+		}
+		//$this->pdo = null;
 		return true;
 	}
 
@@ -726,20 +747,25 @@ class PDOEngine extends PDO {
 		//long queries can really kill this
 		$pattern = '/(?<!\\\\)([\'"])(.*?)(?<!\\\\)\\1/imsx';
 		$_limit  = $limit = ini_get('pcre.backtrack_limit');
-		do {
-			if ($limit > 10000000) {
-				$message = 'The query is too big to parse properly';
-				$this->set_error(__LINE__, __FUNCTION__, $message);
-				break; //no point in continuing execution, would get into a loop
-			} else {
-				ini_set('pcre.backtrack_limit', $limit);
-				$query = preg_replace_callback($pattern, array($this,'replace_variables_with_placeholders'), $this->rewritten_query);
-			}
-			$limit = $limit * 10;
-		} while (empty($query));
+		// if user's setting is more than default * 10, make PHP do the job.
+		if ($limit > 10000000) {
+			$query = preg_replace_callback($pattern, array($this, 'replace_variables_with_placeholders'), $this->rewritten_query);
+		} else {
+			do {
+				if ($limit > 10000000) {
+					$message = 'The query is too big to parse properly';
+					$this->set_error(__LINE__, __FUNCTION__, $message);
+					break; //no point in continuing execution, would get into a loop
+				} else {
+					ini_set('pcre.backtrack_limit', $limit);
+					$query = preg_replace_callback($pattern, array($this,'replace_variables_with_placeholders'), $this->rewritten_query);
+				}
+				$limit = $limit * 10;
+			} while (is_null($query));
 
-		//reset the pcre.backtrack_limist
-		ini_set('pcre.backtrack_limit', $_limit);
+			//reset the pcre.backtrack_limist
+			ini_set('pcre.backtrack_limit', $_limit);
+		}
 		$this->queries[]      = "With Placeholders:\n" . $query;
 		$this->prepared_query = $query;
 	}

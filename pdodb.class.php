@@ -43,7 +43,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::__construct()
 	 */
-	function __construct() {
+	public function __construct() {
 		register_shutdown_function(array($this, '__destruct'));
 
 		if (WP_DEBUG)
@@ -60,7 +60,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::__destruct()
 	 */
-	function __destruct() {
+	public function __destruct() {
 		return true;
 	}
 
@@ -71,7 +71,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::set_charset()
 	 */
-	function set_charset($dbh, $charset = null, $collate = null) {
+	public function set_charset($dbh, $charset = null, $collate = null) {
 		if ( ! isset( $charset ) )
 			$charset = $this->charset;
 		if ( ! isset( $collate ) )
@@ -82,7 +82,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::set_sql_mode()
 	 */
-	function set_sql_mode($modes = array()) {
+	public function set_sql_mode($modes = array()) {
 		unset($modes);
 		return;
 	}
@@ -93,7 +93,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::select()
 	 */
-	function select($db, $dbh = null) {
+	public function select($db, $dbh = null) {
 		if (is_null($dbh))
 			$dbh = $this->dbh;
 		$this->ready = true;
@@ -116,7 +116,18 @@ class PDODB extends wpdb {
 	function _real_escape($string) {
 		return addslashes($string);
 	}
-
+	/**
+	 * Method to dummy out wpdb::esc_like() function.
+	 *
+	 * WordPress 4.0.0 introduced esc_like() function that adds backslashes to %,
+	 * underscore and backslash, which is not interpreted as escape character
+	 * by SQLite. So we override it and dummy out this function.
+	 *
+	 * @see wpdb::esc_like()
+	 */
+	public function esc_like($text) {
+		return $text;
+	}
 	/**
 	 * Method to put out the error message.
 	 *
@@ -124,7 +135,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::print_error()
 	 */
-	function print_error($str = '') {
+	public function print_error($str = '') {
 		global $EZSQL_ERROR;
 
 		if (!$str) {
@@ -172,7 +183,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::flush
 	 */
-	function flush() {
+	public function flush() {
 		$this->last_result = array();
 		$this->col_info    = null;
 		$this->last_query  = null;
@@ -187,7 +198,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::db_connect()
 	 */
-	function db_connect($allow_bail=true) {
+	public function db_connect($allow_bail=true) {
 		if (WP_DEBUG) {
 			$this->dbh = new PDOEngine();
 		} else {
@@ -202,13 +213,14 @@ class PDODB extends wpdb {
 		}
 		$is_enabled_foreign_keys = @$this->get_var('PRAGMA foreign_keys');
 		if ($is_enabled_foreign_keys == '0') @$this->query('PRAGMA foreign_keys = ON');
+		$this->has_connected = true;
 		$this->ready = true;
 	}
 	/**
 	 * Method to dummy out wpdb::check_connection()
 	 *
 	 */
-	function check_connection($allow_bail=true) {
+	public function check_connection($allow_bail=true) {
 	  return true;
 	}
 	/**
@@ -219,7 +231,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::query()
 	 */
-	function query($query) {
+	public function query($query) {
 		if (!$this->ready)
 			return false;
 
@@ -267,7 +279,14 @@ class PDODB extends wpdb {
 		return $return_val;
 	}
 	/**
+	 * Method for future use?
 	 *
+	 * WordPress 3.9 separated the method to execute real query from query() function.
+	 * This is for the restoration from the case that nothing returns from database.
+	 * But this is necessary because we aleady did error manipulations in
+	 * pdoengine.class.php. So we don't use this function.
+	 *
+	 * @access private
 	 */
 	private function _do_query($query) {
 		if (defined('SAVEQUERIES') && SAVEQUERIES) {
@@ -301,7 +320,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::has_cap()
 	 */
-	function has_cap($db_cap) {
+	public function has_cap($db_cap) {
 		switch(strtolower($db_cap)) {
 			case 'collation':
 			case 'group_concat':
@@ -322,7 +341,7 @@ class PDODB extends wpdb {
 	 *
 	 * @see wpdb::db_version()
 	 */
-	function db_version() {
+	public function db_version() {
 		//global $required_mysql_version;
 		//return $required_mysql_version;
 		return '5.5';
