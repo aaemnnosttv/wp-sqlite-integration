@@ -71,6 +71,7 @@ class CreateQuery{
 			return $this->_query;
 		}
 		$this->strip_backticks();
+		$this->quote_illegal_field();
 		$this->get_table_name();
 		$this->rewrite_comments();
 		$this->rewrite_field_types();
@@ -106,6 +107,10 @@ class CreateQuery{
 	/**
 	 * Method to change the MySQL field types to SQLite compatible types.
 	 *
+	 * If column name is the same as the key value, e.g. "date" or "timestamp",
+	 * and the column is on the top of the line, we add a single quote and avoid
+	 * to be replaced. But this doesn't work if that column name is in the middle
+	 * of the line.
 	 * Order of the key value is important. Don't change it.
 	 *
 	 * @access private
@@ -129,7 +134,13 @@ class CreateQuery{
 			'mediumblob' => 'blob',    'mediumtext' => 'text',
 			'longblob'   => 'blob',    'longtext'   => 'text'
 		);
-		foreach ($array_types as $o=>$r){
+		foreach ($array_types as $o => $r){
+			if (preg_match("/^\\s*(?<!')$o\\s+(.+$)/im", $this->_query, $match)) {
+				$ptrn = "/$match[1]/im";
+				$replaced = str_ireplace($ptrn, '#placeholder#', $this->_query);
+				$replaced = str_ireplace($o, "'{$o}'", $replaced);
+				$this->_query = str_replace('#placeholder#', $ptrn, $replaced);
+			}
 			$pattern = "/\\b(?<!')$o\\b\\s*(\([^\)]*\)*)?\\s*/ims";
 			if (preg_match("/^\\s*.*?\\s*\(.*?$o.*?\)/im", $this->_query)) {
 				;
@@ -392,6 +403,14 @@ class CreateQuery{
 		$pattern_collate2 = '/\\s*collate\\s*[^ ]*(?<!;)/im';
 		$patterns         = array($pattern_charset, $pattern_collate1, $pattern_collate2);
 		$this->_query     = preg_replace($patterns, '', $this->_query);
+	}
+	/**
+	 * Method to quote illegal field name for SQLite
+	 *
+	 * @access private
+	 */
+	private function quote_illegal_field() {
+		$this->_query = preg_replace("/^\\s*(?<!')(default|values)/im", "'\\1'", $this->_query);
 	}
 }
 ?>

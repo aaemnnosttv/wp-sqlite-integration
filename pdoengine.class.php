@@ -160,10 +160,44 @@ class PDOEngine extends PDO {
 	/**
 	 * Constructor
 	 *
+	 * Create PDO object, set user defined functions and initialize other settings.
+	 * Don't use parent::__construct() because this class does not only returns
+	 * PDO instance but many others jobs.
+	 *
+	 * Constructor definition is changed since version 1.7.1.
+	 *
 	 * @param none
 	 */
 	function __construct() {
 		register_shutdown_function(array($this, '__destruct'));
+		$dsn = 'sqlite' . FQDB;
+		if (isset($GLOBALS['@pdo'])) {
+			$this->pdo = $GLOBALS['@pdo'];
+		} else {
+			$locked = false;
+			$status = 0;
+			do {
+				try {
+					$this->pdo = new PDO($dsn, null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+					require_once UDF_FILE;
+					new PDOSQLiteUDFS($this->pdo);
+					$GLOBALS['@pdo'] = $this->pdo;
+				} catch (PDOException $ex) {
+					$status = $ex->getCode();
+					if ($status == 5 || $status == 6) {
+						$locked = true;
+					} else {
+						$err_message = $ex->getMessage();
+					}
+				}
+			} while ($locked);
+			if ($status > 0) {
+				$message = 'Database initialization error!<br />' .
+						   'Code: ' . $status . '<br />Error Message: ' . $err_message;
+				$this->set_error(__LINE__, __FILE__, $message);
+				return false;
+			}
+		}
 		$this->init();
 	}
 	/**
@@ -171,6 +205,8 @@ class PDOEngine extends PDO {
 	 *
 	 * If SQLITE_MEM_DEBUG constant is defined, append information about
 	 * memory usage into database/mem_debug.txt.
+	 *
+	 * This definition is changed since version 1.7.
 	 *
 	 * @return boolean
 	 */
@@ -199,63 +235,27 @@ class PDOEngine extends PDO {
 	/**
 	 * Method to initialize database, executed in the contructor.
 	 *
-	 * It checks if there's a database directory and database file, creates the tables,
-	 * and binds the user defined function to the pdo object.
+	 * It checks if WordPress is in the installing process and does the required
+	 * jobs. SQLite library version specific settings are also in this function.
+	 *
+	 * Some developers use WP_INSTALLING constant for other purposes, if so, this
+	 * function will do no harms.
 	 *
 	 * @return boolean
 	 */
 	private function init() {
-		$dsn    = 'sqlite:' . FQDB;
-		$result = $this->prepare_directory();
-		if (!$result) return false;
-		if (is_file(FQDB)) {
-			$locked = false;
-			do {
-				try {
-					if ($locked) $locked = false;
-					$this->pdo = new PDO(
-						$dsn,  // data source name
-						null,  // user name
-						null,  // user password
-						array( // PDO options
-							PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-							));
-					$statement        = $this->pdo->query("SELECT COUNT(*) FROM sqlite_master WHERE type='table'");
-					$number_of_tables = $statement->fetchColumn(0);
-					$statement        = null;
-					if ($number_of_tables == 0) {
-						$this->make_sqlite_tables();
-					}
-				} catch (PDOException $err) {
-					$status = $err->getCode();
-					// code 5 => The database file is locked
-					// code 6 => A table in the database is locked
-					if ($status == 5 || $status == 6) {
-						$locked = true;
-					} else {
-						$message  = 'Database connection error!<br />';
-						$message .= sprintf("Error message is: %s", $err->getMessage());
-						$this->set_error(__LINE__, __FUNCTION__, $message);
-						return false;
-					}
-				}
-			} while ($locked);
-			require_once UDF_FILE;
-			new PDOSQLiteUDFS($this->pdo);
-			if (version_compare($this->get_sqlite_version(), '3.7.11', '>=')) {
-				$this->can_insert_multiple_rows = true;
-			}
-		} else { // database file is not found, so we make it and create tables...
-			try {
-				$this->pdo = new PDO($dsn, null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-			} catch (PDOException $err) {
-				$message  = 'Database initialization error!<br />';
-				$message .= sprintf("Error message is: %s", $err->getMessage());
-				$this->set_error(__LINE__, __FUNCTION__, $message);
-				return false;
-			}
-			$this->make_sqlite_tables();
+		if (defined('WP_INSTALLING') && WP_INSTALLING) {
+			$this->prepare_directory();
+			$statement = $this->pdo->query("SELECT COUNT(*) FROM sqlite_master WHERE type='table'");
+			$number_of_tables = $statement->fetchColumn(0);
+			$statement = null;
+			if ($number_of_tables == 0) $this->make_sqlite_tables();
 		}
+		if (version_compare($this->get_sqlite_version(), '3.7.11', '>=')) {
+			$this->can_insert_multiple_rows = true;
+		}
+		$statement = $this->pdo->query('PRAGMA foreign_keys');
+		if ($statement->fetchColumn(0) == '0') $this->pdo->query('PRAGMA foreign_keys = ON');
 	}
 
 	/**

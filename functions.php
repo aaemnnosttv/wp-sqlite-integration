@@ -34,6 +34,9 @@ class PDOSQLiteUDFS {
 	 * @param reference to PDO object $pdo
 	 */
 	public function __construct(&$pdo){
+		if (!$pdo) {
+			wp_die('Database is not initialized.', 'Database Error');
+		}
 		foreach ($this->functions as $f=>$t) {
 			$pdo->sqliteCreateFunction($f, array($this, $t));
 		}
