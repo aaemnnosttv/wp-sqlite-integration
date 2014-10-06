@@ -170,7 +170,7 @@ class PDOEngine extends PDO {
 	 */
 	function __construct() {
 		register_shutdown_function(array($this, '__destruct'));
-		$dsn = 'sqlite' . FQDB;
+		$dsn = 'sqlite:' . FQDB;
 		if (isset($GLOBALS['@pdo'])) {
 			$this->pdo = $GLOBALS['@pdo'];
 		} else {
