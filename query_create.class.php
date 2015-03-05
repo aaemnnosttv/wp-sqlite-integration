@@ -298,7 +298,7 @@ class CreateQuery{
 	 * @access private
 	 */
 	private function rewrite_key(){
-		$this->_query = preg_replace_callback('/,\\s*(KEY|INDEX)\\s*(\\w+)?\\s*(\(.*(?<!\\d)\))/im', array($this, '_rewrite_key'), $this->_query);
+		$this->_query = preg_replace_callback('/,\\s*(KEY|INDEX)\\s*(\\w+)?\\s*(\(.+\))/im', array($this, '_rewrite_key'), $this->_query);
 	}
 	/**
 	 * Callback method for rewrite_key.

@@ -170,6 +170,9 @@ class PDOEngine extends PDO {
 	 */
 	function __construct() {
 		register_shutdown_function(array($this, '__destruct'));
+        if (is_file(FQDB)) {
+            $this->prepare_directory();
+        }
 		$dsn = 'sqlite:' . FQDB;
 		if (isset($GLOBALS['@pdo'])) {
 			$this->pdo = $GLOBALS['@pdo'];
@@ -245,7 +248,6 @@ class PDOEngine extends PDO {
 	 */
 	private function init() {
 		if (defined('WP_INSTALLING') && WP_INSTALLING) {
-			$this->prepare_directory();
 			$statement = $this->pdo->query("SELECT COUNT(*) FROM sqlite_master WHERE type='table'");
 			$number_of_tables = $statement->fetchColumn(0);
 			$statement = null;
@@ -267,7 +269,7 @@ class PDOEngine extends PDO {
 		global $wpdb;
 		$u = umask(0000);
 		if (!is_dir(FQDBDIR)) {
-			if (!@mkdir(FQDBDIR, 0707, true)) {
+			if (!@mkdir(FQDBDIR, 0704, true)) {
 				umask($u);
 				$message = 'Unable to create the required directory! Please check your server settings.';
 				wp_die($message, 'Error!');

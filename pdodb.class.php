@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 	die();
 }
 require_once PDODIR . 'pdoengine.class.php';
-require_once PDODIR . 'install.php';
+//require_once PDODIR . 'install.php';
 
 if (!defined('SAVEQUERIES')){
 	define ('SAVEQUERIES', false);

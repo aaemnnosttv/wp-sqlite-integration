@@ -6,8 +6,8 @@ Tags: database, SQLite, PDO
 Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
-Tested up to: 4.0
-Stable tag: 1.7
+Tested up to: 4.1.1
+Stable tag: 1.8
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,9 +164,14 @@ wp-config.php を手動で作成することが必要です。WordPress に作�
 
 == Upgrade Notice ==
 
-WordPress 4.0 での動作チェックをして、いくつかのバグを修正しました。アップグレードをお勧めします。自動アップグレードで失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
+WordPress 4.1.1 での動作チェックをして、いくつかのバグを修正しました。アップグレードをお勧めします。自動アップグレードで失敗するようなら、FTPを使っての手動アップグレードを試してみてください。
 
 == Changelog ==
+
+= 1.8 (2014-03-06) =
+* インストール・プロセスのバグを修正しました。
+* index query の正規表現を修正しました。いくつかのプラグインが影響を受けるかもしれません。
+* PHP 5.2.x で動作しない部分を修正しました。
 
 = 1.7 (2014-09-05) =
 * エディタ画面で、添付ファイルの並べ替えができなかったのを修正しました。

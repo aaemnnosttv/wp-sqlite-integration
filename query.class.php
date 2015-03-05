@@ -766,15 +766,29 @@ class PDOSQLiteDriver {
 				$_wpdb = new PDODB();
 				$results = $_wpdb->get_results($query);
 				$_wpdb = null;
-				$compare = function($a, $b) {
-					global $flipped;
-					return $flipped[$a->ID] - $flipped[$b->ID];
-				};
-				usort($results, $compare);
+				/* $compare = function($a, $b) { */
+				/* 	global $flipped; */
+				/* 	return $flipped[$a->ID] - $flipped[$b->ID]; */
+				/* }; */
+				/* usort($results, $compare); */
+                usort($results, array($this, 'orderby_callback'));
 			}
 			$wpdb->dbh->pre_ordered_results = $results;
 		}
 	}
+    /**
+     * Callback method for sorting
+     *
+     * As PHP 5.2 doesn't allow closure function, this callback procedure
+     * is necessary.
+     *
+     * @param queried object
+     * @access private
+     */
+    private function orderby_callback($a, $b) {
+        global $flipped;
+        return $flipped[$a->ID] - $flipped[$b->ID];
+    }
 	/**
 	 * Method to avoid DELETE with JOIN statement.
 	 *
