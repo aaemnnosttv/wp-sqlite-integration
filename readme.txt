@@ -7,7 +7,7 @@ Author: Kojima Toshiyasu
 Author URI: http://dogwood.skr.jp/
 Requires at least: 3.3
 Tested up to: 4.1.1
-Stable tag: 1.8
+Stable tag: 1.8.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -165,6 +165,8 @@ This plugin doesn't support 'WP_PLUGIN_URL' constant.
 WordPress 4.1.1 compatibility is checked and some bugs are fixed. Upgrade is recommended. When auto upgrading fails, please try manual upgrade via FTP.
 
 == Changelog ==
+
+See also ChangeLog file contained in the archive.
 
 = 1.8 (2015-03-06) =
 * Fixed the bug about install process algorithm.

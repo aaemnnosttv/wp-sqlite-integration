@@ -39,7 +39,7 @@ class SQLiteIntegrationUtils {
 		return;
 		$notice_string = __('Upgrading Notice: To finish upgrading, please activate SQLite Integration and go Setting >> SQLite Integration >> Miscellaneous, and click the button &quot;update&quot; at the bottom of the page. Or else replace wp-content/db.php with the one in sqlite-integration directory manually.', 'sqlite-integration');
 		$current_version = defined('SQLITE_INTEGRATION_VERSION') ? SQLITE_INTEGRATION_VERSION : '';
-		if (version_compare($current_version, '1.8', '=')) return;
+		if (version_compare($current_version, '1.8.1', '=')) return;
 		$version = '';
 		if (defined('WP_CONTENT_DIR')) {
 			$path = WP_CONTENT_DIR . '/db.php';

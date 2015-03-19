@@ -170,7 +170,7 @@ class PDOEngine extends PDO {
 	 */
 	function __construct() {
 		register_shutdown_function(array($this, '__destruct'));
-        if (is_file(FQDB)) {
+        if (!is_file(FQDB)) {
             $this->prepare_directory();
         }
 		$dsn = 'sqlite:' . FQDB;

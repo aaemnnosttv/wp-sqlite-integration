@@ -1,3 +1,10 @@
+2015-03-18  KOJIMA Toshiyasu
+
+	* version 1.8.1 bugfix release.
+
+	* pdoengine.class.php: bugfix. database file existent chech doesn't
+	  work properly, which causes installation problem.
+
 2015-03-06  KOJIMA Toshiyasu
 
 	* version 1.8 release.
