@@ -421,9 +421,10 @@ class PDOSQLiteDriver {
 	 */
 	private function rewrite_limit_usage(){
 		$_wpdb = new PDODB();
-		$options = $_wpdb->get_results('PRAGMA compile_options');
-		foreach ($options as $opt) {
-			if (stripos($opt->compile_option, 'ENABLE_UPDATE_DELETE_LIMIT') !== false) return;
+		foreach ($_wpdb->get_results('PRAGMA compile_options') as $opt) {
+			if (isset($opt->compile_option) && stripos($opt->compile_option, 'ENABLE_UPDATE_DELETE_LIMIT') !== false) {
+				return;
+			}
 		}
 		if (stripos($this->_query, '(select') === false) {
 			$this->_query = preg_replace('/\\s*LIMIT\\s*[0-9]$/i', '', $this->_query);
@@ -440,9 +441,10 @@ class PDOSQLiteDriver {
 	 */
 	private function rewrite_order_by_usage() {
 		$_wpdb = new PDODB();
-		$options = $_wpdb->get_results('PRAGMA compile_options');
-		foreach ($options as $opt) {
-			if (stripos($opt->compile_option, 'ENABLE_UPDATE_DELETE_LIMIT') !== false) return;
+		foreach ($_wpdb->get_results('PRAGMA compile_options') as $opt) {
+			if (isset($opt->compile_option) && stripos($opt->compile_option, 'ENABLE_UPDATE_DELETE_LIMIT') !== false) {
+				return;
+			}
 		}
 		if (stripos($this->_query, '(select') === false) {
 			$this->_query = preg_replace('/\\s+ORDER\\s+BY\\s*.*$/i', '', $this->_query);
